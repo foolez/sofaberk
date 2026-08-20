@@ -50,3 +50,16 @@ python3 -m http.server 8080
 - `js/game.js` — kamera, hareket, çarpışma, selam mantığı, tören mini oyunu
 - `js/audio.js` — WebAudio ile üretilen adım/çan/boru sesleri
 - `vendor/three.module.min.js` — three.js r160 (MIT, `vendor/LICENSE-three.txt`)
+
+## Tek dosyalık sürüm (sunucu gerekmez)
+
+`tek-dosya/akkale.html` dosyasını çift tıklayıp doğrudan tarayıcıda açabilirsin;
+three.js dâhil her şey o dosyanın içinde gömülüdür. Kaynak dosyaları değiştirdikten
+sonra yeniden üretmek için:
+
+```bash
+node bundle.mjs
+```
+
+Bu komut iki dosya üretir: `tek-dosya/akkale.html` (çift tıklayıp açılan tam sayfa)
+ve `tek-dosya/akkale-artifact.html` (gövde-içi sürüm, artifact olarak yayımlamak için).
