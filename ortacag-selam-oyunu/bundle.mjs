@@ -18,17 +18,20 @@ three = three.slice(0, m.index) + `\nconst THREE={${pairs.join(',')}};\n`;
 /* --- kendi modüllerimizden import/export satırlarını temizle --- */
 const strip = (src) => src
   .replace(/^\s*import[^;]+;\s*$/gm, '')
+  .replace(/^export\s*\{[^}]*\};?\s*$/gm, '')
   .replace(/^export\s+(function|const|class|let)\b/gm, '$1');
 
 /* Her modül kendi kapsamında kalsın: three.js'in minify edilmiş kısa
    isimleri (ac, C, P...) bizim isimlerimizle çakışmasın diye. */
-const wrap = (src, exp) => `const ${exp} = (() => {\n${strip(src)}\nreturn ${exp};\n})();`;
+const wrap = (src, exps) => `const {${exps.join(', ')}} = (() => {\n${strip(src)}\nreturn {${exps.join(', ')}};\n})();`;
 
 const bundle = [
   three,
-  wrap(read('./js/audio.js'), 'Sfx'),
-  wrap(read('./js/characters.js'), 'createCharacter'),
-  wrap(read('./js/world.js'), 'buildWorld'),
+  wrap(read('./js/audio.js'), ['Sfx']),
+  wrap(read('./js/characters.js'), ['createCharacter']),
+  wrap(read('./js/cinematic.js'), ['createCinema']),
+  wrap(read('./js/feast.js'), ['buildFeast', 'FEAST_ORIGIN']),
+  wrap(read('./js/world.js'), ['buildWorld']),
   `(() => {\n${strip(read('./js/game.js'))}\n})();`,
 ].join('\n');
 

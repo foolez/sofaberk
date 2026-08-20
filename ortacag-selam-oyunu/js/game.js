@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { buildWorld } from './world.js';
 import { createCharacter } from './characters.js';
 import { Sfx } from './audio.js';
+import { createCinema } from './cinematic.js';
+import { buildFeast, FEAST_ORIGIN } from './feast.js';
 
 const $ = (s) => document.querySelector(s);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -35,7 +37,8 @@ const sky = new THREE.Mesh(
 );
 scene.add(sky);
 
-scene.add(new THREE.HemisphereLight(0xd8e8f5, 0x5e6647, 1.05));
+const hemi = new THREE.HemisphereLight(0xd8e8f5, 0x5e6647, 1.05);
+scene.add(hemi);
 scene.add(new THREE.AmbientLight(0xfff2dd, 0.28));
 const sun = new THREE.DirectionalLight(0xfff0d0, 1.45);
 sun.position.set(48, 72, 46);
@@ -48,6 +51,10 @@ sun.shadow.bias = -0.0008;
 scene.add(sun, sun.target);
 
 const world = buildWorld(scene);
+const cine = createCinema(camera, { bars: $('#cine-bars'), cap: $('#cine-cap') });
+const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
+const F = (x, y, z) => FEAST_ORIGIN.clone().add(V3(x, y, z));
+let feast = null;
 
 /* ============================ oyuncu ============================ */
 const player = createCharacter({
@@ -168,7 +175,10 @@ const G = {
   selected: 1,
   quest: 'greet',            // greet -> gate -> throne -> ceremony -> end
   cerScore: 0,
-  paused: false,
+  mode: 'town',        // town | feast
+  toasts: 0,
+  total: 0,
+  feasted: false,
 };
 
 /* ============================ girdi ============================ */
@@ -180,6 +190,10 @@ addEventListener('keydown', (e) => {
   keys[e.code] = true;
   const k = e.key.toLowerCase();
   if (!G.started || G.over) return;
+  if (cine.active) {
+    if (e.code === 'Space' || e.code === 'Escape') { e.preventDefault(); cine.skip(); }
+    return;
+  }
   if (k === 'h') { $('#tore').classList.toggle('hidden'); }
   if (cer.active) { cerKey(e); return; }
   if (k === '1' || k === '2' || k === '3') selectGreeting(+k);
@@ -207,8 +221,7 @@ $('#btn-start').onclick = () => {
   $('#start').classList.add('hidden');
   G.started = true;
   Sfx.unlock(); Sfx.horn();
-  renderer.domElement.requestPointerLock();
-  toast('Akkale kapısından girdin. Töreyi unutma!');
+  playOpening();
 };
 $('#tore-close').onclick = () => $('#tore').classList.add('hidden');
 $('#btn-again').onclick = () => location.reload();
@@ -218,6 +231,45 @@ function selectGreeting(n) {
   document.querySelectorAll('.card').forEach((c) => c.classList.toggle('sel', +c.dataset.k === n));
 }
 selectGreeting(1);
+
+/* ============================ sinematikler ============================ */
+function playOpening() {
+  cine.play([
+    { dur: 5.4, from: V3(0, 32, 98), to: V3(0, 15, 64), look: V3(0, 9, 42), look2: V3(0, 5, 32),
+      cap: 'Uzak diyarların efendisi, yolunu Akkale\'ye düşürdü.', onEnter: () => Sfx.horn() },
+    { dur: 5.2, from: V3(-21, 7.5, 27), to: V3(19, 7.5, 21), look: V3(0, 2.6, 10),
+      cap: 'Pazar yeri kalabalık; halk, yabancı efendiyi süzüyor.' },
+    { dur: 4.8, from: V3(0, 5.5, -16), to: V3(0, 9, -25), look: V3(0, 6, -32), look2: V3(0, 8.5, -34),
+      cap: 'Kale kapısı kapalı. Töre açıktır: önce halkın gönlü, sonra Bey\'in huzuru.' },
+    { dur: 3.6, from: V3(7, 5, 53), to: V3(0, 3.6, 55.5), look: V3(0, 1.6, 48),
+      cap: 'Halka baş selamı, erkâna temenna — diz yalnız şehrin sahibine.' },
+  ], () => {
+    renderer.domElement.requestPointerLock();
+    toast('Akkale kapısındasın. Töreyi unutma!');
+  });
+}
+
+function playGateCinematic() {
+  cine.play([
+    { dur: 4.4, from: V3(0, 4.6, -17), to: V3(0, 7.5, -25), look: V3(0, 5, -32), look2: V3(0, 6, -33),
+      cap: 'Çavuş boru çaldı: "Efendi töreyi bildi — kapıyı açın!"',
+      onEnter: () => { world.openGate(); Sfx.gate(); Sfx.horn(); } },
+    { dur: 3.8, from: V3(-9, 4.5, -30), to: V3(-2.5, 3.2, -34), look: V3(0, 4, -40), look2: V3(0, 2.6, -46),
+      cap: 'Akkale kalesi, yabancı efendiye açıldı.', onEnter: () => Sfx.bell() },
+  ], () => {
+    $('#rep-note').textContent = 'Kale kapısı açıldı.';
+    toast('Kale kapısı açıldı. Bey Alparslan seni bekliyor.');
+  });
+}
+
+function playThroneIntro(after) {
+  cine.play([
+    { dur: 4.0, from: V3(5.5, 3.4, world.daisZ + 10), to: V3(2.2, 2.7, world.daisZ + 6.4),
+      look: V3(0, 2.3, world.daisZ + 0.9),
+      cap: 'Bey Alparslan: "Yaklaş efendi. Divan seni izliyor — selamını göreyim."',
+      onEnter: () => Sfx.horn() },
+  ], after);
+}
 
 /* ============================ çarpışma ============================ */
 const R = 0.55;
@@ -258,6 +310,7 @@ function nearBey() {
 }
 
 function tryInteract() {
+  if (G.mode === 'feast') { doToast(); return; }
   if (P.act) return;
   if (G.quest === 'throne' && nearBey()) { startCeremony(); return; }
   const n = nearestNpc();
@@ -279,7 +332,7 @@ function greet(n, type) {
     verdict = 'ok';
     gain = first ? 9 : 5;
     line = n.ok;
-    n.done = true; G.correct++; G.greeted++;
+    n.done = true; n.ok = true; G.correct++; G.greeted++;
     n.act = { type: n.r === 0 ? 2 : 2, t: -0.55, dur: 1.9 };   // halk da erkân da karşılık verir
     if (n.r === 0) n.act.type = 3;                              // halk efendiye diz kırar
   } else {
@@ -323,10 +376,8 @@ function toast(msg) {
 function checkGate() {
   if (G.quest === 'greet' && G.rep >= G.goal) {
     G.quest = 'gate';
-    world.openGate();
-    Sfx.gate(); setTimeout(() => Sfx.bell(), 900);
-    toast('Kale kapısı açılıyor! Bey Alparslan seni bekliyor.');
-    $('#rep-note').textContent = 'Kale kapısı açıldı.';
+    document.exitPointerLock?.();
+    playGateCinematic();
   }
 }
 
@@ -354,13 +405,17 @@ const CER_STEPS = [
 const cer = { active: false, i: 0, t: 0, dir: 1, done: false, wait: 0 };
 
 function startCeremony() {
+  document.exitPointerLock?.();
+  P.pos.set(0, 0, world.daisZ + 5.2);
+  P.facing = Math.PI;
+  P.act = null;
+  playThroneIntro(runCeremony);
+}
+
+function runCeremony() {
   cer.active = true; cer.i = 0; cer.t = 0; cer.dir = 1; cer.wait = 0;
   G.quest = 'ceremony';
   G.cerScore = 0;
-  document.exitPointerLock?.();
-  P.pos.set(0, 0, world.daisZ + 5.2);
-  P.facing = Math.PI;                 // Bey'e döner (kuzeye)
-  P.act = null;
   $('#ceremony').classList.remove('hidden');
   $('#cer-steps').innerHTML = CER_STEPS.map(() => '<div class="pip"></div>').join('');
   $('#cards').classList.remove('on');
@@ -413,16 +468,14 @@ function finishCeremony() {
   Sfx.bell();
 
   const total = Math.round(G.rep + G.cerScore);
+  G.total = total;
+
+  if (total >= 95) { setTimeout(() => startFeast(), 1900); return; }
+
   let title, txt;
-  if (total >= 120) {
-    title = 'AKKALE\'NİN ONUR KONUĞU';
-    txt = 'Bey Alparslan tahtından indi, seni elinle kaldırdı: "Böyle selam ancak töreyi bilen bir efendiden gelir. Bugünden sonra Akkale\'nin kapıları sana açıktır."';
-  } else if (total >= 95) {
-    title = 'BEY\'İN DOSTU';
-    txt = 'Bey başını eğdi: "Halkım seni övdü, selamın da yerini buldu efendi. Sofram sofrandır."';
-  } else if (total >= 70) {
+  if (total >= 70) {
     title = 'KABUL EDİLDİ';
-    txt = 'Bey elini kaldırdı: "Kusurun vardı ama niyetin temizdi. Akkale seni misafir eder."';
+    txt = 'Bey elini kaldırdı: "Kusurun vardı ama niyetin temizdi. Akkale seni misafir eder — ama soframa değil, hana."';
   } else if (total >= 45) {
     title = 'HOŞ GÖRÜLDÜ';
     txt = 'Bey kaşını çattı: "Töreyi yarım biliyorsun efendi. Bir gece kal, sabah yola çık."';
@@ -430,20 +483,106 @@ function finishCeremony() {
     title = 'KAPI DIŞARI';
     txt = 'Bey ayağa kalktı: "Bu selam Akkale\'ye yakışmadı. Muhafızlar, efendiyi kapıya kadar geçirsin."';
   }
+  setTimeout(() => showEnd(title, txt), 2800);
+}
 
-  setTimeout(() => {
-    G.over = true;
-    $('#end-title').textContent = title;
-    $('#end-txt').textContent = txt;
-    $('#end-stats').innerHTML = `
-      <div><b>İTİBAR</b></div><div>${Math.round(G.rep)} / 100</div>
-      <div><b>DOĞRU SELAM</b></div><div>${G.correct}</div>
-      <div><b>YANLIŞ SELAM</b></div><div>${G.wrong}</div>
-      <div><b>TÖREN PUANI</b></div><div>${G.cerScore} / 40</div>
-      <div><b>TOPLAM</b></div><div>${total} / 140</div>`;
-    $('#end').classList.remove('hidden');
-    document.exitPointerLock?.();
-  }, 3600);
+/* ============================ ziyafet ============================ */
+const TOAST_LINES = [
+  { who: 'BEY ALPARSLAN', t: '"İlk kadeh, töreyi bilen konuğa! Akkale\'de selam, kılıçtan keskindir."' },
+  { who: 'SÖR AYDIN', t: '"İkinci kadeh, efendinin belini kıran temennaya! Şövalyeler bunu şarkı yapacak."' },
+  { who: 'BEZİRGÂN HÂRİS', t: '"Üçüncü kadeh, bu sofraya! Kervanım bunu Bağdat\'a kadar anlatacak."' },
+];
+
+function startFeast() {
+  G.mode = 'feast';
+  G.feasted = true;
+  G.toasts = 0;
+  document.exitPointerLock?.();
+
+  // konuklar: töreye uygun selam verdiğin kişiler
+  let cfgs = npcs.filter((n) => n.ok);
+  if (cfgs.length < 6) cfgs = cfgs.concat(npcs.filter((n) => !n.ok)).slice(0, 8);
+  feast = buildFeast(scene, cfgs);
+
+  // gece ve salon aydınlatması
+  sun.intensity = 0.08;
+  hemi.intensity = 0.5;
+  hemi.color.set(0xffd9a8);
+  hemi.groundColor.set(0x3b2a1e);
+  scene.background = new THREE.Color(0x0d0a10);
+  scene.fog.color.set(0x0d0a10);
+  scene.fog.near = 18; scene.fog.far = 95;
+  sky.visible = false;
+
+  // oyuncuyu Bey'in sağına oturt
+  player.group.position.set(FEAST_ORIGIN.x + feast.seat.x, 0.86, FEAST_ORIGIN.z + feast.seat.z);
+  player.group.rotation.y = feast.seat.facing;
+  P.pos.set(FEAST_ORIGIN.x + feast.seat.x, 0, FEAST_ORIGIN.z + feast.seat.z);
+
+  document.body.classList.add('feast');
+  $('#topbar').style.display = 'none';
+  $('#cards').classList.remove('on');
+  $('#target').classList.remove('on');
+  $('#compass').textContent = '';
+
+  cine.play([
+    { dur: 4.8, from: F(0, 8.5, 17), to: F(0, 4.4, 11), look: F(-4, 2.4, 0), look2: F(-6, 2.0, 0),
+      cap: 'Bey ayağa kalktı: "Bu selam bu şehirde çoktandır görülmemişti. Sofrayı kurun!"',
+      onEnter: () => { Sfx.cheer(); Sfx.music(true); } },
+    { dur: 4.6, from: F(10, 3.4, -6), to: F(-7, 3.0, -5.2), look: F(0, 1.9, 0),
+      cap: 'Kuzular çevrildi, kazanlar kaynadı; def sustuğunda ud başladı.' },
+    { dur: 4.0, from: F(-2.5, 4.8, -10.5), to: F(-1.6, 4.3, -9.2), look: F(-9.2, 1.8, -0.7),
+      cap: 'Efendi, Bey\'in sağına oturtuldu — Akkale\'de en büyük ikram budur.' },
+  ], () => {
+    $('#feast-hud').classList.remove('hidden');
+    $('#feast-txt').innerHTML = 'Bey\'in sağında oturuyorsun. <b>E</b> ile kadeh kaldır.';
+  });
+}
+
+function doToast() {
+  if (!feast || cine.active || G.toasts >= 3) return;
+  const line = TOAST_LINES[G.toasts];
+  G.toasts++;
+  feast.toast();
+  P.feastRaiseTarget = 1;
+  setTimeout(() => { P.feastRaiseTarget = 0; }, 2500);
+  Sfx.clink(); setTimeout(() => Sfx.cheer(), 220);
+  $('#feast-txt').innerHTML = `<b>${line.who}</b> — ${line.t}`;
+  if (G.toasts >= 3) setTimeout(endFeast, 3200);
+}
+
+function endFeast() {
+  $('#feast-hud').classList.add('hidden');
+  cine.play([
+    { dur: 6.0, from: F(0, 3.2, -9), to: F(0, 11, 18), look: F(-4, 1.9, 0), look2: F(0, 2.6, 0),
+      cap: 'O gece Akkale\'de bütün kadehler yabancı efendinin şerefine kalktı.',
+      onEnter: () => Sfx.cheer() },
+  ], () => {
+    Sfx.music(false);
+    const t = G.total;
+    if (t >= 120) {
+      showEnd('AKKALE\'NİN ONUR KONUĞU',
+        'Bey Alparslan tahtından indi, seni elinle kaldırdı: "Böyle selam ancak töreyi bilen bir efendiden gelir. Bugünden sonra Akkale\'nin kapıları da sofrası da sana açıktır."');
+    } else {
+      showEnd('BEY\'İN DOSTU',
+        'Bey kadehini senin kadehine dokundurdu: "Halkım seni övdü, selamın da yerini buldu efendi. Sofram sofrandır."');
+    }
+  });
+}
+
+function showEnd(title, txt) {
+  G.over = true;
+  $('#end-title').textContent = title;
+  $('#end-txt').textContent = txt;
+  $('#end-stats').innerHTML = `
+    <div><b>İTİBAR</b></div><div>${Math.round(G.rep)} / 100</div>
+    <div><b>DOĞRU SELAM</b></div><div>${G.correct}</div>
+    <div><b>YANLIŞ SELAM</b></div><div>${G.wrong}</div>
+    <div><b>TÖREN PUANI</b></div><div>${G.cerScore} / 40</div>
+    <div><b>ŞÖLEN</b></div><div>${G.feasted ? 'Bey sofrasına aldı · ' + G.toasts + ' kadeh' : 'Sofraya davet edilmedin'}</div>
+    <div><b>TOPLAM</b></div><div>${G.total} / 140</div>`;
+  $('#end').classList.remove('hidden');
+  document.exitPointerLock?.();
 }
 
 /* ============================ pusula ============================ */
@@ -479,7 +618,7 @@ let stepTimer = 0;
 function update(dt, t) {
   /* --- hareket --- */
   let moving = false;
-  if (G.started && !cer.active && !G.over && !P.act) {
+  if (G.started && !cer.active && !G.over && !P.act && !cine.active && G.mode === 'town') {
     const f = (keys.KeyW ? 1 : 0) - (keys.KeyS ? 1 : 0);
     const s = (keys.KeyD ? 1 : 0) - (keys.KeyA ? 1 : 0);
     if (f || s) {
@@ -525,7 +664,12 @@ function update(dt, t) {
     if (P.act.type === 3) { pose.kneel = a; pose.bow = a * 0.35; pose.heart = a; pose.hatOff = a * 0.8; }
     if (k >= 1) P.act = null;
   }
-  if (cer.active || cer.done) {
+  if (G.mode === 'feast') {
+    P.feastRaise = damp(P.feastRaise || 0, P.feastRaiseTarget || 0, 3.5, dt);
+    pose.walk = 0; pose.sit = 1; pose.hatOff = 0.15;
+    pose.raise = P.feastRaise;
+    pose.nod = Math.sin(t * 1.1) * 0.08;
+  } else if (cer.active || cer.done) {
     P.cerNow = P.cerNow || { hatOff: 0, kneel: 0, heart: 0 };
     P.cerNow.hatOff = damp(P.cerNow.hatOff, P.cer.hatOff, 5, dt);
     P.cerNow.kneel = damp(P.cerNow.kneel, P.cer.kneel, 4, dt);
@@ -600,9 +744,26 @@ function update(dt, t) {
     }
   }
 
+  if (feast) feast.update(dt, t);
+
   /* --- kamera --- */
+  if (cine.active) {
+    cine.update(dt);
+    camPos.copy(camera.position);
+    $('#cine-skip').classList.add('on');
+    sky.position.copy(camera.position);
+    world.update(t, dt);
+    updateHud();
+    return;
+  }
+  $('#cine-skip').classList.remove('on');
+
   let camTarget, lookTarget;
-  if (cer.active || cer.done) {
+  if (G.mode === 'feast') {
+    const sway = Math.sin(t * 0.3) * 0.6;
+    camTarget = F(-1.6 + sway, 4.3, -9.2);
+    lookTarget = F(-9.2, 1.7, -0.7);
+  } else if (cer.active || cer.done) {
     camTarget = new THREE.Vector3(4.6, 3.1, world.daisZ + 8.4);
     lookTarget = new THREE.Vector3(0, 1.9, world.daisZ + 1.6);
   } else {
@@ -613,7 +774,7 @@ function update(dt, t) {
     camTarget.y = Math.max(0.9, camTarget.y);
     lookTarget = P.pos.clone().add(new THREE.Vector3(0, 1.55, 0));
   }
-  camPos.lerp(camTarget, 1 - Math.exp(-(cer.active || cer.done ? 3 : 14) * dt));
+  camPos.lerp(camTarget, 1 - Math.exp(-(cer.active || cer.done || G.mode === 'feast' ? 3 : 14) * dt));
   camera.position.copy(camPos);
   camera.lookAt(lookTarget);
   sky.position.copy(camera.position);
@@ -621,7 +782,18 @@ function update(dt, t) {
 
   world.update(t, dt);
 
-  /* --- HUD --- */
+  updateHud();
+}
+
+function updateHud() {
+  if (G.mode === 'feast') {
+    const pr = $('#prompt');
+    if (!cine.active && G.toasts < 3) {
+      pr.classList.add('on');
+      pr.textContent = `E — KADEH KALDIR (${G.toasts}/3)`;
+    } else pr.classList.remove('on');
+    return;
+  }
   if (G.started && !G.over) {
     const n = nearestNpc();
     const beyReady = G.quest === 'throne' && nearBey();

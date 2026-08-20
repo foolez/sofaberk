@@ -166,12 +166,13 @@ export function createCharacter(cfg = {}) {
   const parts = { root, torso, head, arms, legs, hat, cape, chest };
   const base = { hatY: hat ? hat.position.y : 0 };
 
-  /* poz: {walkPhase, walk, bow, kneel, nod, wave, hatOff, heart, turn} */
+  /* poz: {walkPhase, walk, bow, kneel, nod, wave, hatOff, heart, sit, raise} */
   function pose(p = {}) {
     const walk = p.walk || 0, ph = p.walkPhase || 0;
     const bow = p.bow || 0, kneel = p.kneel || 0;
     const nod = p.nod || 0, wave = p.wave || 0;
     const heart = p.heart || 0, hatOff = p.hatOff || 0;
+    const sit = p.sit || 0, raise = p.raise || 0;
 
     root.position.y = -0.42 * kneel;
 
@@ -185,6 +186,13 @@ export function createCharacter(cfg = {}) {
       legs[0].rotation.x = THREE.MathUtils.lerp(legs[0].rotation.x, -1.35, kneel);
       legs[1].rotation.x = THREE.MathUtils.lerp(legs[1].rotation.x, 0.55, kneel);
       legs[1].rotation.z = -0.25 * kneel;
+    }
+
+    if (sit > 0) {                       // sofraya oturmuş hâl
+      legs[0].rotation.x = THREE.MathUtils.lerp(legs[0].rotation.x, -1.5, sit);
+      legs[1].rotation.x = THREE.MathUtils.lerp(legs[1].rotation.x, -1.5, sit);
+      legs[0].rotation.z = 0.12 * sit;
+      legs[1].rotation.z = -0.12 * sit;
     }
 
     torso.rotation.x = 0.95 * bow + 0.4 * kneel;
@@ -203,6 +211,10 @@ export function createCharacter(cfg = {}) {
     if (wave > 0.01) {
       arms[1].rotation.x = THREE.MathUtils.lerp(arms[1].rotation.x, -2.3, wave);
       arms[1].rotation.z = THREE.MathUtils.lerp(arms[1].rotation.z, Math.sin(ph * 2.4) * 0.45, wave);
+    }
+    if (raise > 0.01) {                   // kadeh kaldırma
+      arms[1].rotation.x = THREE.MathUtils.lerp(arms[1].rotation.x, -2.45, raise);
+      arms[1].rotation.z = THREE.MathUtils.lerp(arms[1].rotation.z, -0.28, raise);
     }
     if (hat) {                            // şapkayı çıkarma
       hat.position.y = base.hatY + 0.55 * hatOff;

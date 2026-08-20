@@ -109,8 +109,27 @@
     border:2px solid var(--gold);border-radius:3px;transition:transform .12s, filter .12s}
   button:hover{filter:brightness(1.15);transform:translateY(-1px)}
   .hidden{display:none !important}
+  body.feast #cards,body.feast #hint,body.feast #compass,body.feast #target,body.feast #dialogue{display:none !important}
+
+  /* ---------- sinematik ---------- */
+  #cine-bars{position:fixed;inset:0;z-index:18;pointer-events:none;opacity:0;transition:opacity .5s}
+  #cine-bars.on{opacity:1}
+  #cine-bars::before,#cine-bars::after{content:"";position:absolute;left:0;right:0;height:11vh;
+    background:#07060a}
+  #cine-bars::before{top:0} #cine-bars::after{bottom:0}
+  #cine-cap{position:fixed;z-index:19;left:50%;transform:translateX(-50%);bottom:14vh;
+    width:min(760px,88vw);text-align:center;font-size:clamp(17px,2.2vw,22px);line-height:1.45;
+    color:#f6ecd2;text-shadow:0 2px 12px #000,0 0 30px rgba(0,0,0,.8);
+    opacity:0;transition:opacity .55s;font-style:italic}
+  #cine-cap.on{opacity:1}
+  #cine-skip{position:fixed;z-index:19;right:22px;bottom:13.5vh;font-family:"Cinzel",serif;
+    font-size:12px;letter-spacing:.2em;color:#c9b98a;opacity:0;transition:opacity .4s}
+  #cine-skip.on{opacity:.75}
 
   /* ---------- töre paneli ---------- */
+  #feast-hud{position:fixed;z-index:12;top:14px;left:50%;transform:translateX(-50%);
+    padding:10px 18px;text-align:center;max-width:min(560px,92vw)}
+
   #tore{position:fixed;z-index:25;top:50%;left:50%;transform:translate(-50%,-50%);
     width:min(560px,92vw);padding:22px 26px}
   #tore h3{font-family:"Cinzel",serif;margin:0 0 4px;color:var(--wine)}
@@ -176,6 +195,10 @@
   <div id="hint">W A S D — yürü &nbsp;·&nbsp; ÜST KRKT — koş &nbsp;·&nbsp; FARE — bak &nbsp;·&nbsp; H — töre &nbsp;·&nbsp; E — selam</div>
 </div>
 
+<div id="cine-bars"></div>
+<div id="cine-cap"></div>
+<div id="cine-skip">BOŞLUK — GEÇ</div>
+
 <div id="tore" class="panel hidden">
   <h3>AKKALE TÖRESİ</h3>
   <div>Sen bir efendisin; selamın da mertebesine göredir.</div>
@@ -195,6 +218,11 @@
   <div id="timing"><div id="zone"></div><div id="zone2" class="perfect"></div><div id="marker"></div></div>
   <div id="cer-steps"></div>
   <div id="cer-log">&nbsp;</div>
+</div>
+
+<div id="feast-hud" class="panel hidden">
+  <div class="lbl" style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;color:#5a4526">ŞÖLEN SOFRASI</div>
+  <div id="feast-txt" style="font-size:15.5px;margin-top:4px">Bey'in sağında oturuyorsun.</div>
 </div>
 
 <div id="start" class="screen">

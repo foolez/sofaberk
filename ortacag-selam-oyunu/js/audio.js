@@ -50,4 +50,46 @@ export const Sfx = {
   horn() {
     try { tone(196, 0.9, 'sawtooth', 0.07); setTimeout(() => tone(262, 1.2, 'sawtooth', 0.07), 260); } catch (e) {}
   },
+  clink() {
+    try { tone(1760, 0.3, 'triangle', 0.06); setTimeout(() => tone(2340, 0.25, 'triangle', 0.04), 40); } catch (e) {}
+  },
+  cheer() {                       // kalabalık sevinci
+    try {
+      noise(1.1, 700, 0.5, 0.16);
+      noise(1.4, 1500, 0.4, 0.08);
+      for (let i = 0; i < 7; i++) {
+        setTimeout(() => tone(300 + Math.random() * 420, 0.5 + Math.random() * 0.4,
+          'triangle', 0.035, 60), i * 70);
+      }
+    } catch (e) {}
+  },
+
+  /* --- ziyafet müziği: ud benzeri mızrap + def --- */
+  _music: null,
+  music(on) {
+    try {
+      if (!on) {
+        if (this._music) { clearInterval(this._music); this._music = null; }
+        return;
+      }
+      if (this._music) return;
+      // Hicaz benzeri bir dizi
+      const scale = [293.66, 311.13, 369.99, 392.0, 440.0, 466.16, 554.37, 587.33];
+      let step = 0;
+      const bar = () => {
+        for (let i = 0; i < 4; i++) {
+          setTimeout(() => {
+            const n = scale[(step * 3 + i * 2 + (i === 3 ? 1 : 0)) % scale.length];
+            tone(n, 0.42, 'triangle', 0.05);
+            tone(n / 2, 0.5, 'sine', 0.022);
+            if (i % 2 === 0) noise(0.14, 130, 1.4, 0.07);   // def
+            else noise(0.08, 420, 1.8, 0.03);
+          }, i * 300);
+        }
+        step++;
+      };
+      bar();
+      this._music = setInterval(bar, 1200);
+    } catch (e) {}
+  },
 };
