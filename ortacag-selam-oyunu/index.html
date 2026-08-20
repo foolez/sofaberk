@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Akkale'ye Selam — Ortaçağ Selam Duruşu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#c9a227; --gold-soft:#e6c86a; --ink:#2a1d10;
+    --parch:#e8d9b5; --parch-dark:#cbb68a;
+    --wine:#6d1f26; --shadow:rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;overflow:hidden;background:#0b0d10;color:#f2e7cf;
+    font-family:"EB Garamond",Georgia,"Times New Roman",serif}
+  canvas{display:block}
+  .title-font{font-family:"Cinzel",Georgia,serif;letter-spacing:.06em}
+
+  #app{position:fixed;inset:0}
+  #hud{position:fixed;inset:0;pointer-events:none;z-index:10}
+  #vignette{position:fixed;inset:0;pointer-events:none;z-index:5;
+    background:radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(0,0,0,.34) 100%)}
+
+  .panel{
+    background:linear-gradient(180deg,rgba(232,217,181,.94),rgba(203,182,138,.94));
+    color:var(--ink);border:2px solid var(--gold);border-radius:4px;
+    box-shadow:0 6px 26px var(--shadow), inset 0 0 0 1px rgba(255,255,255,.35);
+  }
+
+  /* ---------- üst bar ---------- */
+  #topbar{position:absolute;top:14px;left:14px;right:14px;display:flex;gap:14px;
+    align-items:flex-start;justify-content:space-between}
+  #rep-box{padding:10px 14px;min-width:280px}
+  #rep-box .lbl{font-family:"Cinzel",serif;font-size:12px;letter-spacing:.18em;
+    display:flex;justify-content:space-between;align-items:baseline}
+  #rep-bar{position:relative;height:14px;margin-top:6px;border:1px solid #8a7444;
+    background:#3a3021;border-radius:2px;overflow:hidden}
+  #rep-fill{height:100%;width:0%;background:linear-gradient(90deg,#8a6b1f,var(--gold-soft));
+    transition:width .35s ease}
+  #rep-goal{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--wine);left:60%}
+  #rep-note{font-size:13px;margin-top:6px;font-style:italic;opacity:.85}
+
+  #quest{padding:10px 14px;max-width:330px;text-align:right}
+  #quest .lbl{font-family:"Cinzel",serif;font-size:11px;letter-spacing:.18em;color:#5a4526}
+  #quest .txt{font-size:15px;line-height:1.35;margin-top:4px}
+
+  /* ---------- hedef / selam kartları ---------- */
+  #target{position:absolute;left:50%;transform:translateX(-50%);bottom:210px;
+    text-align:center;opacity:0;transition:opacity .2s}
+  #target.on{opacity:1}
+  #target .name{font-family:"Cinzel",serif;font-size:20px;color:var(--gold-soft);
+    text-shadow:0 2px 8px #000}
+  #target .title{font-size:15px;font-style:italic;color:#f0e2c2;text-shadow:0 2px 8px #000}
+
+  #cards{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+    display:flex;gap:12px;opacity:.25;transition:opacity .25s}
+  #cards.on{opacity:1}
+  .card{width:172px;padding:10px 12px;text-align:center;position:relative}
+  .card .key{font-family:"Cinzel",serif;font-weight:700;font-size:13px;color:var(--wine)}
+  .card .nm{font-family:"Cinzel",serif;font-size:14px;margin-top:2px}
+  .card .ds{font-size:12.5px;font-style:italic;opacity:.8;margin-top:3px;line-height:1.25}
+  .card.done{outline:2px solid var(--wine)}
+  .card.sel{outline:3px solid var(--gold);transform:translateY(-5px);box-shadow:0 10px 22px rgba(0,0,0,.6)}
+
+  #prompt{position:absolute;bottom:150px;left:50%;transform:translateX(-50%);
+    font-family:"Cinzel",serif;font-size:14px;letter-spacing:.1em;padding:6px 14px;
+    background:rgba(20,14,6,.72);border:1px solid var(--gold);border-radius:2px;
+    opacity:0;transition:opacity .2s}
+  #prompt.on{opacity:1}
+
+  #dialogue{position:absolute;bottom:200px;left:50%;transform:translateX(-50%);
+    width:min(680px,86vw);padding:14px 18px;opacity:0;transition:opacity .25s;
+    text-align:center;font-size:17px;line-height:1.4}
+  #dialogue.on{opacity:1}
+  #dialogue .who{font-family:"Cinzel",serif;font-size:13px;letter-spacing:.12em;color:var(--wine)}
+  #dialogue .verdict{display:block;margin-top:6px;font-size:14px;font-weight:600}
+  .good{color:#2f6b2f} .bad{color:#8f2020}
+
+  #toasts{position:absolute;top:120px;right:18px;display:flex;flex-direction:column;
+    gap:8px;align-items:flex-end}
+  .toast{padding:7px 13px;font-size:15px;background:rgba(20,14,6,.8);
+    border-left:3px solid var(--gold);animation:slide .3s ease}
+  @keyframes slide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+
+  #hint{position:absolute;bottom:14px;right:16px;font-size:13px;opacity:.6;
+    text-shadow:0 1px 4px #000}
+  #compass{position:absolute;top:96px;left:50%;transform:translateX(-50%);
+    font-size:13px;letter-spacing:.1em;opacity:.75;text-shadow:0 1px 6px #000;
+    font-family:"Cinzel",serif}
+
+  /* ---------- tam ekran perdeler ---------- */
+  .screen{position:fixed;inset:0;z-index:30;display:flex;align-items:center;
+    justify-content:center;padding:24px;
+    background:radial-gradient(ellipse at center,#241a10 0%,#0a0806 75%)}
+  .screen .box{max-width:720px;width:100%;padding:30px 34px}
+  .screen h1{font-family:"Cinzel",serif;font-size:clamp(26px,5vw,44px);margin:0;
+    color:var(--wine);letter-spacing:.05em}
+  .screen h2{font-family:"Cinzel",serif;font-size:15px;letter-spacing:.3em;margin:6px 0 18px;
+    color:#7a5f2e;font-weight:500}
+  .screen p{font-size:16.5px;line-height:1.5;margin:0 0 12px}
+  .rule{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:18px 0}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;font-size:15px}
+  .grid b{font-family:"Cinzel",serif;font-size:13px}
+  button{font-family:"Cinzel",serif;font-size:15px;letter-spacing:.12em;cursor:pointer;
+    margin-top:18px;padding:12px 26px;color:#f6ecd2;background:var(--wine);
+    border:2px solid var(--gold);border-radius:3px;transition:transform .12s, filter .12s}
+  button:hover{filter:brightness(1.15);transform:translateY(-1px)}
+  .hidden{display:none !important}
+
+  /* ---------- töre paneli ---------- */
+  #tore{position:fixed;z-index:25;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:min(560px,92vw);padding:22px 26px}
+  #tore h3{font-family:"Cinzel",serif;margin:0 0 4px;color:var(--wine)}
+  #tore ul{margin:10px 0 0;padding-left:18px;font-size:15px;line-height:1.55}
+
+  /* ---------- tören (final mini oyun) ---------- */
+  #ceremony{position:fixed;z-index:20;left:50%;bottom:60px;transform:translateX(-50%);
+    width:min(620px,92vw);padding:18px 22px;text-align:center}
+  #ceremony .step{font-family:"Cinzel",serif;font-size:19px;color:var(--wine)}
+  #ceremony .sub{font-size:14.5px;font-style:italic;margin-top:2px}
+  #timing{position:relative;height:26px;margin-top:14px;border:2px solid #8a7444;
+    background:#3a3021;border-radius:3px;overflow:hidden}
+  #zone{position:absolute;top:0;bottom:0;background:rgba(60,120,60,.55);
+    border-left:1px solid #9fd39f;border-right:1px solid #9fd39f}
+  #zone.perfect{position:absolute;background:rgba(201,162,39,.75);border-color:var(--gold-soft)}
+  #marker{position:absolute;top:-3px;bottom:-3px;width:4px;background:#f6ecd2;
+    box-shadow:0 0 10px #fff}
+  #cer-log{margin-top:10px;font-size:14px;min-height:20px;font-weight:600}
+  #cer-steps{display:flex;gap:6px;justify-content:center;margin-top:10px}
+  .pip{width:34px;height:6px;background:#3a3021;border:1px solid #8a7444}
+  .pip.ok{background:var(--gold)} .pip.mid{background:#5e7d4e} .pip.no{background:var(--wine)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="vignette"></div>
+
+<div id="hud">
+  <div id="topbar">
+    <div id="rep-box" class="panel">
+      <div class="lbl"><span>ŞEHİRDEKİ İTİBARIN</span><span><b id="rep-val">0</b> / 100</span></div>
+      <div id="rep-bar"><div id="rep-fill"></div><div id="rep-goal"></div></div>
+      <div id="rep-note">Kale kapısı 60 itibarda açılır.</div>
+    </div>
+    <div id="quest" class="panel">
+      <div class="lbl">GÖREV</div>
+      <div class="txt" id="quest-txt">Akkale halkına töreye uygun selam ver.</div>
+    </div>
+  </div>
+
+  <div id="compass"></div>
+  <div id="toasts"></div>
+
+  <div id="target"><div class="name"></div><div class="title"></div></div>
+  <div id="dialogue" class="panel"></div>
+  <div id="prompt">E — SELAM DUR</div>
+
+  <div id="cards">
+    <div class="card panel" data-k="1">
+      <div class="key">1</div><div class="nm">Baş Selamı</div>
+      <div class="ds">Halka. Hafifçe başını eğersin.</div>
+    </div>
+    <div class="card panel" data-k="2">
+      <div class="key">2</div><div class="nm">Temenna</div>
+      <div class="ds">Erkâna. Elin kalbinde, bel kırılır.</div>
+    </div>
+    <div class="card panel" data-k="3">
+      <div class="key">3</div><div class="nm">Diz Selamı</div>
+      <div class="ds">Yalnız şehrin sahibine. Diz çökersin.</div>
+    </div>
+  </div>
+
+  <div id="hint">W A S D — yürü &nbsp;·&nbsp; ÜST KRKT — koş &nbsp;·&nbsp; FARE — bak &nbsp;·&nbsp; H — töre &nbsp;·&nbsp; E — selam</div>
+</div>
+
+<div id="tore" class="panel hidden">
+  <h3>AKKALE TÖRESİ</h3>
+  <div>Sen bir efendisin; selamın da mertebesine göredir.</div>
+  <ul>
+    <li><b>Baş Selamı (1)</b> — çoban, oduncu, çırak, hizmetkâr, dilenci, pazarcı gibi <i>halktan</i> kişilere.</li>
+    <li><b>Temenna (2)</b> — usta, tüccar, muhafız, şövalye, kâhya, müneccim gibi <i>erkândan</i> kişilere.</li>
+    <li><b>Diz Selamı (3)</b> — yalnız ve yalnız <b>şehrin sahibi Bey</b>'e.</li>
+  </ul>
+  <div class="rule"></div>
+  <div style="font-size:15px">Fazla eğilen efendi zayıf görünür, az eğilen küstah sayılır. İkisi de itibar kaybettirir. Yanılırsan kişi seni bir kez daha dener.</div>
+  <div style="text-align:center"><button id="tore-close">KAPAT (H)</button></div>
+</div>
+
+<div id="ceremony" class="panel hidden">
+  <div class="step" id="cer-step">—</div>
+  <div class="sub" id="cer-sub">—</div>
+  <div id="timing"><div id="zone"></div><div id="zone2" class="perfect"></div><div id="marker"></div></div>
+  <div id="cer-steps"></div>
+  <div id="cer-log">&nbsp;</div>
+</div>
+
+<div id="start" class="screen">
+  <div class="box panel">
+    <h1>AKKALE'YE SELAM</h1>
+    <h2>ORTAÇAĞ SELAM DURUŞU</h2>
+    <p>Uzak diyarların efendisisin. Yolun <b>Akkale</b>'ye düştü ve töre açıktır:
+       şehrin sahibinin huzuruna çıkmadan önce halkının gönlünü almalısın.</p>
+    <p>Sokakları dolaş, karşılaştığın herkese <b>mertebesine uygun</b> selam ver.
+       İtibarın 60'ı bulunca kale kapısı önünde açılır; içeride <b>Bey Alparslan</b>'ın
+       huzurunda selam töreni seni bekler.</p>
+    <div class="rule"></div>
+    <div class="grid">
+      <div><b>W A S D</b> — yürü</div><div><b>ÜST KARAKTER</b> — koş</div>
+      <div><b>FARE</b> — çevrene bak</div><div><b>E</b> — selam dur</div>
+      <div><b>1 / 2 / 3</b> — selam çeşidini seç</div><div><b>H</b> — töre kitabı</div>
+    </div>
+    <div style="text-align:center"><button id="btn-start">ŞEHRE GİR</button></div>
+  </div>
+</div>
+
+<div id="end" class="screen hidden">
+  <div class="box panel">
+    <h1 id="end-title">—</h1>
+    <h2 id="end-sub">AKKALE DİVANI'NIN HÜKMÜ</h2>
+    <p id="end-txt">—</p>
+    <div class="rule"></div>
+    <div class="grid" id="end-stats"></div>
+    <div style="text-align:center"><button id="btn-again">BAŞTAN OYNA</button></div>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+<script type="module" src="./js/game.js"></script>
+</body>
+</html>
