@@ -59,9 +59,9 @@ export function buildWorld(scene) {
   ground.receiveShadow = true;
   root.add(ground);
 
-  const street = new THREE.Mesh(new THREE.PlaneGeometry(14, 96), mat(C.cobble));
+  const street = new THREE.Mesh(new THREE.PlaneGeometry(14, 84), mat(C.cobble));
   street.rotation.x = -Math.PI / 2;
-  street.position.set(0, 0.02, 8);
+  street.position.set(0, 0.02, 12);
   street.receiveShadow = true;
   root.add(street);
 
@@ -78,12 +78,12 @@ export function buildWorld(scene) {
   root.add(yard);
 
   // kaldırım taşı serpiştirmesi
-  for (let i = 0; i < 70; i++) {
-    const x = (Math.random() - 0.5) * 13, z = 8 + (Math.random() - 0.5) * 88;
-    const s = 0.7 + Math.random() * 1.5;
-    const t = new THREE.Mesh(new THREE.BoxGeometry(s, 0.06, s * 0.8), mat(i % 2 ? C.cobbleDark : C.cobble));
+  for (let i = 0; i < 44; i++) {
+    const x = (Math.random() - 0.5) * 13, z = 25 + (Math.random() - 0.5) * 50;
+    const s = 0.5 + Math.random() * 0.9;
+    const t = new THREE.Mesh(new THREE.BoxGeometry(s, 0.04, s * 0.8), mat(i % 2 ? C.cobbleDark : 0x656059));
     t.receiveShadow = true;
-    add(t, x, 0.05, z, Math.random() * 3);
+    add(t, x, 0.04, z, Math.random() * 3);
   }
 
   /* ---------------- ev ---------------- */
@@ -259,7 +259,7 @@ export function buildWorld(scene) {
       const n = Math.max(2, Math.floor(len / 1.6));
       for (let i = 0; i < n; i++) {
         const t = -len / 2 + 0.8 + i * (len - 1.6) / (n - 1);
-        bx(along ? 0.8 : d + 0.1, 0.7, along ? d + 0.1 : 0.8,
+        bx(along ? 0.8 : w + 0.1, 0.7, along ? d + 0.1 : 0.8,
            C.stoneDark, along ? x + t : x, h + 0.35, along ? z : z + t);
       }
     }
@@ -370,8 +370,8 @@ export function buildWorld(scene) {
     const leg = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.7, 0.25), mat(C.woodDark));
     leg.position.set(sx, 0.35, 0); throne.add(leg);
   }
-  const carpet = new THREE.Mesh(new THREE.PlaneGeometry(5, 22), mat(C.wine));
-  carpet.rotation.x = -Math.PI / 2; carpet.position.set(0, 0.06, daisZ + 13);
+  const carpet = new THREE.Mesh(new THREE.PlaneGeometry(5, 15), mat(C.wine));
+  carpet.rotation.x = -Math.PI / 2; carpet.position.set(0, 0.06, daisZ + 6);
   carpet.receiveShadow = true; root.add(carpet);
 
   banner(-7, 8, -50, 0); banner(7, 8, -50, 0);

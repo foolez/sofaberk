@@ -653,4 +653,4 @@ function loop() {
 loop();
 
 // hata ayıklama kolaylığı
-window.__akkale = { G, P, world, npcs, cer };
+window.__akkale = { G, P, world, npcs, cer, THREE, camera, scene };
