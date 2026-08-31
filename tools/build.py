@@ -11,7 +11,7 @@ oku = lambda p: (kok / p).read_text(encoding='utf-8')
 
 html = oku('index.html')
 css  = oku('assets/css/style.css')
-js   = oku('assets/js/teams.js') + "\n" + oku('assets/js/game.js')
+js   = "\n".join(oku(f) for f in ('assets/js/teams.js','assets/js/game.js','assets/js/online.js'))
 
 govde = re.search(r'<body>(.*)</body>', html, re.S).group(1)
 govde = re.sub(r'\s*<script src="assets/js/[^"]+"></script>', '', govde)

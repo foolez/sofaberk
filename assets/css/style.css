@@ -188,3 +188,79 @@ button{font-family:inherit;cursor:pointer;border:none}
   .mesaj{min-height:26px;font-size:11px}
   .arma-alan{padding-bottom:38px}
 }
+
+/* ================= ONLINE ================= */
+.mod-secim{display:flex;gap:8px;margin:0 0 22px}
+.mod{
+  flex:1;background:var(--panel);border:1.5px solid var(--cizgi);color:var(--soluk);
+  padding:12px 8px;border-radius:14px;font-weight:800;font-size:13px
+}
+.mod.aktif{border-color:var(--vurgu);background:#12251c;color:var(--vurgu)}
+
+.ayrac{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--soluk);font-size:12px;font-weight:700}
+.ayrac::before,.ayrac::after{content:"";flex:1;height:1px;background:var(--cizgi)}
+
+.kod-girdi{font-family:var(--display);font-size:26px;letter-spacing:8px;text-align:center;text-transform:uppercase}
+.kod-rozet{
+  display:block;width:100%;margin:6px 0 4px;background:var(--panel);border:2px dashed var(--vurgu);
+  color:var(--vurgu);font-family:var(--display);font-weight:900;font-size:clamp(40px,15vw,64px);
+  letter-spacing:10px;padding:16px 8px 16px 18px;border-radius:var(--gol)
+}
+.net-durum{min-height:20px;font-size:13px;font-weight:700;color:var(--vurgu2);margin:14px 0 6px}
+.net-durum.kotu{color:var(--kirmizi)}
+
+.lobi-liste{display:flex;flex-direction:column;gap:8px;margin:18px 0}
+.lobi-oyuncu{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--panel);
+  border:1.5px solid var(--cizgi);border-radius:14px;padding:14px 16px;font-weight:800
+}
+.lobi-oyuncu .rol{font-size:11px;color:var(--soluk);font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.lobi-oyuncu.bos{border-style:dashed;color:var(--soluk)}
+.lobi-ayar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.lobi-ayar span{background:var(--panel2);border:1px solid var(--cizgi);color:var(--soluk);
+  padding:7px 12px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.6px}
+
+/* --- online oyun ekranı --- */
+.net-saha{position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;padding:12px}
+.net-ust{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.net-kim{font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+.net-rakip{margin-left:auto;font-size:12px;color:var(--soluk);font-weight:700;display:flex;align-items:center;gap:6px}
+.cevrim{color:var(--kirmizi);font-size:10px}
+.cevrim.acik{color:var(--vurgu)}
+#ekran-net .arma-alan{flex:1 1 auto;padding-bottom:44px}
+.net-rozet{
+  flex:0 0 auto;text-align:center;font-size:12px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;
+  padding:9px;border-radius:12px;background:#232c3a;color:var(--soluk)
+}
+.net-rozet.sen{background:#12351f;color:var(--vurgu)}
+.net-rozet.rakip{background:#122536;color:var(--mavi)}
+.net-akis{
+  flex:0 0 auto;max-height:24vh;overflow:auto;display:flex;flex-direction:column;gap:6px;
+  background:#0e131b;border:1.5px solid var(--cizgi);border-radius:14px;padding:10px
+}
+.net-akis:empty{display:none}
+.satir{font-size:13px;line-height:1.45;font-weight:600}
+.satir .etiket2{font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:var(--soluk);margin-right:6px}
+.satir.evet{color:var(--vurgu)} .satir.hayir{color:var(--kirmizi)} .satir.sistem{color:var(--soluk);font-style:italic}
+.buyuk-soru{
+  flex:0 0 auto;background:#101c17;border:2px solid var(--vurgu);border-radius:16px;padding:14px;
+  font-size:16px;font-weight:800;text-align:center;line-height:1.4
+}
+.net-aksiyon{flex:0 0 auto;display:flex;flex-direction:column;gap:8px}
+.net-aksiyon .satir-btn{display:flex;gap:8px}
+.net-aksiyon .satir-btn button{
+  flex:1;padding:15px 6px;border-radius:14px;font-weight:900;font-size:14px;
+  background:var(--panel2);color:var(--yazi);border:1.5px solid var(--cizgi)
+}
+.net-aksiyon .evet{background:#12351f;border-color:#1f6b3d;color:#5ef0a4}
+.net-aksiyon .hayir{background:#351218;border-color:#6b1f2a;color:#ff8a96}
+.net-aksiyon .tahmin{background:#2e2708;border-color:#6b5a1f;color:var(--vurgu2)}
+.net-aksiyon .dar{flex:0 0 56px;font-size:18px;padding:14px 4px}
+.net-aksiyon .bekle{text-align:center;color:var(--soluk);font-weight:700;font-size:13px;padding:12px}
+.soru-satir{display:flex;gap:8px}
+.soru-satir .girdi{padding:14px 14px;font-size:15px}
+.soru-satir button{flex:0 0 92px;background:var(--vurgu);color:#05130c;border-radius:14px;font-weight:900}
+
+/* tam ekran katman (online tahmin / eleme) */
+.tam-katman{position:fixed;inset:0;z-index:30;background:#0c1016;display:flex;flex-direction:column;padding:12px;gap:10px}
+.tam-katman .izgara{overflow:auto;flex:1 1 auto;align-content:start}

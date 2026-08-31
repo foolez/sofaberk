@@ -103,7 +103,7 @@ $('#secim-ara').oninput = e => secimListele(e.target.value);
 function secimListele(q){
   const iz = $('#secim-izgara'); iz.innerHTML = '';
   const ara = norm(q.trim());
-  S.havuz.filter(t => !ara || norm(t.ad).includes(ara) || norm(t.sehir).includes(ara) || norm(t.kisa).includes(ara))
+  S.havuz.filter(t => !ara || norm(t.ad).includes(ara) || norm(t.sehir).includes(ara) || norm(t.lig).includes(ara))
     .forEach(t => iz.appendChild(takimKarti(t, ()=>{
       S.oyuncular[S.secimSirasi].takim = t;
       if(S.secimSirasi === 0){
@@ -120,7 +120,7 @@ function secimListele(q){
 function takimKarti(t, tikla){
   const d = document.createElement('button');
   d.className = 'kart'; d.type = 'button';
-  d.innerHTML = `${armaSVG(t)}<div class="isim">${t.ad}</div><div class="lig">${t.sehir}</div>`;
+  d.innerHTML = `${armaSVG(t)}<div class="isim">${t.ad}</div><div class="lig">${t.lig}</div>`;
   d.onclick = tikla;
   return d;
 }
@@ -305,7 +305,7 @@ function katmanAc(i, baslik, kartTikla, elemeModu){
   const ciz = q => {
     iz.innerHTML = '';
     const n = norm(q.trim());
-    S.havuz.filter(t=>!n || norm(t.ad).includes(n) || norm(t.sehir).includes(n) || norm(t.kisa).includes(n))
+    S.havuz.filter(t=>!n || norm(t.ad).includes(n) || norm(t.sehir).includes(n) || norm(t.lig).includes(n))
       .forEach(t=>{
         const kart = takimKarti(t, ()=> kartTikla(t, kart));
         if(elemeModu && S.oyuncular[i].elenen.has(t.id)) kart.classList.add('elendi');

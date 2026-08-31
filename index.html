@@ -20,6 +20,11 @@
     <h1 class="logo-yazi">TAKIM<span>TUT</span></h1>
     <p class="slogan">Sen takımını tutarsın, o seninkini bilmeye çalışır.<br>Evet / Hayır. Sırayla. Süreli.</p>
 
+    <div class="mod-secim">
+      <button class="mod aktif" data-mod="yerel">📱 Aynı cihazda</button>
+      <button class="mod" data-mod="online">🌐 Online · oda kodu</button>
+    </div>
+
     <div class="alan">
       <label class="etiket">Oyuncular</label>
       <div class="ikili">
@@ -68,7 +73,120 @@
   </div>
 </section>
 
-<!-- ============ 2) GİZLİ SEÇİM ============ -->
+
+<!-- ============ ONLINE: BAĞLANTI ============ -->
+<section id="ekran-online" class="ekran">
+  <div class="kurulum-kutu">
+    <h1 class="logo-yazi">ONLINE<span>ODA</span></h1>
+    <p class="slogan">İki ayrı telefon, tek oda kodu. Takımını gerçekten kimse göremez.</p>
+
+    <div class="alan">
+      <label class="etiket">Adın</label>
+      <input id="net-ad" class="girdi" maxlength="14" placeholder="Adın">
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Sunucu adresi</label>
+      <input id="net-sunucu" class="girdi" placeholder="https://oda-sunucun.up.railway.app" autocomplete="off" spellcheck="false">
+      <p class="ipucu" style="margin-top:8px">Oyunu sunucunun adresinden açtıysan burayı boş bırak — kendi adresini kullanır.
+      Online mod bir oda sunucusu ister (<code>online-server/</code>, README’de deploy adımları var).
+      claude.ai önizlemesinde çalışmaz: tarayıcı güvenlik politikası dışarı bağlantıyı engelliyor.</p>
+    </div>
+
+    <button id="net-kur" class="buyuk-btn">ODA KUR</button>
+
+    <div class="ayrac"><span>ya da</span></div>
+
+    <div class="alan">
+      <label class="etiket">Oda kodu</label>
+      <div class="ikili">
+        <input id="net-kod" class="girdi kod-girdi" maxlength="4" placeholder="ABCD" autocomplete="off" spellcheck="false">
+        <button id="net-katil" class="buyuk-btn" style="margin:0;flex:0 0 130px">KATIL</button>
+      </div>
+    </div>
+
+    <p id="net-durum" class="net-durum"></p>
+    <button class="ikincil-btn" data-geri="ekran-kurulum">← Geri</button>
+  </div>
+</section>
+
+<!-- ============ ONLINE: LOBİ ============ -->
+<section id="ekran-lobi" class="ekran">
+  <div class="kurulum-kutu">
+    <div class="kucuk-etiket">Oda kodu</div>
+    <button id="lobi-kod" class="kod-rozet" title="Kopyalamak için dokun">----</button>
+    <p class="slogan" id="lobi-ipucu">Kodu rakibine söyle, o da “Online → Katıl” desin.</p>
+
+    <div class="lobi-liste" id="lobi-oyuncular"></div>
+    <div class="lobi-ayar" id="lobi-ayar"></div>
+
+    <button id="lobi-basla" class="buyuk-btn">BAŞLAT</button>
+    <button class="ikincil-btn" id="lobi-cik">Odadan çık</button>
+  </div>
+</section>
+
+<!-- ============ ONLINE: TAKIM SEÇİMİ ============ -->
+<section id="ekran-net-secim" class="ekran">
+  <div class="secim-ust">
+    <div>
+      <div class="kucuk-etiket">Takımını seç</div>
+      <h2>Kimse göremez</h2>
+    </div>
+    <div class="uyari-rozet" id="net-secim-durum">Rakip seçiyor…</div>
+  </div>
+  <input id="net-secim-ara" class="girdi ara" placeholder="Takım ya da şehir ara…" autocomplete="off">
+  <div id="net-secim-izgara" class="izgara"></div>
+</section>
+
+<!-- ============ ONLINE: OYUN ============ -->
+<section id="ekran-net" class="ekran">
+  <div class="net-saha">
+    <div class="net-ust">
+      <div class="net-kim">
+        <span id="net-ben-ad">Sen</span>
+        <span class="hak" id="net-hak">🎯 2</span>
+      </div>
+      <div class="net-rakip">
+        <span id="net-rakip-ad">Rakip</span>
+        <span class="cevrim" id="net-cevrim">●</span>
+      </div>
+      <div class="sayac-mini" id="net-sayac">–</div>
+    </div>
+
+    <div class="arma-alan" id="net-arma-alan">
+      <div class="takim-bilgi">
+        <div class="ad" id="net-takim-ad"></div>
+        <div class="detay" id="net-takim-detay"></div>
+      </div>
+      <div class="kilit" id="net-kilit">
+        <div class="kilit-ikon">🔒</div>
+        <div>BASILI TUT &amp; GÖR</div>
+        <div class="kilit-alt">Takımın sadece bu telefonda. Rakip asla göremez.</div>
+      </div>
+    </div>
+
+    <div class="net-rozet" id="net-rozet">Sıra sende</div>
+    <div class="net-akis" id="net-akis"></div>
+
+    <div class="net-aksiyon" id="net-aksiyon"></div>
+  </div>
+</section>
+
+<!-- ============ ONLINE: BİTİŞ ============ -->
+<section id="ekran-net-bitis" class="ekran">
+  <div class="bitis-kutu">
+    <div id="net-bitis-kupa" class="devir-ikon">🏆</div>
+    <h2 id="net-bitis-baslik"></h2>
+    <p id="net-bitis-alt"></p>
+    <div class="acilis" id="net-bitis-acilis"></div>
+    <div class="bitis-btnler">
+      <button id="net-tekrar" class="buyuk-btn">TEKRAR OYNA</button>
+      <button class="ikincil-btn" id="net-bitis-cik">Odadan çık</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2) GİZLİ SEÇİM (yerel) ============ -->
 <section id="ekran-secim" class="ekran">
   <div class="secim-ust">
     <div>
@@ -117,5 +235,6 @@
 
 <script src="assets/js/teams.js"></script>
 <script src="assets/js/game.js"></script>
+<script src="assets/js/online.js"></script>
 </body>
 </html>
