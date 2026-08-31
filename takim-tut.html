@@ -1,0 +1,2015 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0d13">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+<title>Takım Tut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@500;700;800&display=swap">
+<style>
+/* ================= TAKIM TUT — stil ================= */
+:root{
+  --zemin:#0a0d13; --panel:#141922; --panel2:#1b2230; --cizgi:#28303f;
+  --yazi:#eef2f8; --soluk:#93a0b4;
+  --vurgu:#38e08a; --vurgu2:#ffd23f; --kirmizi:#ff4d5e; --mavi:#4aa3ff;
+  --gol:16px;
+  --display:'Archivo Black','Arial Black',Impact,system-ui,sans-serif;
+  --govde:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -10%, #16202e 0%, var(--zemin) 60%);
+  color:var(--yazi); font-family:var(--govde);
+  overflow:hidden; overscroll-behavior:none;
+}
+button{font-family:inherit;cursor:pointer;border:none}
+
+.ekran{position:fixed;inset:0;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
+.ekran.aktif{display:block}
+
+/* ---------- KURULUM ---------- */
+.kurulum-kutu{max-width:560px;margin:0 auto;padding:28px 20px 44px;text-align:center}
+.logo-yazi{font-family:var(--display);font-weight:900;font-size:clamp(38px,11vw,64px);letter-spacing:-1px;margin:14px 0 4px;line-height:.95;text-wrap:balance}
+.logo-yazi span{color:var(--vurgu)}
+.slogan{color:var(--soluk);margin:0 0 26px;font-size:14px;line-height:1.6}
+.alan{text-align:left;margin-bottom:20px}
+.etiket{display:block;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--soluk);margin-bottom:8px;font-weight:700}
+.kucuk-etiket{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--soluk);font-weight:700}
+.girdi{
+  width:100%;background:var(--panel);border:1.5px solid var(--cizgi);color:var(--yazi);
+  padding:14px 16px;border-radius:var(--gol);font-size:16px;font-weight:600;outline:none
+}
+.girdi:focus{border-color:var(--vurgu)}
+.ikili{display:flex;align-items:center;gap:10px}
+.vs{font-weight:900;color:var(--soluk);font-size:13px}
+.secenekler{display:flex;gap:8px;flex-wrap:wrap}
+.secenek{
+  flex:1 1 auto;min-width:96px;background:var(--panel);border:1.5px solid var(--cizgi);color:var(--yazi);
+  padding:12px 10px;border-radius:14px;font-size:14px;font-weight:700;display:flex;flex-direction:column;gap:3px;
+  transition:.15s
+}
+.secenek small{font-weight:600;font-size:11px;color:var(--soluk)}
+.secenek.secili{border-color:var(--vurgu);background:#12251c;color:var(--vurgu)}
+.secenek.secili small{color:#6fdca6}
+.buyuk-btn{
+  width:100%;background:var(--vurgu);color:#05130c;padding:18px;border-radius:var(--gol);
+  font-family:var(--display);font-weight:900;font-size:17px;letter-spacing:.5px;margin-top:6px;box-shadow:0 8px 24px rgba(56,224,138,.25)
+}
+.buyuk-btn:active{transform:translateY(1px)}
+.ikincil-btn{width:100%;background:transparent;border:1.5px solid var(--cizgi);color:var(--soluk);padding:14px;border-radius:var(--gol);font-weight:700;margin-top:10px}
+.ipucu{color:var(--soluk);font-size:12px;line-height:1.7;margin-top:18px}
+.ipucu b{color:var(--vurgu2)}
+
+/* ---------- SEÇİM ---------- */
+#ekran-secim{padding:18px 14px 30px}
+.secim-ust{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.secim-ust h2{margin:2px 0 0;font-size:23px;font-family:var(--display);font-weight:900}
+.uyari-rozet{background:#2a1c1c;color:#ff9aa4;border:1px solid #4a2a2f;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700}
+.ara{margin-bottom:14px}
+.izgara{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;padding-bottom:40px}
+.kart{
+  background:var(--panel);border:1.5px solid var(--cizgi);border-radius:14px;padding:10px 6px 8px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--yazi)
+}
+.kart .arma{width:52px;height:auto;display:block}
+img.arma{object-fit:contain}
+.kart .isim{font-size:11px;font-weight:700;line-height:1.2;text-align:center}
+.kart .lig{font-size:9px;color:var(--soluk)}
+.kart:active{border-color:var(--vurgu)}
+.kart.elendi{opacity:.32}
+.kart.elendi .isim{text-decoration:line-through}
+
+/* ---------- DEVİR / BİTİŞ ---------- */
+.devir-kutu,.bitis-kutu{max-width:460px;margin:0 auto;padding:60px 22px;text-align:center}
+.devir-ikon{font-size:64px;margin-bottom:10px}
+.devir-kutu h2,.bitis-kutu h2{font-family:var(--display);font-weight:900;font-size:26px;margin:0 0 8px;line-height:1.15;text-wrap:balance}
+.devir-kutu p,.bitis-kutu p{color:var(--soluk);margin:0 0 26px;line-height:1.6}
+.acilis{display:flex;gap:14px;justify-content:center;margin-bottom:26px;flex-wrap:wrap}
+.acilis .oyuncu-sonuc{background:var(--panel);border:1.5px solid var(--cizgi);border-radius:16px;padding:14px 16px;min-width:140px}
+.acilis .arma{width:76px;margin:0 auto 8px;display:block}
+.acilis .kim{font-size:11px;color:var(--soluk);text-transform:uppercase;letter-spacing:1.2px;font-weight:700}
+.acilis .tkm{font-weight:800;font-size:15px;margin-top:2px}
+.bitis-btnler{max-width:320px;margin:0 auto}
+
+/* ================= OYUN — SPLIT SCREEN ================= */
+#ekran-oyun{overflow:hidden}
+.saha{position:absolute;inset:0;display:flex;flex-direction:column}
+.saha.yatay{flex-direction:row}                 /* telefon yan: sol | sağ */
+.saha.dikey{flex-direction:column}              /* telefon masada: üst / alt */
+.yari{
+  position:relative;flex:1 1 50%;min-height:0;display:flex;flex-direction:column;
+  padding:12px 12px;gap:8px;transition:background .25s, box-shadow .25s;
+  background:var(--panel);border:2px solid transparent;overflow:hidden
+}
+.saha.dikey .yari.sol{transform:rotate(180deg)}  /* karşıdaki düz okusun */
+.saha.yatay .yari{flex:1 1 50%}
+.yari.pasif{background:#0f141c}
+.yari.sirasi{border-color:var(--vurgu);background:#101c17;box-shadow:inset 0 0 60px rgba(56,224,138,.10)}
+.yari.cevap-sirasi{border-color:var(--mavi);background:#0f1722;box-shadow:inset 0 0 60px rgba(74,163,255,.10)}
+
+.yari-ust-serit{display:flex;justify-content:space-between;align-items:center;gap:8px;flex:0 0 auto}
+.oyuncu-adi{font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+.durum-rozet{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:#232c3a;color:var(--soluk)}
+.durum-rozet.sor{background:#12351f;color:var(--vurgu)}
+.durum-rozet.cevapla{background:#122536;color:var(--mavi)}
+.sayac-mini{font-variant-numeric:tabular-nums;font-weight:900;font-size:16px;color:var(--soluk)}
+.sayac-mini.az{color:var(--kirmizi)}
+
+/* arma alanı + kilit */
+.arma-alan{flex:1 1 auto;position:relative;display:flex;align-items:center;justify-content:center;min-height:0;padding-bottom:44px;touch-action:none;cursor:pointer}
+.arma-alan .arma{height:100%;max-height:100%;width:auto;max-width:70%;object-fit:contain;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5))}
+.takim-bilgi{position:absolute;bottom:2px;left:0;right:0;text-align:center;pointer-events:none}
+.takim-bilgi .ad{font-family:var(--display);font-weight:900;font-size:clamp(17px,4.6vw,26px);letter-spacing:-.3px}
+.takim-bilgi .detay{font-size:11px;color:var(--soluk);margin-top:2px}
+.kilit{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  background:linear-gradient(180deg,#161c26,#101620);border:2px dashed var(--cizgi);border-radius:18px;
+  color:var(--soluk);font-weight:800;letter-spacing:.5px;user-select:none;-webkit-user-select:none;text-align:center;padding:10px
+}
+.kilit .kilit-ikon{font-size:34px}
+.kilit .kilit-alt{font-size:11px;font-weight:600;color:#6d7a8d;max-width:230px;line-height:1.5}
+.kilit.gizli{display:none}
+
+/* kontroller */
+.kontrol{display:flex;gap:8px;flex:0 0 auto}
+.kontrol button{
+  flex:1;padding:14px 6px;border-radius:14px;font-weight:900;font-size:14px;
+  background:var(--panel2);color:var(--yazi);border:1.5px solid var(--cizgi);letter-spacing:.3px
+}
+.kontrol button:disabled{opacity:.32}
+.kontrol .evet{background:#12351f;border-color:#1f6b3d;color:#5ef0a4}
+.kontrol .hayir{background:#351218;border-color:#6b1f2a;color:#ff8a96}
+.kontrol .tahmin{background:#2e2708;border-color:#6b5a1f;color:var(--vurgu2)}
+.kontrol .pas{flex:0 0 84px;font-size:12px}
+.kontrol .eleme,.kontrol .fikir{flex:0 0 54px;font-size:18px;padding:12px 2px}
+.kontrol .fikir{background:#26221a;border-color:#5a4c22}
+
+.mesaj{
+  flex:0 0 auto;min-height:34px;display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:12px;font-weight:700;color:var(--soluk);text-align:center;line-height:1.35
+}
+.mesaj .rozet-evet{color:var(--vurgu)} .mesaj .rozet-hayir{color:var(--kirmizi)}
+.hak{font-size:10px;color:var(--soluk);font-weight:700}
+
+/* orta şerit */
+.orta-serit{
+  position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);height:44px;
+  display:flex;align-items:center;justify-content:center;gap:14px;pointer-events:none;z-index:5
+}
+.orta-serit.yatay{
+  top:50%;left:50%;right:auto;transform:translate(-50%,-50%);height:auto;
+  flex-direction:column;gap:8px
+}
+.orta-serit.yatay .orta-bilgi{display:none}   /* dar seam: sayaç yeter, rol rozetleri yarılarda */
+/* yatay düzende telefon dik tutuluyorsa uyar */
+.cevir{display:none;background:#2a1c1c;border:2px solid #4a2a2f;color:#ff9aa4;
+  font-size:12px;font-weight:800;padding:8px 14px;border-radius:999px;text-align:center}
+@media (orientation:portrait){ .orta-serit.yatay .cevir{display:block} }
+.orta-sayac{
+  background:#0a0d13;border:2px solid var(--cizgi);color:var(--yazi);font-family:var(--display);font-weight:900;font-size:18px;
+  min-width:58px;text-align:center;padding:6px 10px;border-radius:999px;font-variant-numeric:tabular-nums
+}
+.orta-sayac.az{border-color:var(--kirmizi);color:var(--kirmizi);animation:nabiz .8s infinite}
+.orta-bilgi{background:#0a0d13;border:2px solid var(--cizgi);color:var(--soluk);font-size:11px;font-weight:800;padding:7px 12px;border-radius:999px;letter-spacing:.8px;text-transform:uppercase}
+@keyframes nabiz{50%{transform:scale(1.08)}}
+
+/* yarı içi katman (tahmin / eleme) */
+.katman{
+  position:absolute;inset:0;background:#0c1016;z-index:8;display:flex;flex-direction:column;padding:10px;gap:8px
+}
+.katman-ust{display:flex;justify-content:space-between;align-items:center;gap:8px;flex:0 0 auto}
+.katman-ust h3{margin:0;font-size:14px}
+.katman .kapat{background:var(--panel2);border:1.5px solid var(--cizgi);color:var(--soluk);border-radius:10px;padding:8px 12px;font-weight:800;font-size:12px}
+.katman .ara{margin:0;padding:10px 12px;font-size:14px;flex:0 0 auto}
+.katman .izgara{overflow:auto;flex:1 1 auto;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:7px;padding-bottom:6px;align-content:start}
+.katman .kart{padding:7px 4px 6px;border-radius:11px;gap:4px}
+.katman .kart .arma{width:34px}
+.katman .kart .isim{font-size:9.5px}
+.katman .kart .lig{display:none}
+
+@media (min-height:760px){ .kart .arma{width:60px} }
+/* dar/alçak yarılar için sıkıştırma (telefon yan tutulduğunda) */
+@media (max-height:520px){
+  .yari{padding:8px 10px;gap:6px}
+  .kilit .kilit-alt{display:none}
+  .kilit .kilit-ikon{font-size:26px}
+  .kontrol button{padding:11px 4px;font-size:13px}
+  .mesaj{min-height:26px;font-size:11px}
+  .arma-alan{padding-bottom:38px}
+}
+
+/* ================= ONLINE ================= */
+.mod-secim{display:flex;gap:8px;margin:0 0 22px}
+.mod{
+  flex:1;background:var(--panel);border:1.5px solid var(--cizgi);color:var(--soluk);
+  padding:12px 8px;border-radius:14px;font-weight:800;font-size:13px
+}
+.mod.aktif{border-color:var(--vurgu);background:#12251c;color:var(--vurgu)}
+
+.ayrac{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--soluk);font-size:12px;font-weight:700}
+.ayrac::before,.ayrac::after{content:"";flex:1;height:1px;background:var(--cizgi)}
+
+.kod-girdi{font-family:var(--display);font-size:26px;letter-spacing:8px;text-align:center;text-transform:uppercase}
+.kod-rozet{
+  display:block;width:100%;margin:6px 0 4px;background:var(--panel);border:2px dashed var(--vurgu);
+  color:var(--vurgu);font-family:var(--display);font-weight:900;font-size:clamp(40px,15vw,64px);
+  letter-spacing:10px;padding:16px 8px 16px 18px;border-radius:var(--gol)
+}
+.net-durum{min-height:20px;font-size:13px;font-weight:700;color:var(--vurgu2);margin:14px 0 6px}
+.net-durum.kotu{color:var(--kirmizi)}
+
+.lobi-liste{display:flex;flex-direction:column;gap:8px;margin:18px 0}
+.lobi-oyuncu{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--panel);
+  border:1.5px solid var(--cizgi);border-radius:14px;padding:14px 16px;font-weight:800
+}
+.lobi-oyuncu .rol{font-size:11px;color:var(--soluk);font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.lobi-oyuncu.bos{border-style:dashed;color:var(--soluk)}
+.lobi-ayar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.lobi-ayar span{background:var(--panel2);border:1px solid var(--cizgi);color:var(--soluk);
+  padding:7px 12px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.6px}
+
+/* --- online oyun ekranı --- */
+.net-saha{position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;padding:12px}
+.net-ust{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.net-kim{font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+.net-rakip{margin-left:auto;font-size:12px;color:var(--soluk);font-weight:700;display:flex;align-items:center;gap:6px}
+.cevrim{color:var(--kirmizi);font-size:10px}
+.cevrim.acik{color:var(--vurgu)}
+#ekran-net .arma-alan{flex:1 1 auto;padding-bottom:44px}
+.net-rozet{
+  flex:0 0 auto;text-align:center;font-size:12px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;
+  padding:9px;border-radius:12px;background:#232c3a;color:var(--soluk)
+}
+.net-rozet.sen{background:#12351f;color:var(--vurgu)}
+.net-rozet.rakip{background:#122536;color:var(--mavi)}
+.net-akis{
+  flex:0 0 auto;max-height:24vh;overflow:auto;display:flex;flex-direction:column;gap:6px;
+  background:#0e131b;border:1.5px solid var(--cizgi);border-radius:14px;padding:10px
+}
+.net-akis:empty{display:none}
+.satir{font-size:13px;line-height:1.45;font-weight:600}
+.satir .etiket2{font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:var(--soluk);margin-right:6px}
+.satir.evet{color:var(--vurgu)} .satir.hayir{color:var(--kirmizi)} .satir.sistem{color:var(--soluk);font-style:italic}
+.buyuk-soru{
+  flex:0 0 auto;background:#101c17;border:2px solid var(--vurgu);border-radius:16px;padding:14px;
+  font-size:16px;font-weight:800;text-align:center;line-height:1.4
+}
+.net-aksiyon{flex:0 0 auto;display:flex;flex-direction:column;gap:8px}
+.net-aksiyon .satir-btn{display:flex;gap:8px}
+.net-aksiyon .satir-btn button{
+  flex:1;padding:15px 6px;border-radius:14px;font-weight:900;font-size:14px;
+  background:var(--panel2);color:var(--yazi);border:1.5px solid var(--cizgi)
+}
+.net-aksiyon .evet{background:#12351f;border-color:#1f6b3d;color:#5ef0a4}
+.net-aksiyon .hayir{background:#351218;border-color:#6b1f2a;color:#ff8a96}
+.net-aksiyon .tahmin{background:#2e2708;border-color:#6b5a1f;color:var(--vurgu2)}
+.net-aksiyon .dar{flex:0 0 56px;font-size:18px;padding:14px 4px}
+.net-aksiyon .bekle{text-align:center;color:var(--soluk);font-weight:700;font-size:13px;padding:12px}
+.soru-satir{display:flex;gap:8px}
+.soru-satir .girdi{padding:14px 14px;font-size:15px}
+.soru-satir button{flex:0 0 92px;background:var(--vurgu);color:#05130c;border-radius:14px;font-weight:900}
+
+/* tam ekran katman (online tahmin / eleme) */
+.tam-katman{position:fixed;inset:0;z-index:30;background:#0c1016;display:flex;flex-direction:column;padding:12px;gap:10px}
+.tam-katman .izgara{overflow:auto;flex:1 1 auto;align-content:start}
+
+/* lobide oda ayarları */
+.lobi-ayar.kurucu{flex-direction:column;gap:14px;align-items:stretch;text-align:left}
+.lobi-grup{display:flex;flex-direction:column;gap:7px}
+.cipler{display:flex;gap:7px;flex-wrap:wrap}
+.lobi-cip{
+  flex:1 1 auto;min-width:88px;background:var(--panel);border:1.5px solid var(--cizgi);color:var(--yazi);
+  padding:10px 8px;border-radius:12px;font-size:13px;font-weight:800;display:flex;flex-direction:column;gap:2px
+}
+.lobi-cip small{font-weight:600;font-size:10px;color:var(--soluk)}
+.lobi-cip.secili{border-color:var(--vurgu);background:#12251c;color:var(--vurgu)}
+.lobi-cip.secili small{color:#6fdca6}
+
+</style>
+</head>
+<body>
+
+
+
+<!-- ============ 1) KURULUM ============ -->
+<section id="ekran-kurulum" class="ekran aktif">
+  <div class="kurulum-kutu">
+    <h1 class="logo-yazi">TAKIM<span>TUT</span></h1>
+    <p class="slogan">Sen takımını tutarsın, o seninkini bilmeye çalışır.<br>Evet / Hayır. Sırayla. Süreli.</p>
+
+    <div class="mod-secim">
+      <button class="mod aktif" data-mod="yerel">📱 Aynı cihazda</button>
+      <button class="mod" data-mod="online">🌐 Online · oda kodu</button>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Oyuncular</label>
+      <div class="ikili">
+        <input id="ad1" class="girdi" maxlength="14" placeholder="1. Oyuncu" value="Oyuncu 1">
+        <span class="vs">VS</span>
+        <input id="ad2" class="girdi" maxlength="14" placeholder="2. Oyuncu" value="Oyuncu 2">
+      </div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Takım havuzu</label>
+      <div id="havuz-secim" class="secenekler"></div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Tur süresi</label>
+      <div class="secenekler" id="sure-secim">
+        <button class="secenek" data-sure="15">15 sn<small>hızlı</small></button>
+        <button class="secenek secili" data-sure="30">30 sn<small>normal</small></button>
+        <button class="secenek" data-sure="45">45 sn<small>sakin</small></button>
+        <button class="secenek" data-sure="0">Süresiz<small>rahat</small></button>
+      </div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Ekran düzeni</label>
+      <div class="secenekler" id="duzen-secim">
+        <button class="secenek secili" data-duzen="yatay">Yatay<small>yan yana, telefon yan</small></button>
+        <button class="secenek" data-duzen="dikey">Karşılıklı<small>alt alta, üst yarı ters</small></button>
+      </div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Tahmin hakkı</label>
+      <div class="secenekler" id="hak-secim">
+        <button class="secenek" data-hak="1">1 hak<small>tek şans</small></button>
+        <button class="secenek secili" data-hak="2">2 hak<small>önerilen</small></button>
+        <button class="secenek" data-hak="3">3 hak<small>bol keseden</small></button>
+      </div>
+    </div>
+
+    <button id="basla" class="buyuk-btn">OYUNU BAŞLAT</button>
+    <p class="ipucu"><b>Yatay:</b> telefonu yan çevir, yan yana oturun — sol taraf senin, sağ taraf onun.<br>
+      <b>Karşılıklı:</b> telefonu aranıza yatır, üst yarı karşındaki için ters döner.<br>
+      Her ikisinde de kendi takımını görmek için kendi yarındaki armaya <b>basılı tut</b> — parmağını çekince kilitlenir.</p>
+  </div>
+</section>
+
+
+<!-- ============ ONLINE: BAĞLANTI ============ -->
+<section id="ekran-online" class="ekran">
+  <div class="kurulum-kutu">
+    <h1 class="logo-yazi">ONLINE<span>ODA</span></h1>
+    <p class="slogan">İki ayrı telefon, tek oda kodu. Takımını gerçekten kimse göremez.</p>
+
+    <div class="alan">
+      <label class="etiket">Adın</label>
+      <input id="net-ad" class="girdi" maxlength="14" placeholder="Adın">
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Sunucu adresi</label>
+      <input id="net-sunucu" class="girdi" placeholder="https://oda-sunucun.up.railway.app" autocomplete="off" spellcheck="false">
+      <p class="ipucu" style="margin-top:8px">Oyunu sunucunun adresinden açtıysan burayı boş bırak — kendi adresini kullanır.
+      Online mod bir oda sunucusu ister (<code>online-server/</code>, README’de deploy adımları var).
+      claude.ai önizlemesinde çalışmaz: tarayıcı güvenlik politikası dışarı bağlantıyı engelliyor.</p>
+    </div>
+
+    <button id="net-kur" class="buyuk-btn">ODA KUR</button>
+
+    <div class="ayrac"><span>ya da</span></div>
+
+    <div class="alan">
+      <label class="etiket">Oda kodu</label>
+      <div class="ikili">
+        <input id="net-kod" class="girdi kod-girdi" maxlength="4" placeholder="ABCD" autocomplete="off" spellcheck="false">
+        <button id="net-katil" class="buyuk-btn" style="margin:0;flex:0 0 130px">KATIL</button>
+      </div>
+    </div>
+
+    <p id="net-durum" class="net-durum"></p>
+    <button class="ikincil-btn" data-geri="ekran-kurulum">← Geri</button>
+  </div>
+</section>
+
+<!-- ============ ONLINE: LOBİ ============ -->
+<section id="ekran-lobi" class="ekran">
+  <div class="kurulum-kutu">
+    <div class="kucuk-etiket">Oda kodu</div>
+    <button id="lobi-kod" class="kod-rozet" title="Kopyalamak için dokun">----</button>
+    <p class="slogan" id="lobi-ipucu">Kodu rakibine söyle, o da “Online → Katıl” desin.</p>
+
+    <div class="lobi-liste" id="lobi-oyuncular"></div>
+    <div class="lobi-ayar" id="lobi-ayar"></div>
+
+    <button id="lobi-basla" class="buyuk-btn">BAŞLAT</button>
+    <button class="ikincil-btn" id="lobi-cik">Odadan çık</button>
+  </div>
+</section>
+
+<!-- ============ ONLINE: TAKIM SEÇİMİ ============ -->
+<section id="ekran-net-secim" class="ekran">
+  <div class="secim-ust">
+    <div>
+      <div class="kucuk-etiket">Takımını seç</div>
+      <h2>Kimse göremez</h2>
+    </div>
+    <div class="uyari-rozet" id="net-secim-durum">Rakip seçiyor…</div>
+  </div>
+  <input id="net-secim-ara" class="girdi ara" placeholder="Takım ya da şehir ara…" autocomplete="off">
+  <div id="net-secim-izgara" class="izgara"></div>
+</section>
+
+<!-- ============ ONLINE: OYUN ============ -->
+<section id="ekran-net" class="ekran">
+  <div class="net-saha">
+    <div class="net-ust">
+      <div class="net-kim">
+        <span id="net-ben-ad">Sen</span>
+        <span class="hak" id="net-hak">🎯 2</span>
+      </div>
+      <div class="net-rakip">
+        <span id="net-rakip-ad">Rakip</span>
+        <span class="cevrim" id="net-cevrim">●</span>
+      </div>
+      <div class="sayac-mini" id="net-sayac">–</div>
+    </div>
+
+    <div class="arma-alan" id="net-arma-alan">
+      <div class="takim-bilgi">
+        <div class="ad" id="net-takim-ad"></div>
+        <div class="detay" id="net-takim-detay"></div>
+      </div>
+      <!-- online modda kilit yok: telefon senin, rakip zaten göremiyor -->
+      <div class="kilit gizli" id="net-kilit"></div>
+    </div>
+
+    <div class="net-rozet" id="net-rozet">Sıra sende</div>
+    <div class="net-akis" id="net-akis"></div>
+
+    <div class="net-aksiyon" id="net-aksiyon"></div>
+  </div>
+</section>
+
+<!-- ============ ONLINE: BİTİŞ ============ -->
+<section id="ekran-net-bitis" class="ekran">
+  <div class="bitis-kutu">
+    <div id="net-bitis-kupa" class="devir-ikon">🏆</div>
+    <h2 id="net-bitis-baslik"></h2>
+    <p id="net-bitis-alt"></p>
+    <div class="acilis" id="net-bitis-acilis"></div>
+    <div class="bitis-btnler">
+      <button id="net-tekrar" class="buyuk-btn">TEKRAR OYNA</button>
+      <button class="ikincil-btn" id="net-bitis-cik">Odadan çık</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2) GİZLİ SEÇİM (yerel) ============ -->
+<section id="ekran-secim" class="ekran">
+  <div class="secim-ust">
+    <div>
+      <div class="kucuk-etiket">Sıra sende</div>
+      <h2 id="secim-oyuncu">Oyuncu 1</h2>
+    </div>
+    <div class="uyari-rozet">Rakip bakmasın 👀</div>
+  </div>
+  <input id="secim-ara" class="girdi ara" placeholder="Takım ara…" autocomplete="off">
+  <div id="secim-izgara" class="izgara"></div>
+</section>
+
+<!-- ============ 3) DEVİR TESLİM ============ -->
+<section id="ekran-devir" class="ekran">
+  <div class="devir-kutu">
+    <div class="devir-ikon">🤝</div>
+    <h2 id="devir-baslik">Telefonu 2. Oyuncuya ver</h2>
+    <p id="devir-alt">Sen hazırsın. Şimdi sıra onda.</p>
+    <button id="devir-btn" class="buyuk-btn">HAZIRIM</button>
+  </div>
+</section>
+
+<!-- ============ 4) OYUN (SPLIT SCREEN) ============ -->
+<section id="ekran-oyun" class="ekran">
+  <div class="saha" id="saha"></div>
+  <div class="orta-serit" id="orta-serit">
+    <div class="orta-sayac" id="orta-sayac">30</div>
+    <div class="orta-bilgi" id="orta-bilgi">Tur 1</div>
+    <div class="cevir">📱 Telefonu yan çevir</div>
+  </div>
+</section>
+
+<!-- ============ 5) BİTİŞ ============ -->
+<section id="ekran-bitis" class="ekran">
+  <div class="bitis-kutu">
+    <div id="bitis-kupa" class="devir-ikon">🏆</div>
+    <h2 id="bitis-baslik">Kazandı!</h2>
+    <p id="bitis-alt"></p>
+    <div class="acilis" id="bitis-acilis"></div>
+    <div class="bitis-btnler">
+      <button id="tekrar" class="buyuk-btn">TEKRAR OYNA</button>
+      <button id="menu" class="ikincil-btn">Ana menü</button>
+    </div>
+  </div>
+</section>
+
+<script>
+/* =============================================================
+   TAKIM TUT — takım veritabanı + arma (logo) üreteci
+   -------------------------------------------------------------
+   Kulüplerin gerçek armaları telifli olduğu için her takım için
+   kendi renk / desen / kuruluş verisinden STİLİZE bir arma
+   üretilir. Takım ilk bakışta tanınır, telif sorunu olmaz.
+
+   Satır düzeni:
+   [id, ad, kısa, şehir, lig, kuruluş, renk1, renk2, desen, grup, bayrak]
+     desen  : stripes | hoops | halves | sash | solid
+     grup   : sl=Süper Lig  1l=TFF 1. Lig  tr=Türkiye klasikleri
+              pl ll sa bl l1 = Avrupa'nın 5 büyük ligi
+              ed=Eredivisie  pt=Primeira  dg=diğer Avrupa  dn=dünya
+     bayrak : s=deniz kenarı şehir  b=başkent  a=Avrupa kupası var
+   ============================================================= */
+
+const _SATIRLAR = [
+  ['gs','Galatasaray','GS','İstanbul','Süper Lig',1905,'F5B301','A32638','stripes','sl','sa'],
+  ['fb','Fenerbahçe','FB','İstanbul','Süper Lig',1907,'FFED00','12326E','stripes','sl','s'],
+  ['bjk','Beşiktaş','BJK','İstanbul','Süper Lig',1903,'111111','FFFFFF','stripes','sl','s'],
+  ['ts','Trabzonspor','TS','Trabzon','Süper Lig',1967,'6E1B37','2C6DB5','stripes','sl','s'],
+  ['ibfk','Başakşehir','İBFK','İstanbul','Süper Lig',1990,'0A2A5B','F26522','halves','sl','s'],
+  ['sam','Samsunspor','SAM','Samsun','Süper Lig',1965,'D2172A','FFFFFF','hoops','sl','s'],
+  ['goz','Göztepe','GÖZ','İzmir','Süper Lig',1925,'F5B301','A32638','halves','sl','s'],
+  ['kon','Konyaspor','KON','Konya','Süper Lig',1922,'0B6B3A','FFFFFF','stripes','sl',''],
+  ['kay','Kayserispor','KAY','Kayseri','Süper Lig',1966,'F5B301','A32638','halves','sl',''],
+  ['ant','Antalyaspor','ANT','Antalya','Süper Lig',1966,'D2172A','FFFFFF','stripes','sl','s'],
+  ['aln','Alanyaspor','ALN','Alanya','Süper Lig',1948,'F47B20','0B6B3A','halves','sl','s'],
+  ['rize','Çaykur Rizespor','RİZ','Rize','Süper Lig',1953,'0B6B3A','1B65B0','stripes','sl','s'],
+  ['ksp','Kasımpaşa','KSP','İstanbul','Süper Lig',1921,'12326E','FFFFFF','stripes','sl','s'],
+  ['gfk','Gaziantep FK','GFK','Gaziantep','Süper Lig',1969,'D2172A','111111','stripes','sl',''],
+  ['eyp','Eyüpspor','EYP','İstanbul','Süper Lig',1919,'5B2A86','F5D000','stripes','sl','s'],
+  ['koc','Kocaelispor','KOC','Kocaeli','Süper Lig',1966,'0B6B3A','111111','stripes','sl','s'],
+  ['gbb','Gençlerbirliği','GBB','Ankara','Süper Lig',1923,'A32638','111111','stripes','sl','b'],
+  ['kgm','F. Karagümrük','KGM','İstanbul','Süper Lig',1926,'A32638','111111','halves','sl','s'],
+  ['bod','Bodrum FK','BOD','Bodrum','1. Lig',1931,'0B6B3A','FFFFFF','hoops','1l','s'],
+  ['hat','Hatayspor','HAT','Hatay','1. Lig',1967,'6E1B37','FFFFFF','stripes','1l','s'],
+  ['siv','Sivasspor','SİV','Sivas','1. Lig',1967,'D2172A','FFFFFF','hoops','1l',''],
+  ['ads','Adana Demirspor','ADS','Adana','1. Lig',1940,'12326E','FFFFFF','stripes','1l',''],
+  ['erz','Erzurumspor FK','ERZ','Erzurum','1. Lig',1967,'0B6B3A','FFFFFF','halves','1l',''],
+  ['sak','Sakaryaspor','SAK','Sakarya','1. Lig',1965,'0B6B3A','111111','stripes','1l',''],
+  ['man','Manisa FK','MAN','Manisa','1. Lig',2016,'D2172A','FFFFFF','halves','1l',''],
+  ['bol','Boluspor','BOL','Bolu','1. Lig',1965,'A32638','FFFFFF','stripes','1l',''],
+  ['ban','Bandırmaspor','BAN','Bandırma','1. Lig',1965,'0B6B3A','A32638','stripes','1l','s'],
+  ['ums','Ümraniyespor','ÜMS','İstanbul','1. Lig',1938,'A32638','FFFFFF','sash','1l','s'],
+  ['ist','İstanbulspor','İST','İstanbul','1. Lig',1926,'F5B301','111111','stripes','1l','s'],
+  ['pen','Pendikspor','PEN','İstanbul','1. Lig',1950,'12326E','FFFFFF','stripes','1l','s'],
+  ['kec','Keçiörengücü','KEÇ','Ankara','1. Lig',1945,'12326E','A32638','halves','1l','b'],
+  ['amd','Amedspor','AMD','Diyarbakır','1. Lig',1990,'0B6B3A','A32638','halves','1l',''],
+  ['urf','Şanlıurfaspor','URF','Şanlıurfa','1. Lig',1969,'F5B301','0B6B3A','stripes','1l',''],
+  ['cor','Çorum FK','ÇOR','Çorum','1. Lig',1967,'A32638','111111','stripes','1l',''],
+  ['sar','Sarıyer','SAR','İstanbul','1. Lig',1940,'12326E','A32638','stripes','1l','s'],
+  ['van','Vanspor FK','VAN','Van','1. Lig',1976,'A32638','FFFFFF','halves','1l',''],
+  ['brs','Bursaspor','BRS','Bursa','Türkiye',1963,'0B6B3A','FFFFFF','stripes','tr',''],
+  ['ank','MKE Ankaragücü','ANK','Ankara','Türkiye',1910,'F5B301','12326E','stripes','tr','b'],
+  ['esk','Eskişehirspor','ESK','Eskişehir','Türkiye',1965,'A32638','111111','stripes','tr',''],
+  ['dnz','Denizlispor','DNZ','Denizli','Türkiye',1966,'0B6B3A','111111','halves','tr',''],
+  ['alt','Altay','ALT','İzmir','Türkiye',1914,'111111','FFFFFF','stripes','tr','s'],
+  ['ksy','Karşıyaka','KŞY','İzmir','Türkiye',1912,'0B6B3A','A32638','stripes','tr','s'],
+  ['gir','Giresunspor','GİR','Giresun','Türkiye',1967,'0B6B3A','FFFFFF','halves','tr','s'],
+  ['mlt','Malatyaspor','MLT','Malatya','Türkiye',1986,'F5B301','111111','halves','tr',''],
+  ['miy','Mersin İdmanyurdu','MİY','Mersin','Türkiye',1925,'A32638','12326E','stripes','tr','s'],
+  ['zon','Zonguldakspor','ZON','Zonguldak','Türkiye',1966,'12326E','A32638','halves','tr','s'],
+  ['ada','Adanaspor','ADA','Adana','Türkiye',1954,'F47B20','FFFFFF','halves','tr',''],
+  ['ord','Orduspor','ORD','Ordu','Türkiye',1967,'A32638','111111','stripes','tr','s'],
+  ['akh','Akhisarspor','AKH','Akhisar','Türkiye',1970,'0B6B3A','FFFFFF','stripes','tr',''],
+  ['vef','Vefa','VEF','İstanbul','Türkiye',1908,'0B6B3A','111111','halves','tr','s'],
+  ['ars','Arsenal','ARS','Londra','Premier Lig',1886,'EF0107','FFFFFF','sash','pl','ba'],
+  ['avl','Aston Villa','AVL','Birmingham','Premier Lig',1874,'670E36','95BFE5','stripes','pl','a'],
+  ['bou','Bournemouth','BOU','Bournemouth','Premier Lig',1899,'DA291C','111111','stripes','pl','s'],
+  ['bre','Brentford','BRE','Londra','Premier Lig',1889,'E30613','FFFFFF','stripes','pl','b'],
+  ['bha','Brighton','BHA','Brighton','Premier Lig',1901,'0057B8','FFFFFF','stripes','pl','s'],
+  ['bur','Burnley','BUR','Burnley','Premier Lig',1882,'6C1D45','87CEEB','solid','pl',''],
+  ['che','Chelsea','CHE','Londra','Premier Lig',1905,'034694','FFFFFF','solid','pl','ba'],
+  ['cry','Crystal Palace','CRY','Londra','Premier Lig',1905,'1B458F','C4122E','stripes','pl','b'],
+  ['eve','Everton','EVE','Liverpool','Premier Lig',1878,'003399','FFFFFF','solid','pl','s'],
+  ['ful','Fulham','FUL','Londra','Premier Lig',1879,'FFFFFF','111111','halves','pl','b'],
+  ['lee','Leeds United','LEE','Leeds','Premier Lig',1919,'FFFFFF','1D428A','solid','pl',''],
+  ['liv','Liverpool','LIV','Liverpool','Premier Lig',1892,'C8102E','FFFFFF','solid','pl','sa'],
+  ['mci','Manchester City','MCI','Manchester','Premier Lig',1880,'6CABDD','FFFFFF','solid','pl','a'],
+  ['mun','Manchester United','MUN','Manchester','Premier Lig',1878,'DA291C','111111','solid','pl','a'],
+  ['new','Newcastle United','NEW','Newcastle','Premier Lig',1892,'111111','FFFFFF','stripes','pl','sa'],
+  ['nfo','Nottingham Forest','NFO','Nottingham','Premier Lig',1865,'DD0000','FFFFFF','solid','pl','a'],
+  ['sun','Sunderland','SUN','Sunderland','Premier Lig',1879,'EB172B','FFFFFF','stripes','pl','s'],
+  ['tot','Tottenham','TOT','Londra','Premier Lig',1882,'FFFFFF','132257','halves','pl','ba'],
+  ['whu','West Ham United','WHU','Londra','Premier Lig',1895,'7A263A','1BB1E7','solid','pl','ba'],
+  ['wol','Wolverhampton','WOL','Wolverhampton','Premier Lig',1877,'FDB913','111111','solid','pl',''],
+  ['ala','Deportivo Alavés','ALA','Vitoria','LaLiga',1921,'0761AF','FFFFFF','stripes','ll',''],
+  ['ath','Athletic Bilbao','ATH','Bilbao','LaLiga',1898,'EE2523','FFFFFF','stripes','ll','s'],
+  ['atm','Atlético Madrid','ATM','Madrid','LaLiga',1903,'CB3524','FFFFFF','stripes','ll','ba'],
+  ['fcb','Barcelona','FCB','Barcelona','LaLiga',1899,'A50044','004D98','stripes','ll','sa'],
+  ['bet','Real Betis','BET','Sevilla','LaLiga',1907,'00954C','FFFFFF','stripes','ll',''],
+  ['cta','Celta Vigo','CEL','Vigo','LaLiga',1923,'8AC3EE','FFFFFF','solid','ll','s'],
+  ['elc','Elche','ELC','Elche','LaLiga',1923,'00873E','FFFFFF','halves','ll','s'],
+  ['esp','Espanyol','ESP','Barcelona','LaLiga',1900,'0067B1','FFFFFF','stripes','ll','s'],
+  ['get','Getafe','GET','Getafe','LaLiga',1983,'004FA3','FFFFFF','solid','ll',''],
+  ['gro','Girona','GIR','Girona','LaLiga',1930,'D81E05','FFFFFF','stripes','ll',''],
+  ['lev','Levante','LEV','Valencia','LaLiga',1909,'004B9F','A50044','halves','ll','s'],
+  ['mll','Mallorca','MLL','Palma','LaLiga',1916,'C4122E','111111','solid','ll','s'],
+  ['osa','Osasuna','OSA','Pamplona','LaLiga',1920,'D91A21','00184E','solid','ll',''],
+  ['ovi','Real Oviedo','OVI','Oviedo','LaLiga',1926,'0B4EA2','FFFFFF','solid','ll',''],
+  ['ray','Rayo Vallecano','RAY','Madrid','LaLiga',1924,'FFFFFF','E53027','sash','ll','b'],
+  ['rma','Real Madrid','RMA','Madrid','LaLiga',1902,'FFFFFF','FEBE10','solid','ll','ba'],
+  ['rso','Real Sociedad','RSO','San Sebastián','LaLiga',1909,'0067B1','FFFFFF','stripes','ll','s'],
+  ['sev','Sevilla','SEV','Sevilla','LaLiga',1890,'FFFFFF','D0021B','halves','ll','a'],
+  ['val','Valencia','VAL','Valencia','LaLiga',1919,'FFFFFF','F18E00','halves','ll','sa'],
+  ['vil','Villarreal','VIL','Villarreal','LaLiga',1923,'FFE667','005187','solid','ll','sa'],
+  ['ata','Atalanta','ATA','Bergamo','Serie A',1907,'1D2D5C','111111','stripes','sa','a'],
+  ['blg','Bologna','BOL','Bologna','Serie A',1909,'A21C24','12326E','halves','sa',''],
+  ['cag','Cagliari','CAG','Cagliari','Serie A',1920,'A5122B','12326E','halves','sa','s'],
+  ['com','Como','COM','Como','Serie A',1907,'12326E','FFFFFF','solid','sa',''],
+  ['crm','Cremonese','CRE','Cremona','Serie A',1903,'A21C24','111111','halves','sa',''],
+  ['fio','Fiorentina','FIO','Floransa','Serie A',1926,'59308F','FFFFFF','solid','sa','a'],
+  ['gen','Genoa','GEN','Cenova','Serie A',1893,'A21C24','12326E','halves','sa','s'],
+  ['hel','Hellas Verona','VER','Verona','Serie A',1903,'F5B301','12326E','halves','sa',''],
+  ['int','Inter','INT','Milano','Serie A',1908,'0068A8','111111','stripes','sa','a'],
+  ['juv','Juventus','JUV','Torino','Serie A',1897,'111111','FFFFFF','stripes','sa','a'],
+  ['laz','Lazio','LAZ','Roma','Serie A',1900,'87D8F7','FFFFFF','solid','sa','ba'],
+  ['lce','Lecce','LEC','Lecce','Serie A',1908,'F5B301','A21C24','halves','sa','s'],
+  ['mil','Milan','MIL','Milano','Serie A',1899,'FB090B','111111','stripes','sa','a'],
+  ['nap','Napoli','NAP','Napoli','Serie A',1926,'12A0D7','FFFFFF','solid','sa','sa'],
+  ['par','Parma','PAR','Parma','Serie A',1913,'F5D000','12326E','hoops','sa','a'],
+  ['pis','Pisa','PIS','Pisa','Serie A',1909,'12326E','FFFFFF','solid','sa','s'],
+  ['rom','Roma','ROM','Roma','Serie A',1927,'8E1F2F','F0BC42','solid','sa','ba'],
+  ['sas','Sassuolo','SAS','Sassuolo','Serie A',1920,'00A752','111111','stripes','sa',''],
+  ['tno','Torino','TOR','Torino','Serie A',1906,'7C2529','FFFFFF','solid','sa',''],
+  ['udi','Udinese','UDI','Udine','Serie A',1896,'111111','FFFFFF','stripes','sa',''],
+  ['aug','Augsburg','FCA','Augsburg','Bundesliga',1907,'BA3733','00875B','stripes','bl',''],
+  ['bay','Bayern München','FCB','Münih','Bundesliga',1900,'DC052D','FFFFFF','solid','bl','a'],
+  ['b04','Bayer Leverkusen','B04','Leverkusen','Bundesliga',1904,'E32219','111111','halves','bl','a'],
+  ['bvb','Borussia Dortmund','BVB','Dortmund','Bundesliga',1909,'FDE100','111111','solid','bl','a'],
+  ['sge','Eintracht Frankfurt','SGE','Frankfurt','Bundesliga',1899,'111111','E1000F','stripes','bl','a'],
+  ['scf','Freiburg','SCF','Freiburg','Bundesliga',1904,'E2001A','FFFFFF','stripes','bl',''],
+  ['hsv','Hamburger SV','HSV','Hamburg','Bundesliga',1887,'12326E','FFFFFF','halves','bl','sa'],
+  ['fch','Heidenheim','FCH','Heidenheim','Bundesliga',1846,'E4002B','12326E','solid','bl',''],
+  ['tsg','Hoffenheim','TSG','Hoffenheim','Bundesliga',1899,'1961B5','FFFFFF','solid','bl',''],
+  ['koe','1. FC Köln','KÖL','Köln','Bundesliga',1948,'ED1C24','FFFFFF','halves','bl',''],
+  ['rbl','RB Leipzig','RBL','Leipzig','Bundesliga',2009,'DD0741','FFFFFF','solid','bl',''],
+  ['m05','Mainz 05','M05','Mainz','Bundesliga',1905,'C3141E','FFFFFF','solid','bl',''],
+  ['bmg','B. Mönchengladbach','BMG','Mönchengladbach','Bundesliga',1900,'111111','00A752','stripes','bl','a'],
+  ['stp','St. Pauli','STP','Hamburg','Bundesliga',1910,'61371F','FFFFFF','solid','bl','s'],
+  ['vfb','Stuttgart','VFB','Stuttgart','Bundesliga',1893,'FFFFFF','E32219','sash','bl',''],
+  ['fcu','Union Berlin','FCU','Berlin','Bundesliga',1966,'EB1923','F5D000','solid','bl','b'],
+  ['svw','Werder Bremen','SVW','Bremen','Bundesliga',1899,'1D9053','FFFFFF','stripes','bl','a'],
+  ['wob','Wolfsburg','WOB','Wolfsburg','Bundesliga',1945,'65B32E','FFFFFF','solid','bl',''],
+  ['ang','Angers','SCO','Angers','Ligue 1',1919,'111111','FFFFFF','halves','l1',''],
+  ['axr','Auxerre','AJA','Auxerre','Ligue 1',1905,'FFFFFF','12326E','stripes','l1',''],
+  ['sb29','Brest','SB29','Brest','Ligue 1',1950,'A50044','FFFFFF','solid','l1','s'],
+  ['hac','Le Havre','HAC','Le Havre','Ligue 1',1872,'87CEEB','12326E','stripes','l1','s'],
+  ['len','Lens','RCL','Lens','Ligue 1',1906,'F5D000','A50044','stripes','l1',''],
+  ['lil','Lille','LOSC','Lille','Ligue 1',1944,'E01E13','12326E','solid','l1',''],
+  ['lor','Lorient','FCL','Lorient','Ligue 1',1926,'F58220','111111','solid','l1','s'],
+  ['ol','Lyon','OL','Lyon','Ligue 1',1950,'FFFFFF','122E62','halves','l1',''],
+  ['om','Marseille','OM','Marsilya','Ligue 1',1899,'FFFFFF','2FAEE0','solid','l1','sa'],
+  ['fcm','Metz','FCM','Metz','Ligue 1',1932,'6E1B37','FFFFFF','solid','l1',''],
+  ['asm','Monaco','ASM','Monako','Ligue 1',1924,'E63329','FFFFFF','halves','l1','sb'],
+  ['fcn','Nantes','FCN','Nantes','Ligue 1',1943,'F5D000','00843D','stripes','l1','s'],
+  ['ogc','Nice','OGCN','Nice','Ligue 1',1904,'A21C24','111111','halves','l1','s'],
+  ['pfc','Paris FC','PFC','Paris','Ligue 1',1969,'12326E','FFFFFF','solid','l1','b'],
+  ['psg','Paris Saint-Germain','PSG','Paris','Ligue 1',1970,'004170','DA291C','sash','l1','ba'],
+  ['srf','Rennes','SRFC','Rennes','Ligue 1',1901,'E4002B','111111','halves','l1',''],
+  ['rcs','Strasbourg','RCSA','Strazburg','Ligue 1',1906,'12326E','FFFFFF','solid','l1',''],
+  ['tfc','Toulouse','TFC','Toulouse','Ligue 1',1970,'5B2A86','FFFFFF','solid','l1',''],
+  ['aja','Ajax','AJAX','Amsterdam','Eredivisie',1900,'FFFFFF','D2122E','sash','ed','ba'],
+  ['psv','PSV','PSV','Eindhoven','Eredivisie',1913,'ED1C24','FFFFFF','stripes','ed','a'],
+  ['fey','Feyenoord','FEY','Rotterdam','Eredivisie',1908,'CE1317','FFFFFF','halves','ed','sa'],
+  ['az','AZ Alkmaar','AZ','Alkmaar','Eredivisie',1967,'E4002B','FFFFFF','solid','ed','a'],
+  ['twe','Twente','TWE','Enschede','Eredivisie',1965,'ED1C24','FFFFFF','solid','ed',''],
+  ['utr','Utrecht','UTR','Utrecht','Eredivisie',1970,'ED1C24','FFFFFF','halves','ed',''],
+  ['gae','Go Ahead Eagles','GAE','Deventer','Eredivisie',1902,'F5D000','A32638','stripes','ed',''],
+  ['hee','Heerenveen','HEE','Heerenveen','Eredivisie',1920,'12326E','FFFFFF','halves','ed',''],
+  ['nec','NEC Nijmegen','NEC','Nijmegen','Eredivisie',1900,'12326E','A32638','stripes','ed',''],
+  ['spa','Sparta Rotterdam','SPA','Rotterdam','Eredivisie',1888,'A32638','FFFFFF','stripes','ed','s'],
+  ['grn','Groningen','GRO','Groningen','Eredivisie',1971,'00A752','FFFFFF','halves','ed',''],
+  ['zwo','PEC Zwolle','PEC','Zwolle','Eredivisie',1910,'12326E','FFFFFF','solid','ed',''],
+  ['ben','Benfica','SLB','Lizbon','Primeira Liga',1904,'E30613','FFFFFF','solid','pt','sba'],
+  ['por','Porto','FCP','Porto','Primeira Liga',1893,'003DA5','FFFFFF','stripes','pt','sa'],
+  ['spo','Sporting CP','SCP','Lizbon','Primeira Liga',1906,'008057','FFFFFF','hoops','pt','sba'],
+  ['bra','Sporting Braga','SCB','Braga','Primeira Liga',1921,'A32638','FFFFFF','solid','pt',''],
+  ['vsc','Vitória SC','VSC','Guimarães','Primeira Liga',1922,'FFFFFF','111111','stripes','pt',''],
+  ['fam','Famalicão','FAM','Famalicão','Primeira Liga',1931,'FFFFFF','111111','halves','pt',''],
+  ['mor','Moreirense','MOR','Moreira','Primeira Liga',1938,'0B6B3A','FFFFFF','stripes','pt',''],
+  ['rav','Rio Ave','RAV','Vila do Conde','Primeira Liga',1939,'0B6B3A','FFFFFF','halves','pt','s'],
+  ['est','Estoril','EST','Estoril','Primeira Liga',1939,'F5D000','12326E','halves','pt','s'],
+  ['cpa','Casa Pia','CPA','Lizbon','Primeira Liga',1920,'111111','A32638','stripes','pt','sb'],
+  ['cel','Celtic','CEL','Glasgow','İskoçya',1887,'018749','FFFFFF','hoops','dg','a'],
+  ['ran','Rangers','RAN','Glasgow','İskoçya',1872,'1B458F','FFFFFF','solid','dg','a'],
+  ['and','Anderlecht','AND','Brüksel','Belçika',1908,'5B2A86','FFFFFF','solid','dg','ba'],
+  ['clb','Club Brugge','CLB','Brugge','Belçika',1891,'12326E','111111','stripes','dg',''],
+  ['gnk','Genk','GNK','Genk','Belçika',1988,'12326E','FFFFFF','solid','dg',''],
+  ['stl','Standard Liège','STL','Liège','Belçika',1898,'A32638','FFFFFF','solid','dg',''],
+  ['oly','Olympiakos','OLY','Pire','Yunanistan',1925,'A32638','FFFFFF','stripes','dg','sa'],
+  ['pao','Panathinaikos','PAO','Atina','Yunanistan',1908,'0B6B3A','FFFFFF','stripes','dg','b'],
+  ['aek','AEK Atina','AEK','Atina','Yunanistan',1924,'F5D000','111111','halves','dg','b'],
+  ['pak','PAOK','PAOK','Selanik','Yunanistan',1926,'111111','FFFFFF','stripes','dg','s'],
+  ['zvz','Kızılyıldız','CRZ','Belgrad','Sırbistan',1945,'A32638','FFFFFF','stripes','dg','ba'],
+  ['par2','Partizan','PAR','Belgrad','Sırbistan',1945,'111111','FFFFFF','stripes','dg','b'],
+  ['dzg','Dinamo Zagreb','DZG','Zagreb','Hırvatistan',1945,'12326E','FFFFFF','solid','dg','b'],
+  ['haj','Hajduk Split','HAJ','Split','Hırvatistan',1911,'FFFFFF','12326E','stripes','dg','s'],
+  ['shk','Shakhtar Donetsk','SHK','Donetsk','Ukrayna',1936,'F58220','111111','stripes','dg','a'],
+  ['dnk','Dinamo Kiev','DYN','Kiev','Ukrayna',1927,'FFFFFF','12326E','halves','dg','ba'],
+  ['zen','Zenit','ZEN','St. Petersburg','Rusya',1925,'12326E','87CEEB','solid','dg','sa'],
+  ['spm','Spartak Moskova','SPM','Moskova','Rusya',1922,'A32638','FFFFFF','sash','dg','b'],
+  ['cka','CSKA Moskova','CSKA','Moskova','Rusya',1911,'A32638','12326E','halves','dg','ba'],
+  ['salz','RB Salzburg','SLZ','Salzburg','Avusturya',1933,'A32638','FFFFFF','solid','dg',''],
+  ['rpd','Rapid Wien','RAP','Viyana','Avusturya',1899,'00A752','FFFFFF','halves','dg','b'],
+  ['bas','Basel','BAS','Basel','İsviçre',1893,'A32638','12326E','halves','dg',''],
+  ['ybb','Young Boys','YB','Bern','İsviçre',1898,'F5D000','111111','stripes','dg','b'],
+  ['fck','Kopenhag','FCK','Kopenhag','Danimarka',1992,'FFFFFF','12326E','halves','dg','sb'],
+  ['mff','Malmö','MFF','Malmö','İsveç',1910,'87CEEB','FFFFFF','solid','dg','s'],
+  ['leg','Legia Varşova','LEG','Varşova','Polonya',1916,'0B6B3A','FFFFFF','stripes','dg','b'],
+  ['fer','Ferencváros','FTC','Budapeşte','Macaristan',1899,'00A752','FFFFFF','stripes','dg','b'],
+  ['slv','Slavia Prag','SLA','Prag','Çekya',1892,'A32638','FFFFFF','halves','dg','b'],
+  ['spr','Sparta Prag','SPT','Prag','Çekya',1893,'8E1F2F','F5D000','solid','dg','b'],
+  ['fcs','FCSB','FCSB','Bükreş','Romanya',1947,'A32638','12326E','halves','dg','ba'],
+  ['boc','Boca Juniors','BOC','Buenos Aires','Arjantin',1905,'12326E','F5D000','hoops','dn','sba'],
+  ['riv','River Plate','RIV','Buenos Aires','Arjantin',1901,'FFFFFF','A32638','sash','dn','sba'],
+  ['fla','Flamengo','FLA','Rio de Janeiro','Brezilya',1895,'A32638','111111','hoops','dn','sa'],
+  ['pal','Palmeiras','PAL','São Paulo','Brezilya',1914,'00623B','FFFFFF','solid','dn','a'],
+  ['cnt','Corinthians','COR','São Paulo','Brezilya',1910,'FFFFFF','111111','halves','dn','a'],
+  ['spf','São Paulo','SPFC','São Paulo','Brezilya',1930,'FFFFFF','A32638','hoops','dn','a'],
+  ['san','Santos','SAN','Santos','Brezilya',1912,'FFFFFF','111111','halves','dn','sa'],
+  ['pen2','Peñarol','PEÑ','Montevideo','Uruguay',1891,'F5D000','111111','stripes','dn','sba'],
+  ['col','Colo-Colo','COLO','Santiago','Şili',1925,'FFFFFF','111111','solid','dn','ba'],
+  ['hil','Al Hilal','HIL','Riyad','S. Arabistan',1957,'12326E','FFFFFF','stripes','dn','b'],
+  ['nsr','Al Nassr','NSR','Riyad','S. Arabistan',1955,'F5D000','12326E','halves','dn','b'],
+  ['ahl','Al Ahly','AHLY','Kahire','Mısır',1907,'A32638','FFFFFF','solid','dn','b'],
+  ['mia','Inter Miami','MIA','Miami','ABD',2018,'F8B7CD','111111','solid','dn','s'],
+  ['lag','LA Galaxy','LAG','Los Angeles','ABD',1994,'FFFFFF','12326E','solid','dn','s'],
+  ['lok','Lokomotiv Moskova','LOK','Moskova','Rusya',1922,'0B6B3A','A32638','halves','ru','b'],
+  ['dnm','Dinamo Moskova','DIN','Moskova','Rusya',1923,'12326E','FFFFFF','halves','ru','b'],
+  ['krd','Krasnodar','KRD','Krasnodar','Rusya',2008,'111111','00A752','stripes','ru',''],
+  ['rub','Rubin Kazan','RUB','Kazan','Rusya',1958,'A32638','0B6B3A','halves','ru',''],
+  ['ros','Rostov','ROS','Rostov','Rusya',1930,'F5B301','12326E','halves','ru',''],
+  ['sam2','Krylia Sovetov','KRY','Samara','Rusya',1942,'12326E','FFFFFF','stripes','ru',''],
+  ['dnp','Dnipro-1','DNP','Dnipro','Ukrayna',2017,'12326E','F5B301','halves','ru',''],
+  ['zor','Zorya Luhansk','ZOR','Luhansk','Ukrayna',1923,'111111','FFFFFF','stripes','ru',''],
+  ['pol','Polissya','POL','Jitomir','Ukrayna',2016,'0B6B3A','FFFFFF','halves','ru',''],
+  ['olx','Oleksandriya','OLK','Oleksandriya','Ukrayna',1990,'F5B301','111111','stripes','ru',''],
+  ['ast','Astana','AST','Astana','Kazakistan',2009,'12326E','F5B301','halves','kz','b'],
+  ['kai','Kairat','KAI','Almatı','Kazakistan',1954,'F5B301','111111','stripes','kz',''],
+  ['tob','Tobol','TOB','Kostanay','Kazakistan',1967,'12326E','FFFFFF','stripes','kz',''],
+  ['orda','Ordabasy','ORB','Şımkent','Kazakistan',1998,'0B6B3A','FFFFFF','halves','kz',''],
+  ['akt','Aktobe','AKT','Aktöbe','Kazakistan',1967,'A32638','FFFFFF','stripes','kz',''],
+  ['qar','Qarabağ','QAR','Ağdam','Azerbaycan',1951,'FFFFFF','111111','halves','kz',''],
+  ['nef','Neftçi','NEF','Bakü','Azerbaycan',1937,'FFFFFF','111111','stripes','kz','sb'],
+  ['sbh','Sabah','SBH','Bakü','Azerbaycan',2017,'12326E','FFFFFF','solid','kz','sb'],
+  ['dtb','Dinamo Tiflis','DTB','Tiflis','Gürcistan',1925,'12326E','FFFFFF','solid','kz','ba'],
+  ['tku','Torpedo Kutaisi','TKU','Kutaisi','Gürcistan',1946,'A32638','111111','halves','kz',''],
+  ['pyu','Pyunik','PYU','Erivan','Ermenistan',1992,'F5B301','12326E','halves','kz','b'],
+  ['ara','Ararat-Armenia','ARA','Erivan','Ermenistan',2017,'A32638','FFFFFF','stripes','kz','b'],
+  ['bat','BATE Borisov','BATE','Barysav','Belarus',1973,'F5B301','12326E','stripes','kz',''],
+  ['dmn','Dinamo Minsk','DMN','Minsk','Belarus',1927,'12326E','FFFFFF','solid','kz','b'],
+  ['shf','Sheriff Tiraspol','SHF','Tiraspol','Moldova',1997,'F5B301','111111','halves','kz',''],
+  ['mls2','Milsami','MIL2','Orhei','Moldova',2005,'0B6B3A','F5B301','stripes','kz',''],
+  ['bodo','Bodø/Glimt','BOD2','Bodø','Norveç',1916,'F5B301','111111','solid','eu2','s'],
+  ['mol','Molde','MOL','Molde','Norveç',1911,'12326E','FFFFFF','solid','eu2','s'],
+  ['ros2','Rosenborg','RBK','Trondheim','Norveç',1917,'FFFFFF','111111','solid','eu2','s'],
+  ['brn','Brann','BRA','Bergen','Norveç',1908,'A32638','FFFFFF','solid','eu2','s'],
+  ['aik','AIK','AIK','Stockholm','İsveç',1891,'111111','F5B301','solid','eu2','sb'],
+  ['dju','Djurgården','DIF','Stockholm','İsveç',1891,'12326E','87CEEB','stripes','eu2','sb'],
+  ['hck','BK Häcken','HAC','Göteborg','İsveç',1940,'F5B301','111111','stripes','eu2','s'],
+  ['elf','Elfsborg','ELF','Borås','İsveç',1904,'F5B301','111111','stripes','eu2',''],
+  ['ifk','IFK Göteborg','IFK','Göteborg','İsveç',1904,'12326E','FFFFFF','stripes','eu2','sa'],
+  ['fcm2','Midtjylland','FCM2','Herning','Danimarka',1999,'111111','A32638','stripes','eu2',''],
+  ['brb','Brøndby','BIF','Kopenhag','Danimarka',1964,'F5B301','12326E','halves','eu2','sb'],
+  ['agf','AGF Aarhus','AGF','Aarhus','Danimarka',1880,'FFFFFF','12326E','stripes','eu2','s'],
+  ['hjk','HJK Helsinki','HJK','Helsinki','Finlandiya',1907,'12326E','FFFFFF','stripes','eu2','sb'],
+  ['kup','KuPS','KUPS','Kuopio','Finlandiya',1923,'F5B301','111111','halves','eu2',''],
+  ['bre2','Breiðablik','BRE2','Kópavogur','İzlanda',1950,'0B6B3A','FFFFFF','stripes','eu2','s'],
+  ['val2','Valur','VAL2','Reykjavík','İzlanda',1911,'A32638','FFFFFF','stripes','eu2','sb'],
+  ['flo','Flora Tallinn','FLO','Tallinn','Estonya',1990,'0B6B3A','FFFFFF','stripes','eu2','sb'],
+  ['lev2','Levadia','LEV2','Tallinn','Estonya',1998,'0B6B3A','111111','stripes','eu2','sb'],
+  ['rfs','RFS','RFS','Riga','Letonya',2005,'6E1B37','FFFFFF','solid','eu2','sb'],
+  ['rga','Riga FC','RGA','Riga','Letonya',2014,'111111','FFFFFF','halves','eu2','sb'],
+  ['zal','Žalgiris','ZAL','Vilnius','Litvanya',1947,'0B6B3A','FFFFFF','stripes','eu2','b'],
+  ['pnv','Panevėžys','PNV','Panevėžys','Litvanya',2015,'12326E','FFFFFF','solid','eu2',''],
+  ['lec2','Lech Poznań','LEC2','Poznań','Polonya',1922,'12326E','FFFFFF','stripes','eu2',''],
+  ['rak','Raków','RAK','Częstochowa','Polonya',1921,'A32638','12326E','halves','eu2',''],
+  ['jag','Jagiellonia','JAG','Białystok','Polonya',1920,'F5B301','A32638','stripes','eu2',''],
+  ['pog','Pogoń Szczecin','POG','Szczecin','Polonya',1948,'12326E','6E1B37','stripes','eu2','s'],
+  ['wis','Wisła Kraków','WIS','Kraków','Polonya',1906,'FFFFFF','A32638','sash','eu2',''],
+  ['plz','Viktoria Plzeň','PLZ','Plzeň','Çekya',1911,'A32638','12326E','stripes','eu2',''],
+  ['ban2','Baník Ostrava','BAN2','Ostrava','Çekya',1922,'12326E','FFFFFF','stripes','eu2',''],
+  ['slo','Slovan Bratislava','SLO','Bratislava','Slovakya',1919,'87CEEB','FFFFFF','solid','eu2','b'],
+  ['trn','Spartak Trnava','TRN','Trnava','Slovakya',1923,'A32638','111111','halves','eu2',''],
+  ['pus','Puskás Akadémia','PUS','Felcsút','Macaristan',2005,'12326E','FFFFFF','stripes','eu2',''],
+  ['feh','Fehérvár','FEH','Székesfehérvár','Macaristan',1941,'A32638','12326E','halves','eu2',''],
+  ['stu','Sturm Graz','STU','Graz','Avusturya',1909,'111111','FFFFFF','stripes','eu2',''],
+  ['las','LASK','LASK','Linz','Avusturya',1908,'111111','FFFFFF','halves','eu2',''],
+  ['awi','Austria Wien','AUW','Viyana','Avusturya',1911,'5B2A86','FFFFFF','solid','eu2','b'],
+  ['srv','Servette','SRV','Cenevre','İsviçre',1890,'6E1B37','FFFFFF','solid','eu2',''],
+  ['lug','Lugano','LUG','Lugano','İsviçre',1908,'111111','FFFFFF','halves','eu2',''],
+  ['sga','St. Gallen','SGA','St. Gallen','İsviçre',1879,'0B6B3A','FFFFFF','stripes','eu2',''],
+  ['zur','FC Zürich','ZUR','Zürih','İsviçre',1896,'FFFFFF','12326E','halves','eu2',''],
+  ['gnt','Gent','GNT','Gent','Belçika',1900,'12326E','FFFFFF','stripes','eu2',''],
+  ['ant2','Antwerp','ANT2','Anvers','Belçika',1880,'A32638','FFFFFF','solid','eu2','s'],
+  ['usg','Union SG','USG','Brüksel','Belçika',1897,'F5B301','12326E','halves','eu2','b'],
+  ['cer','Cercle Brugge','CER','Brugge','Belçika',1899,'0B6B3A','111111','stripes','eu2',''],
+  ['lud','Ludogorets','LUD','Razgrad','Bulgaristan',1945,'0B6B3A','FFFFFF','stripes','eu2',''],
+  ['lvs','Levski Sofya','LVS','Sofya','Bulgaristan',1914,'12326E','FFFFFF','halves','eu2','b'],
+  ['cks','CSKA Sofya','CSKS','Sofya','Bulgaristan',1948,'A32638','FFFFFF','solid','eu2','b'],
+  ['cfr','CFR Cluj','CFR','Cluj','Romanya',1907,'6E1B37','FFFFFF','stripes','eu2',''],
+  ['ucv','U. Craiova','UCV','Craiova','Romanya',1991,'12326E','FFFFFF','halves','eu2',''],
+  ['rap2','Rapid Bükreş','RAP2','Bükreş','Romanya',1923,'6E1B37','F5B301','stripes','eu2','b'],
+  ['voj','Vojvodina','VOJ','Novi Sad','Sırbistan',1914,'A32638','FFFFFF','stripes','eu2',''],
+  ['cuk','Čukarički','CUK','Belgrad','Sırbistan',1926,'F5B301','111111','halves','eu2','b'],
+  ['rij','Rijeka','RIJ','Rijeka','Hırvatistan',1946,'FFFFFF','12326E','halves','eu2','s'],
+  ['osi','Osijek','OSI','Osijek','Hırvatistan',1947,'12326E','FFFFFF','stripes','eu2',''],
+  ['olj','Olimpija','OLJ','Ljubljana','Slovenya',1911,'0B6B3A','FFFFFF','stripes','eu2','b'],
+  ['mar','Maribor','MAR','Maribor','Slovenya',1960,'5B2A86','F5B301','halves','eu2',''],
+  ['cel2','Celje','CEL2','Celje','Slovenya',1919,'F5B301','12326E','stripes','eu2',''],
+  ['zrn','Zrinjski','ZRN','Mostar','Bosna',1905,'A32638','FFFFFF','stripes','eu2',''],
+  ['fks','FK Sarajevo','FKS','Saraybosna','Bosna',1946,'6E1B37','FFFFFF','solid','eu2','b'],
+  ['bor','Borac','BOR','Banja Luka','Bosna',1926,'A32638','12326E','halves','eu2',''],
+  ['shk2','Shkëndija','SHK2','Tetova','K. Makedonya',1979,'A32638','111111','stripes','eu2',''],
+  ['vrd','Vardar','VRD','Üsküp','K. Makedonya',1947,'A32638','111111','halves','eu2','b'],
+  ['tir','KF Tirana','TIR','Tiran','Arnavutluk',1920,'12326E','FFFFFF','stripes','eu2','b'],
+  ['ptz','Partizani','PTZ','Tiran','Arnavutluk',1946,'A32638','FFFFFF','solid','eu2','b'],
+  ['bal','Ballkani','BAL','Suva Reka','Kosova',1947,'A32638','12326E','halves','eu2',''],
+  ['drt','Drita','DRT','Gjilan','Kosova',1947,'12326E','FFFFFF','stripes','eu2',''],
+  ['bud','Budućnost','BUD','Podgorica','Karadağ',1925,'12326E','FFFFFF','stripes','eu2','b'],
+  ['ari','Aris','ARI','Selanik','Yunanistan',1914,'F5B301','111111','halves','eu2','s'],
+  ['apo','APOEL','APO','Lefkoşa','Kıbrıs',1926,'12326E','F5B301','halves','eu2','b'],
+  ['omo','Omonia','OMO','Lefkoşa','Kıbrıs',1948,'0B6B3A','FFFFFF','stripes','eu2','b'],
+  ['paf','Pafos','PAF','Baf','Kıbrıs',2014,'12326E','FFFFFF','solid','eu2','s'],
+  ['mtl','Maccabi Tel Aviv','MTA','Tel Aviv','İsrail',1906,'F5B301','12326E','stripes','eu2','s'],
+  ['mhf','Maccabi Haifa','MHF','Hayfa','İsrail',1913,'0B6B3A','FFFFFF','stripes','eu2','s'],
+  ['hbs','Hapoel Beer Şeva','HBS','Beer Şeva','İsrail',1949,'A32638','FFFFFF','solid','eu2',''],
+  ['bjr','Beitar Kudüs','BJR','Kudüs','İsrail',1936,'F5B301','111111','stripes','eu2','b'],
+  ['hea','Hearts','HEA','Edinburgh','İskoçya',1874,'6E1B37','FFFFFF','solid','eu2','b'],
+  ['hib','Hibernian','HIB','Edinburgh','İskoçya',1875,'0B6B3A','FFFFFF','halves','eu2','b'],
+  ['abd','Aberdeen','ABD','Aberdeen','İskoçya',1903,'A32638','FFFFFF','solid','eu2','s'],
+  ['shr','Shamrock Rovers','SHR','Dublin','İrlanda',1899,'0B6B3A','FFFFFF','hoops','eu2','sb'],
+  ['boh','Bohemians','BOH','Dublin','İrlanda',1890,'A32638','111111','stripes','eu2','sb'],
+  ['lin','Linfield','LIN','Belfast','K. İrlanda',1886,'12326E','FFFFFF','solid','eu2','s'],
+  ['lar','Larne','LAR','Larne','K. İrlanda',1889,'A32638','111111','halves','eu2','s'],
+  ['tns','The New Saints','TNS','Oswestry','Galler',1959,'0B6B3A','FFFFFF','stripes','eu2',''],
+  ['lri','Lincoln Red Imps','LRI','Cebelitarık','Cebelitarık',1976,'111111','A32638','stripes','eu2','sb'],
+  ['kik','KÍ Klaksvík','KI','Klaksvík','Faroe',1904,'12326E','FFFFFF','stripes','eu2','s'],
+  ['hbt','HB Tórshavn','HB','Tórshavn','Faroe',1904,'12326E','FFFFFF','stripes','eu2','sb'],
+  ['ham','Hamrun Spartans','HAM','Ħamrun','Malta',1907,'A32638','111111','stripes','eu2','s'],
+  ['flr','Floriana','FLR','Floriana','Malta',1894,'0B6B3A','FFFFFF','stripes','eu2','s'],
+  ['dif','Differdange 03','DIF','Differdange','Lüksemburg',2003,'A32638','111111','halves','eu2',''],
+  ['dud','F91 Dudelange','DUD','Dudelange','Lüksemburg',1991,'F5B301','111111','stripes','eu2',''],
+  ['ies','Inter Escaldes','IES','Escaldes','Andorra',1991,'12326E','FFFFFF','solid','eu2',''],
+  ['tfi','Tre Fiori','TFI','Fiorentino','San Marino',1949,'F5B301','12326E','halves','eu2',''],
+  ['lafc','Los Angeles FC','LAFC','Los Angeles','MLS',2014,'111111','F5B301','halves','na','s'],
+  ['sea','Seattle Sounders','SEA','Seattle','MLS',2007,'0B6B3A','12326E','stripes','na','s'],
+  ['atl','Atlanta United','ATL','Atlanta','MLS',2014,'A32638','111111','stripes','na',''],
+  ['nyc','New York City FC','NYC','New York','MLS',2013,'87CEEB','12326E','halves','na','s'],
+  ['rbny','New York Red Bulls','RBNY','New York','MLS',1994,'A32638','FFFFFF','solid','na','s'],
+  ['ptl','Portland Timbers','POR2','Portland','MLS',2009,'0B6B3A','F5B301','stripes','na',''],
+  ['clbc','Columbus Crew','CLB2','Columbus','MLS',1994,'F5B301','111111','halves','na',''],
+  ['tor','Toronto FC','TOR2','Toronto','MLS',2005,'A32638','FFFFFF','stripes','na','s'],
+  ['phi','Philadelphia Union','PHI','Philadelphia','MLS',2008,'12326E','F5B301','stripes','na','s'],
+  ['sdg','San Diego FC','SDFC','San Diego','MLS',2023,'12326E','F5B301','halves','na','s'],
+  ['ame','Club América','AME','Meksiko','Liga MX',1916,'F5D000','12326E','solid','na','ba'],
+  ['chv','Guadalajara (Chivas)','CHV','Guadalajara','Liga MX',1906,'A32638','FFFFFF','stripes','na','a'],
+  ['cru','Cruz Azul','CAZ','Meksiko','Liga MX',1927,'12326E','FFFFFF','solid','na','ba'],
+  ['pum','Pumas UNAM','PUM','Meksiko','Liga MX',1954,'F5B301','12326E','halves','na','ba'],
+  ['tig','Tigres UANL','TIG','Monterrey','Liga MX',1960,'F5B301','12326E','stripes','na','a'],
+  ['mty','Monterrey','MTY','Monterrey','Liga MX',1945,'12326E','FFFFFF','stripes','na','a'],
+  ['tol','Toluca','TOL','Toluca','Liga MX',1917,'A32638','FFFFFF','stripes','na',''],
+  ['pac','Pachuca','PAC','Pachuca','Liga MX',1901,'12326E','FFFFFF','stripes','na','a'],
+  ['rac','Racing Club','RAC','Buenos Aires','Arjantin',1903,'87CEEB','FFFFFF','stripes','sam','sba'],
+  ['ind','Independiente','IND','Buenos Aires','Arjantin',1905,'A32638','FFFFFF','solid','sam','sba'],
+  ['sanl','San Lorenzo','SLZ','Buenos Aires','Arjantin',1908,'12326E','A32638','stripes','sam','sba'],
+  ['estu','Estudiantes','EST2','La Plata','Arjantin',1905,'A32638','FFFFFF','stripes','sam','sa'],
+  ['vel','Vélez Sarsfield','VEL','Buenos Aires','Arjantin',1910,'FFFFFF','12326E','sash','sam','sba'],
+  ['new2','Newells Old Boys','NOB','Rosario','Arjantin',1903,'A32638','111111','halves','sam',''],
+  ['roc','Rosario Central','CEN','Rosario','Arjantin',1889,'F5B301','12326E','stripes','sam',''],
+  ['gre','Grêmio','GRE','Porto Alegre','Brezilya',1903,'87CEEB','111111','stripes','sam','sa'],
+  ['int2','Internacional','INT2','Porto Alegre','Brezilya',1909,'A32638','FFFFFF','solid','sam','sa'],
+  ['cru2','Cruzeiro','CRU','Belo Horizonte','Brezilya',1921,'12326E','FFFFFF','solid','sam','a'],
+  ['cam','Atlético Mineiro','CAM','Belo Horizonte','Brezilya',1908,'111111','FFFFFF','stripes','sam','a'],
+  ['bot','Botafogo','BOT','Rio de Janeiro','Brezilya',1904,'111111','FFFFFF','stripes','sam','sa'],
+  ['vas','Vasco da Gama','VAS','Rio de Janeiro','Brezilya',1898,'111111','FFFFFF','sash','sam','s'],
+  ['flu','Fluminense','FLU','Rio de Janeiro','Brezilya',1902,'6E1B37','0B6B3A','stripes','sam','sa'],
+  ['bah','Bahia','BAH','Salvador','Brezilya',1931,'12326E','A32638','stripes','sam','s'],
+  ['for','Fortaleza','FOR','Fortaleza','Brezilya',1918,'12326E','A32638','stripes','sam','s'],
+  ['nac','Nacional','NAC','Montevideo','Uruguay',1899,'FFFFFF','12326E','solid','sam','sba'],
+  ['def','Defensor Sporting','DEF','Montevideo','Uruguay',1913,'5B2A86','FFFFFF','solid','sam','sb'],
+  ['ldu','LDU Quito','LDU','Quito','Ekvador',1930,'FFFFFF','111111','solid','sam','ba'],
+  ['bsc','Barcelona SC','BSC','Guayaquil','Ekvador',1925,'F5B301','A32638','stripes','sam','s'],
+  ['idv','Independiente del Valle','IDV','Sangolquí','Ekvador',1958,'111111','A32638','stripes','sam','a'],
+  ['oli','Olimpia','OLI','Asunción','Paraguay',1902,'FFFFFF','111111','solid','sam','ba'],
+  ['cer2','Cerro Porteño','CER2','Asunción','Paraguay',1912,'A32638','12326E','stripes','sam','b'],
+  ['liber','Libertad','LIB','Asunción','Paraguay',1905,'111111','FFFFFF','stripes','sam','b'],
+  ['blv','Bolívar','BOL2','La Paz','Bolivya',1925,'87CEEB','FFFFFF','solid','sam','b'],
+  ['str','The Strongest','STR','La Paz','Bolivya',1908,'F5B301','111111','stripes','sam','b'],
+  ['uni','Universitario','UNI','Lima','Peru',1924,'FFFFFF','A32638','solid','sam','sb'],
+  ['ali','Alianza Lima','ALI','Lima','Peru',1901,'12326E','FFFFFF','solid','sam','sb'],
+  ['spc','Sporting Cristal','SPC','Lima','Peru',1955,'87CEEB','FFFFFF','solid','sam','sb'],
+  ['unc','U. de Chile','UCH','Santiago','Şili',1927,'12326E','A32638','solid','sam','ba'],
+  ['ucc','U. Católica','UCC','Santiago','Şili',1937,'FFFFFF','12326E','sash','sam','b'],
+  ['atn','Atlético Nacional','ATN','Medellín','Kolombiya',1947,'0B6B3A','FFFFFF','stripes','sam','a'],
+  ['mll2','Millonarios','MLL2','Bogotá','Kolombiya',1946,'12326E','FFFFFF','solid','sam','b'],
+  ['jun','Junior','JUN','Barranquilla','Kolombiya',1924,'A32638','FFFFFF','stripes','sam','s'],
+  ['adc','América de Cali','ADC','Cali','Kolombiya',1927,'A32638','FFFFFF','solid','sam',''],
+  ['car','Caracas FC','CAR','Karakas','Venezuela',1967,'A32638','FFFFFF','stripes','sam','b'],
+  ['auc','Auckland City','AUC','Auckland','Yeni Zelanda',2004,'12326E','FFFFFF','stripes','ok','sa'],
+  ['wel','Wellington Phoenix','WEL','Wellington','Yeni Zelanda',2007,'F5B301','111111','solid','ok','sb'],
+  ['mvi','Melbourne Victory','MVI','Melbourne','Avustralya',2004,'12326E','FFFFFF','stripes','ok','s'],
+  ['mci2','Melbourne City','MCY','Melbourne','Avustralya',2009,'87CEEB','FFFFFF','solid','ok','s'],
+  ['syd','Sydney FC','SYD','Sidney','Avustralya',2004,'87CEEB','12326E','halves','ok','s'],
+  ['wsw','Western Sydney','WSW','Sidney','Avustralya',2012,'A32638','111111','stripes','ok','s'],
+  ['cmr','Central Coast Mariners','CCM','Gosford','Avustralya',2004,'F5B301','12326E','stripes','ok','s'],
+  ['adl','Adelaide United','ADL','Adelaide','Avustralya',2003,'A32638','12326E','stripes','ok','s'],
+  ['itt','Al Ittihad','ITT','Cidde','S. Arabistan',1927,'F5B301','111111','stripes','as','sa'],
+  ['ahi','Al Ahli','AHLI','Cidde','S. Arabistan',1937,'0B6B3A','FFFFFF','stripes','as','s'],
+  ['shb','Al Shabab','SHB','Riyad','S. Arabistan',1947,'FFFFFF','111111','halves','as','b'],
+  ['urw','Urawa Reds','URW','Saitama','Japonya',1950,'A32638','111111','solid','as','a'],
+  ['kaw','Kawasaki Frontale','KAW','Kawasaki','Japonya',1955,'87CEEB','111111','stripes','as','sa'],
+  ['kas','Kashima Antlers','KAS','Kashima','Japonya',1947,'6E1B37','FFFFFF','solid','as','sa'],
+  ['gam','Gamba Osaka','GAM','Osaka','Japonya',1980,'12326E','111111','stripes','as','sa'],
+  ['jeo','Jeonbuk Hyundai','JEO','Jeonju','G. Kore',1994,'0B6B3A','FFFFFF','solid','as','a'],
+  ['uls','Ulsan HD','ULS','Ulsan','G. Kore',1983,'12326E','F5B301','stripes','as','sa'],
+  ['fcs2','FC Seoul','SEO','Seul','G. Kore',1983,'A32638','111111','stripes','as','ba'],
+  ['shp','Shanghai Port','SHP','Şanghay','Çin',2005,'A32638','111111','solid','as','s'],
+  ['gua','Guangzhou FC','GUA','Guangzhou','Çin',1954,'A32638','FFFFFF','solid','as','sa'],
+  ['per','Persepolis','PER','Tahran','İran',1963,'A32638','FFFFFF','stripes','as','b'],
+  ['est3','Esteghlal','EST3','Tahran','İran',1945,'12326E','FFFFFF','stripes','as','ba'],
+  ['sad','Al Sadd','SADD','Doha','Katar',1969,'FFFFFF','111111','solid','as','ba'],
+  ['duh','Al Duhail','DUH','Doha','Katar',2009,'A32638','111111','stripes','as','b'],
+  ['ain','Al Ain','AIN','Al Ain','BAE',1968,'5B2A86','FFFFFF','solid','as','a'],
+  ['zam','Zamalek','ZAM','Kahire','Mısır',1911,'FFFFFF','A32638','solid','af','ba'],
+  ['pyr','Pyramids FC','PYR','Kahire','Mısır',2008,'87CEEB','FFFFFF','solid','af','ba'],
+  ['wac','Wydad Casablanca','WAC','Kazablanka','Fas',1937,'A32638','FFFFFF','solid','af','sa'],
+  ['rca','Raja Casablanca','RCA','Kazablanka','Fas',1949,'0B6B3A','FFFFFF','solid','af','sa'],
+  ['esp2','Espérance Tunis','EST4','Tunus','Tunus',1919,'F5B301','A32638','stripes','af','ba'],
+  ['csx','Club Africain','CSA','Tunus','Tunus',1920,'A32638','FFFFFF','stripes','af','ba'],
+  ['mca','MC Alger','MCA','Cezayir','Cezayir',1921,'0B6B3A','A32638','halves','af','sba'],
+  ['esset','ES Sétif','ESS','Sétif','Cezayir',1958,'111111','FFFFFF','stripes','af','a'],
+  ['msd','Mamelodi Sundowns','SUN2','Pretoria','G. Afrika',1970,'F5B301','12326E','solid','af','ba'],
+  ['kai2','Kaizer Chiefs','KZC','Johannesburg','G. Afrika',1970,'F5B301','111111','solid','af',''],
+  ['ori','Orlando Pirates','ORL','Johannesburg','G. Afrika',1937,'111111','FFFFFF','solid','af','a'],
+  ['sim','Simba SC','SIM','Darüsselam','Tanzanya',1936,'A32638','FFFFFF','solid','af','sb'],
+  ['tpm','TP Mazembe','TPM','Lubumbashi','Kongo',1939,'111111','FFFFFF','solid','af','a'],
+  ['enu','Enyimba','ENY','Aba','Nijerya',1976,'12326E','FFFFFF','solid','af','a'],
+];
+
+const _GRUP_ADI = {
+  sl:'Süper Lig', '1l':'TFF 1. Lig', tr:'Türkiye klasikleri',
+  pl:'Premier Lig', ll:'LaLiga', sa:'Serie A', bl:'Bundesliga', l1:'Ligue 1',
+  ed:'Eredivisie', pt:'Primeira Liga', dg:'Avrupa', eu2:'Avrupa kupaları',
+  ru:'Rusya/Ukrayna', kz:'Kazakistan/Kafkasya',
+  na:'Kuzey Amerika', sam:'Güney Amerika', ok:'Okyanusya', as:'Asya', af:'Afrika', dn:'Dünya',
+};
+
+const AVRUPA_GRUPLARI = ['pl','ll','sa','bl','l1','ed','pt','dg','eu2','ru','kz'];
+const DUNYA_GRUPLARI  = ['na','sam','ok','as','af','dn'];
+
+const TAKIMLAR = _SATIRLAR.map(([id, ad, kisa, sehir, lig, kurulus, r1, r2, desen, grup, bay]) => ({
+  id, ad, kisa, sehir, lig, kurulus, desen, grup,
+  renkler: ['#' + r1, '#' + r2],
+  sahil:   bay.includes('s'),
+  baskent: bay.includes('b'),
+  avrupa:  bay.includes('a'),
+}));
+
+const HAVUZLAR = {
+  'super-lig': { ad:'Süper Lig',   aciklama:'Sadece Süper Lig',
+                 filtre: t => t.grup === 'sl' },
+  'turkiye':   { ad:'Türkiye',     aciklama:'Süper Lig + 1. Lig + klasikler',
+                 filtre: t => ['sl','1l','tr'].includes(t.grup) },
+  'top5':      { ad:'Avrupa 5 Büyük', aciklama:'PL, LaLiga, Serie A, Bundesliga, Ligue 1',
+                 filtre: t => ['pl','ll','sa','bl','l1'].includes(t.grup) },
+  'avrupa':    { ad:'Tüm Avrupa',  aciklama:'ŞL, Avrupa Ligi ve Konferans Ligi kulüpleri — Rusya, Kafkasya, adalar dahil',
+                 filtre: t => AVRUPA_GRUPLARI.includes(t.grup) || t.grup === 'sl' },
+  'dunya':     { ad:'Dünya',       aciklama:'Amerika, Asya, Afrika, Okyanusya',
+                 filtre: t => DUNYA_GRUPLARI.includes(t.grup) },
+  'hepsi':     { ad:'Hepsi',       aciklama:'Bütün takımlar — en zor mod',
+                 filtre: () => true },
+};
+
+/* -------------------- ARMA ÜRETECİ — yardımcılar -------------------- */
+
+function _parlaklik(hex){
+  const h = hex.replace('#','');
+  const r = parseInt(h.slice(0,2),16), g = parseInt(h.slice(2,4),16), b = parseInt(h.slice(4,6),16);
+  return (0.299*r + 0.587*g + 0.114*b) / 255;
+}
+function kontrastRenk(hex){ return _parlaklik(hex) > 0.6 ? '#101318' : '#FFFFFF'; }
+
+/* Kalkanın içini takımın desenine göre boyar */
+function _desenIcerik(t){
+  const [a, b] = t.renkler;
+  switch(t.desen){
+    case 'stripes': {
+      let s = `<rect x="0" y="0" width="200" height="240" fill="${a}"/>`;
+      for(let i=0;i<5;i++) s += `<rect x="${20+i*40}" y="0" width="20" height="240" fill="${b}"/>`;
+      return s;
+    }
+    case 'hoops': {
+      let s = `<rect x="0" y="0" width="200" height="240" fill="${a}"/>`;
+      for(let i=0;i<5;i++) s += `<rect x="0" y="${24+i*48}" width="200" height="24" fill="${b}"/>`;
+      return s;
+    }
+    case 'halves':
+      return `<rect x="0" y="0" width="100" height="240" fill="${a}"/><rect x="100" y="0" width="100" height="240" fill="${b}"/>`;
+    case 'sash':
+      return `<rect x="0" y="0" width="200" height="240" fill="${a}"/>`+
+             `<path d="M -20 200 L 150 -20 L 220 30 L 50 250 Z" fill="${b}"/>`;
+    default:
+      return `<rect x="0" y="0" width="200" height="240" fill="${a}"/>`;
+  }
+}
+
+/* -------------------- GERÇEK LOGOLAR --------------------
+   LOGOLAR[takimId] = resim adresi ya da data: URI.
+   İki yoldan dolar:
+     1) assets/js/logos.js  — tools/logo-cek.py ile üretilen gömülü sürüm
+        (internet gerekmez, tek dosya sürümde de çalışır)
+     2) assets/js/logo.js   — tarayıcı açılışta Wikipedia'dan çeker, sonucu
+        localStorage'a yazar
+   Logo yoksa aşağıdaki stilize arma çizilir, oyun hiç aksamaz.        */
+const LOGOLAR = Object.create(null);
+/* 'stil'  = herkes icin stilize kalkan (varsayilan, internet gerekmez)
+   'gercek'= Wikipedia'dan gercek kulup armalarini cek (assets/js/logo.js)  */
+let LOGO_MODU = 'stil';
+
+/* Ekrana çizilecek arma: gerçek logo varsa o, yoksa stilize kalkan */
+function arma(t){
+  const kaynak = LOGO_MODU === 'gercek' ? LOGOLAR[t.id] : null;
+  if(kaynak){
+    return `<img class="arma logo" src="${kaynak}" alt="${t.ad} logosu" loading="lazy" `+
+           `data-tid="${t.id}" onerror="this.replaceWith(logoYedek('${t.id}'))">`;
+  }
+  return armaSVG(t);
+}
+/* <img> yüklenemezse stilize armaya düş */
+function logoYedek(id){
+  const t = takimBul(id);
+  const kap = document.createElement('span');
+  kap.className = 'arma-yedek';
+  kap.innerHTML = t ? armaSVG(t) : '';
+  delete LOGOLAR[id];
+  return kap.firstElementChild || kap;
+}
+
+/* Takımın stilize armasını SVG string olarak döner */
+function armaSVG(t){
+  const uid = 'c' + t.id + '_' + Math.random().toString(36).slice(2,7);
+  const cerceve = _parlaklik(t.renkler[0]) > 0.75 ? '#101318' : '#F7F7F7';
+  const seritZemin = t.renkler[1];
+  const seritYazi = kontrastRenk(t.renkler[1]);
+  const kalkan = 'M100 4 L192 40 C192 150 160 210 100 236 C40 210 8 150 8 40 Z';
+  const boy = t.kisa.length > 3 ? 30 : 40;
+  return `
+<svg viewBox="0 0 200 260" class="arma" role="img" aria-label="${t.ad} arması" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="${uid}"><path d="${kalkan}"/></clipPath>
+    <linearGradient id="${uid}g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".28"/>
+      <stop offset=".55" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity=".28"/>
+    </linearGradient>
+  </defs>
+  <path d="${kalkan}" fill="${cerceve}"/>
+  <g clip-path="url(#${uid})">
+    ${_desenIcerik(t)}
+    <rect x="0" y="96" width="200" height="52" fill="${seritZemin}" opacity=".95"/>
+    <text x="100" y="133" text-anchor="middle" font-size="${boy}" font-weight="900"
+          font-family="'Archivo Black', 'Arial Black', Impact, system-ui, sans-serif" fill="${seritYazi}"
+          letter-spacing="1">${t.kisa}</text>
+    <rect x="60" y="154" width="80" height="30" rx="15" fill="#000" opacity=".38"/>
+    <text x="100" y="176" text-anchor="middle" font-size="22" font-weight="800"
+          font-family="system-ui, sans-serif" fill="#FFFFFF" opacity=".95">${t.kurulus}</text>
+    <rect x="0" y="0" width="200" height="240" fill="url(#${uid}g)"/>
+  </g>
+  <path d="${kalkan}" fill="none" stroke="${cerceve}" stroke-width="7"/>
+  <path d="${kalkan}" fill="none" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+</svg>`;
+}
+
+function takimlariGetir(havuzKey){
+  const h = HAVUZLAR[havuzKey] || HAVUZLAR['super-lig'];
+  return TAKIMLAR.filter(h.filtre);
+}
+function takimBul(id){ return TAKIMLAR.find(t => t.id === id) || null; }
+
+/* ================= TAKIM TUT — oyun motoru ================= */
+const $  = (s, k=document) => k.querySelector(s);
+const $$ = (s, k=document) => [...k.querySelectorAll(s)];
+
+const SORULAR = [
+  'Takımın renklerinde kırmızı var mı?',
+  'Renklerinde siyah var mı?',
+  'Formasında dikey çubuklar var mı?',
+  'Şehri deniz kenarında mı?',
+  '1950’den önce mi kuruldu?',
+  'Takımın Avrupa kupası var mı?',
+  'Bir başkent takımı mı?',
+  'İstanbul takımı mı?',
+  'Adı bir şehir adıyla mı bitiyor?',
+  'Türkiye’den mi?',
+  'Şu an Süper Lig’de mi?',
+  'Adı iki kelimeden mi oluşuyor?',
+  'Renklerinde sarı var mı?',
+  'Adında “spor” geçiyor mu?',
+];
+
+const S = {
+  ayar: { havuz:'super-lig', sure:30, duzen:'yatay', hak:2 },
+  oyuncular: [],
+  havuz: [],
+  sira: 0,          // soruyu soran oyuncu
+  tur: 1,
+  kalan: 0,
+  timer: null,
+  secimSirasi: 0,
+};
+
+/* ---------- yardımcılar ---------- */
+const ekranGoster = id => { $$('.ekran').forEach(e=>e.classList.remove('aktif')); $('#'+id).classList.add('aktif'); };
+const titret = ms => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
+const karistir = a => a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
+const norm = s => s.toLocaleLowerCase('tr').replace(/[çğıöşü]/g, c=>({'ç':'c','ğ':'g','ı':'i','ö':'o','ş':'s','ü':'u'}[c]));
+
+function ayarKaydet(){ try{ localStorage.setItem('takimtut', JSON.stringify(S.ayar)); }catch(e){} }
+function ayarYukle(){
+  try{ const v = JSON.parse(localStorage.getItem('takimtut')||'null'); if(v) Object.assign(S.ayar, v); }catch(e){}
+}
+
+/* ================= KURULUM EKRANI ================= */
+function kurulumHazirla(){
+  ayarYukle();
+  const hs = $('#havuz-secim'); hs.innerHTML = '';
+  Object.entries(HAVUZLAR).forEach(([k,v])=>{
+    const b = document.createElement('button');
+    b.className = 'secenek' + (S.ayar.havuz===k ? ' secili':'');
+    b.dataset.havuz = k;
+    b.innerHTML = `${v.ad}<small>${takimlariGetir(k).length} takım</small>`;
+    b.onclick = ()=>{ S.ayar.havuz=k; $$('#havuz-secim .secenek').forEach(x=>x.classList.toggle('secili', x.dataset.havuz===k)); ayarKaydet(); };
+    hs.appendChild(b);
+  });
+  grupBagla('#sure-secim','sure','sure', Number);
+  grupBagla('#duzen-secim','duzen','duzen', String);
+  grupBagla('#hak-secim','hak','hak', Number);
+}
+function grupBagla(sel, dataAdi, ayarAdi, tip){
+  $$(sel+' .secenek').forEach(b=>{
+    b.classList.toggle('secili', tip(b.dataset[dataAdi]) === S.ayar[ayarAdi]);
+    b.onclick = ()=>{
+      S.ayar[ayarAdi] = tip(b.dataset[dataAdi]);
+      $$(sel+' .secenek').forEach(x=>x.classList.toggle('secili', x===b));
+      ayarKaydet();
+    };
+  });
+}
+
+$('#basla').onclick = ()=>{
+  S.havuz = takimlariGetir(S.ayar.havuz);
+  S.oyuncular = [0,1].map(i=>({
+    ad: ($('#ad'+(i+1)).value.trim() || ('Oyuncu '+(i+1))).slice(0,14),
+    takim: null, kalanHak: S.ayar.hak, soru: 0, elenen: new Set(),
+  }));
+  S.tur = 1; S.sira = 0;
+
+  S.secimSirasi = 0;
+  devirGoster(0, 'Telefon ' + S.oyuncular[0].ad + '’da', 'Takımını gizlice sen seçiyorsun. Rakip bakmasın.', secimEkrani);
+};
+
+/* ================= DEVİR TESLİM ================= */
+let devirDevam = null;
+function devirGoster(_, baslik, alt, sonra){
+  $('#devir-baslik').textContent = baslik;
+  $('#devir-alt').textContent = alt;
+  devirDevam = sonra;
+  ekranGoster('ekran-devir');
+}
+$('#devir-btn').onclick = ()=>{ const f = devirDevam; devirDevam = null; f && f(); };
+
+/* ================= GİZLİ SEÇİM ================= */
+function secimEkrani(){
+  const o = S.oyuncular[S.secimSirasi];
+  $('#secim-oyuncu').textContent = o.ad;
+  $('#secim-ara').value = '';
+  secimListele('');
+  ekranGoster('ekran-secim');
+}
+$('#secim-ara').oninput = e => secimListele(e.target.value);
+
+function secimListele(q){
+  const iz = $('#secim-izgara'); iz.innerHTML = '';
+  const ara = norm(q.trim());
+  S.havuz.filter(t => !ara || norm(t.ad).includes(ara) || norm(t.sehir).includes(ara) || norm(t.lig).includes(ara))
+    .forEach(t => iz.appendChild(takimKarti(t, ()=>{
+      S.oyuncular[S.secimSirasi].takim = t;
+      if(S.secimSirasi === 0){
+        S.secimSirasi = 1;
+        devirGoster(1, 'Telefonu ' + S.oyuncular[1].ad + '’a ver', 'Sıra onda — o da takımını gizlice seçecek.', secimEkrani);
+      } else {
+        devirGoster(0, 'Hazırsınız!', S.ayar.duzen === 'yatay'
+          ? 'Telefonu yan çevirin ve yan yana oturun: sol taraf ' + S.oyuncular[0].ad + ', sağ taraf ' + S.oyuncular[1].ad + '.'
+          : 'Telefonu aranıza yatırın. Üst yarı ' + S.oyuncular[0].ad + ' için ters çevrilidir.', oyunuBaslat);
+      }
+    })));
+}
+
+function takimKarti(t, tikla){
+  const d = document.createElement('button');
+  d.className = 'kart'; d.type = 'button';
+  d.innerHTML = `${arma(t)}<div class="isim">${t.ad}</div><div class="lig">${t.lig}</div>`;
+  d.onclick = tikla;
+  return d;
+}
+
+/* ================= OYUN ================= */
+function oyunuBaslat(){
+  ekranGoster('ekran-oyun');
+  sahaCiz();
+  turBasla(true);
+}
+
+function sahaCiz(){
+  const saha = $('#saha');
+  saha.className = 'saha ' + S.ayar.duzen;
+  $('#orta-serit').className = 'orta-serit ' + S.ayar.duzen;
+  saha.innerHTML = '';
+  [0,1].forEach(i=>{
+    const o = S.oyuncular[i];
+    const t = o.takim;
+    const y = document.createElement('div');
+    y.className = 'yari ' + (i===0 ? 'sol':'sag');
+    y.id = 'yari-'+i;
+    y.innerHTML = `
+      <div class="yari-ust-serit">
+        <div class="oyuncu-adi">${o.ad} <span class="hak" id="hak-${i}">🎯 ${o.kalanHak}</span></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="durum-rozet" id="rozet-${i}">bekliyor</span>
+          <span class="sayac-mini" id="minisayac-${i}">–</span>
+        </div>
+      </div>
+
+      <div class="arma-alan">
+        ${arma(t)}
+        <div class="takim-bilgi">
+          <div class="ad">${t.ad}</div>
+          <div class="detay">${t.sehir} • ${t.kurulus} • ${t.lig}</div>
+        </div>
+        <div class="kilit" id="kilit-${i}">
+          <div class="kilit-ikon">🔒</div>
+          <div>BASILI TUT &amp; GÖR</div>
+          <div class="kilit-alt">Takımın gizli. Sadece sen görmelisin — parmağını çekince tekrar kilitlenir.</div>
+        </div>
+      </div>
+
+      <div class="mesaj" id="mesaj-${i}">Oyun başlıyor…</div>
+
+      <div class="kontrol" id="kontrol-${i}">
+        <button class="evet"   data-rol="evet">EVET</button>
+        <button class="hayir"  data-rol="hayir">HAYIR</button>
+        <button class="tahmin" data-rol="tahmin">TAHMİN ET</button>
+        <button class="pas"    data-rol="pas">PAS</button>
+        <button class="fikir"  data-rol="fikir" title="Soru fikri">💡</button>
+        <button class="eleme"  data-rol="eleme" title="Eleme tahtası">📋</button>
+      </div>`;
+    saha.appendChild(y);
+
+    /* kilit: arma alanına basılı tut & gör */
+    const kilit = $('#kilit-'+i, y);
+    const alan  = $('.arma-alan', y);
+    const ac    = e => { e.preventDefault(); kilit.classList.add('gizli'); };
+    const kapat = () => kilit.classList.remove('gizli');
+    alan.addEventListener('pointerdown', ac);
+    ['pointerup','pointercancel','pointerleave'].forEach(ev => alan.addEventListener(ev, kapat));
+    document.addEventListener('pointerup', kapat);
+    document.addEventListener('pointercancel', kapat);
+
+    /* kontroller */
+    $$('#kontrol-'+i+' button', y).forEach(b=>{
+      b.onclick = () => kontrolTik(i, b.dataset.rol);
+    });
+  });
+}
+
+function kontrolTik(i, rol){
+  const soran = S.sira, cevaplayan = 1 - S.sira;
+  if(rol === 'eleme'){ elemeAc(i); return; }
+  if(rol === 'fikir'){
+    if(i !== soran) return;
+    mesaj(i, '💡 ' + SORULAR[Math.floor(Math.random()*SORULAR.length)]);
+    return;
+  }
+  if(rol === 'evet' || rol === 'hayir'){
+    if(i !== cevaplayan) return;
+    cevapVer(rol === 'evet');
+  }
+  if(rol === 'tahmin'){ if(i !== soran) return; tahminAc(i); }
+  if(rol === 'pas'){ if(i !== soran) return; mesaj(soran, 'Turu pas geçtin.'); mesaj(cevaplayan, 'Rakip pas geçti.'); siraDegis(); }
+}
+
+function cevapVer(evetMi){
+  const soran = S.sira, cevaplayan = 1 - S.sira;
+  S.oyuncular[soran].soru++;
+  titret(30);
+  mesaj(soran, evetMi
+    ? '<span class="rozet-evet">✅ Cevap: EVET</span>'
+    : '<span class="rozet-hayir">❌ Cevap: HAYIR</span>');
+  mesaj(cevaplayan, evetMi ? 'Cevabın: EVET' : 'Cevabın: HAYIR');
+  siraDegis();
+}
+
+function siraDegis(){
+  S.sira = 1 - S.sira;
+  S.tur++;
+  turBasla(false);
+}
+
+function turBasla(ilk){
+  const soran = S.sira, cevaplayan = 1 - S.sira;
+  $('#yari-'+soran).className = 'yari ' + (soran===0?'sol ':'sag ') + 'sirasi';
+  $('#yari-'+cevaplayan).className = 'yari ' + (cevaplayan===0?'sol ':'sag ') + 'cevap-sirasi';
+  $('#rozet-'+soran).textContent = 'SEN SOR';       $('#rozet-'+soran).className = 'durum-rozet sor';
+  $('#rozet-'+cevaplayan).textContent = 'SEN CEVAPLA'; $('#rozet-'+cevaplayan).className = 'durum-rozet cevapla';
+
+  butonDurum(soran,      { evet:false, hayir:false, tahmin:true,  pas:true,  fikir:true  });
+  butonDurum(cevaplayan, { evet:true,  hayir:true,  tahmin:false, pas:false, fikir:false });
+
+  if(ilk){
+    mesaj(soran, 'Sıra sende: rakibe <b>evet/hayır</b>lık bir soru sor.');
+    mesaj(cevaplayan, 'Rakip soracak. Kendi takımına göre cevapla.');
+  } else {
+    ekle(soran, 'Sıra sende — soru sor.');
+    ekle(cevaplayan, 'Rakibin sorusunu cevapla.');
+  }
+  $('#orta-bilgi').textContent = 'Tur ' + S.tur + ' • ' + S.oyuncular[soran].ad + ' soruyor';
+  sayacBaslat();
+}
+
+/* rolüne uymayan butonu tamamen gizle — 5 buton dar ekrana sığmıyor */
+function butonDurum(i, harita){
+  $$('#kontrol-'+i+' button').forEach(b=>{
+    const r = b.dataset.rol;
+    if(!(r in harita)) return;          // eleme tahtası her zaman açık
+    b.style.display = harita[r] ? '' : 'none';
+    b.disabled = !harita[r];
+  });
+}
+
+function mesaj(i, html){ $('#mesaj-'+i).innerHTML = html; }
+function ekle(i, html){ $('#mesaj-'+i).innerHTML = html; }
+
+/* ---------- sayaç ---------- */
+function sayacBaslat(){
+  clearInterval(S.timer);
+  if(!S.ayar.sure){
+    $('#orta-sayac').textContent = '∞'; $('#orta-sayac').classList.remove('az');
+    [0,1].forEach(i=>{ $('#minisayac-'+i).textContent = '∞'; $('#minisayac-'+i).classList.remove('az'); });
+    return;
+  }
+  S.kalan = S.ayar.sure;
+  sayacCiz();
+  S.timer = setInterval(()=>{
+    S.kalan--;
+    sayacCiz();
+    if(S.kalan <= 0){
+      clearInterval(S.timer);
+      titret([60,60,60]);
+      const soran = S.sira, cevaplayan = 1 - S.sira;
+      mesaj(soran, '⏱ Süren doldu! Tur rakibe geçti.');
+      mesaj(cevaplayan, '⏱ Rakibin süresi doldu. Sıra sende.');
+      siraDegis();
+    }
+  }, 1000);
+}
+function sayacCiz(){
+  const az = S.kalan <= 5;
+  const s = $('#orta-sayac'); s.textContent = S.kalan; s.classList.toggle('az', az);
+  [0,1].forEach(i=>{ const m = $('#minisayac-'+i); m.textContent = S.kalan + '"'; m.classList.toggle('az', az); });
+}
+
+/* ---------- katman (tahmin & eleme) ---------- */
+function katmanAc(i, baslik, kartTikla, elemeModu){
+  const y = $('#yari-'+i);
+  if($('.katman', y)) return;
+  const k = document.createElement('div');
+  k.className = 'katman';
+  k.innerHTML = `
+    <div class="katman-ust"><h3>${baslik}</h3><button class="kapat">KAPAT</button></div>
+    <input class="girdi ara" placeholder="Takım ara…" autocomplete="off">
+    <div class="izgara"></div>`;
+  y.appendChild(k);
+  const iz = $('.izgara', k), ara = $('.ara', k);
+  const ciz = q => {
+    iz.innerHTML = '';
+    const n = norm(q.trim());
+    S.havuz.filter(t=>!n || norm(t.ad).includes(n) || norm(t.sehir).includes(n) || norm(t.lig).includes(n))
+      .forEach(t=>{
+        const kart = takimKarti(t, ()=> kartTikla(t, kart));
+        if(elemeModu && S.oyuncular[i].elenen.has(t.id)) kart.classList.add('elendi');
+        iz.appendChild(kart);
+      });
+  };
+  ara.oninput = e => ciz(e.target.value);
+  $('.kapat', k).onclick = ()=> k.remove();
+  ciz('');
+}
+
+function elemeAc(i){
+  katmanAc(i, 'Eleme tahtası — elediğini işaretle', (t, kart)=>{
+    const e = S.oyuncular[i].elenen;
+    if(e.has(t.id)){ e.delete(t.id); kart.classList.remove('elendi'); }
+    else { e.add(t.id); kart.classList.add('elendi'); }
+  }, true);
+}
+
+function tahminAc(i){
+  katmanAc(i, 'Rakibin takımı hangisi?', (t)=>{
+    $('.katman', $('#yari-'+i)).remove();
+    tahminYap(i, t);
+  }, false);
+}
+
+function tahminYap(i, t){
+  const rakip = 1 - i;
+  const dogru = S.oyuncular[rakip].takim.id === t.id;
+  if(dogru){ bitir(i, 'tahmin'); return; }
+  const o = S.oyuncular[i];
+  o.kalanHak--;
+  $('#hak-'+i).textContent = '🎯 ' + o.kalanHak;
+  titret(120);
+  if(o.kalanHak <= 0){ bitir(rakip, 'hak'); return; }
+  mesaj(i, `❌ <b>${t.ad}</b> değil! Kalan tahmin hakkın: ${o.kalanHak}`);
+  mesaj(rakip, `Rakip <b>${t.ad}</b> dedi, tutturamadı. Sıra sende.`);
+  siraDegis();
+}
+
+/* ---------- bitiş ---------- */
+function bitir(kazanan, sebep){
+  clearInterval(S.timer);
+  titret([80,50,80,50,160]);
+  const k = S.oyuncular[kazanan], r = S.oyuncular[1-kazanan];
+  $('#bitis-baslik').textContent = k.ad + ' kazandı! 🏆';
+  $('#bitis-alt').innerHTML = sebep === 'tahmin'
+    ? `<b>${r.takim.ad}</b> takımını <b>${k.soru}</b> soruda bildi. Toplam ${S.tur} tur sürdü.`
+    : `${r.ad} tahmin haklarını tüketti. ${k.ad} otomatik kazandı.`;
+  $('#bitis-acilis').innerHTML = S.oyuncular.map((o,i)=>`
+    <div class="oyuncu-sonuc">
+      ${arma(o.takim)}
+      <div class="kim">${o.ad}${i===kazanan?' 👑':''}</div>
+      <div class="tkm">${o.takim.ad}</div>
+      <div class="kim" style="margin-top:6px;color:#6d7a8d">${o.soru} soru</div>
+    </div>`).join('');
+  ekranGoster('ekran-bitis');
+}
+
+$('#tekrar').onclick = ()=>{ ekranGoster('ekran-kurulum'); $('#basla').click(); };
+$('#menu').onclick   = ()=>{ clearInterval(S.timer); ekranGoster('ekran-kurulum'); };
+
+/* başlat */
+kurulumHazirla();
+
+/* ================= TAKIM TUT — online oda istemcisi =================
+   Sunucu (online-server/main.py) oyunun tek doğrusu: sıra, süre ve
+   tahmin hakları orada tutulur. Bu dosya sadece gelen durumu çizer
+   ve hamleleri iletir. Rakibin takımı oyun bitene kadar sunucudan
+   hiç gönderilmez — yani gerçekten görünmez.
+   ==================================================================== */
+
+const NET = {
+  ws: null, kod: null, pid: null, ben: -1, d: null,
+  sunucu: '', kalan: null, sayacId: null, elenen: new Set(),
+  kapaniyor: false, denemeler: 0,
+};
+
+/* ---------- kimlik & adres ---------- */
+function netPid(){
+  let p = null;
+  try { p = localStorage.getItem('takimtut_pid'); } catch(e){}
+  if(!p){
+    p = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    try { localStorage.setItem('takimtut_pid', p); } catch(e){}
+  }
+  return p;
+}
+function netVarsayilanSunucu(){
+  if(location.protocol === 'http:' || location.protocol === 'https:') return location.origin;
+  return '';
+}
+function netWsAdresi(taban){
+  const t = (taban || '').trim().replace(/\/+$/,'');
+  if(!t) return null;
+  if(/^wss?:\/\//.test(t)) return t + '/ws';
+  if(/^https?:\/\//.test(t)) return t.replace(/^http/, 'ws') + '/ws';
+  return 'wss://' + t + '/ws';   // şema yazılmadıysa güvenli varsay
+}
+function netMesaj(metin, kotu){
+  const e = $('#net-durum');
+  e.textContent = metin || '';
+  e.classList.toggle('kotu', !!kotu);
+}
+
+/* ---------- bağlantı ---------- */
+function netBaglan(ilkMesaj, hazir){
+  const adres = netWsAdresi($('#net-sunucu').value || NET.sunucu || netVarsayilanSunucu());
+  if(!adres){
+    netMesaj('Sunucu adresi gerekli. Odayı çalıştırdığın adresi yaz (örn. https://xxx.up.railway.app).', true);
+    return;
+  }
+  netMesaj('Bağlanılıyor…');
+  let ws;
+  try { ws = new WebSocket(adres); }
+  catch(e){ netMesaj('Adres geçersiz: ' + adres, true); return; }
+
+  NET.ws = ws;
+  NET.kapaniyor = false;
+
+  ws.onopen = () => { netMesaj(''); ws.send(JSON.stringify(ilkMesaj)); hazir && hazir(); };
+  ws.onmessage = ev => {
+    let m; try { m = JSON.parse(ev.data); } catch(e){ return; }
+    if(m.t === 'oda'){
+      NET.kod = m.kod; NET.pid = m.pid;
+      try { history.replaceState(null, '', '?oda=' + m.kod); } catch(e){}
+    }
+    if(m.t === 'hata'){ netUyar(m.mesaj); netMesaj(m.mesaj, true); }
+    if(m.t === 'durum'){ NET.d = m; netCiz(); }
+  };
+  ws.onclose = () => {
+    if(NET.kapaniyor) return;
+    netMesaj('Bağlantı koptu. Yeniden bağlanılıyor…', true);
+    netUyar('Bağlantı koptu, yeniden bağlanılıyor…');
+    if(NET.kod){
+      setTimeout(()=> netBaglan({ t:'katil', kod:NET.kod, ad:netAd(), pid:netPid() }), 1500);
+    }
+  };
+  ws.onerror = () => netMesaj('Sunucuya ulaşılamadı: ' + adres, true);
+}
+function netGonder(o){
+  if(NET.ws && NET.ws.readyState === 1) NET.ws.send(JSON.stringify(o));
+}
+function netAd(){ return ($('#net-ad').value || '').trim().slice(0,14) || 'Oyuncu'; }
+function netKapat(){
+  NET.kapaniyor = true;
+  try { NET.ws && NET.ws.close(); } catch(e){}
+  NET.ws = null; NET.kod = null; NET.d = null; NET.elenen.clear();
+  clearInterval(NET.sayacId);
+  try { history.replaceState(null, '', location.pathname); } catch(e){}
+  ekranGoster('ekran-kurulum');
+}
+
+/* geçici bildirim */
+function netUyar(metin){
+  let k = $('#net-toast');
+  if(!k){
+    k = document.createElement('div');
+    k.id = 'net-toast';
+    k.style.cssText = 'position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;'+
+      'background:#1b2230;border:1.5px solid #38e08a;color:#eef2f8;padding:12px 18px;border-radius:999px;'+
+      'font-weight:800;font-size:13px;max-width:88vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.5)';
+    document.body.appendChild(k);
+  }
+  k.textContent = metin;
+  k.style.display = 'block';
+  clearTimeout(k._z);
+  k._z = setTimeout(()=>{ k.style.display = 'none'; }, 2600);
+}
+
+/* ---------- kurulum ekranı: mod geçişi ---------- */
+$$('.mod').forEach(b => b.onclick = () => {
+  $$('.mod').forEach(x => x.classList.toggle('aktif', x === b));
+  if(b.dataset.mod === 'online'){
+    $('#net-ad').value = $('#net-ad').value || $('#ad1').value || '';
+    $('#net-sunucu').value = NET.sunucu || netVarsayilanSunucu();
+    ekranGoster('ekran-online');
+  }
+});
+$$('[data-geri]').forEach(b => b.onclick = () => {
+  $$('.mod').forEach(x => x.classList.toggle('aktif', x.dataset.mod === 'yerel'));
+  ekranGoster(b.dataset.geri);
+});
+
+$('#net-kur').onclick = () => {
+  NET.sunucu = $('#net-sunucu').value.trim();
+  try { localStorage.setItem('takimtut_sunucu', NET.sunucu); } catch(e){}
+  netBaglan({ t:'kur', ad:netAd(), pid:netPid(), havuz:S.ayar.havuz, sure:S.ayar.sure, hak:S.ayar.hak });
+};
+$('#net-katil').onclick = () => {
+  const kod = $('#net-kod').value.trim().toUpperCase();
+  if(kod.length !== 4){ netMesaj('Oda kodu 4 karakter olmalı.', true); return; }
+  NET.sunucu = $('#net-sunucu').value.trim();
+  try { localStorage.setItem('takimtut_sunucu', NET.sunucu); } catch(e){}
+  netBaglan({ t:'katil', kod, ad:netAd(), pid:netPid() });
+};
+$('#net-kod').oninput = e => { e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,''); };
+
+$('#lobi-kod').onclick = () => {
+  const bag = location.origin + location.pathname + '?oda=' + NET.kod;
+  const metin = NET.kod + ' — ' + bag;
+  if(navigator.clipboard) navigator.clipboard.writeText(metin).then(()=>netUyar('Kod ve link kopyalandı'), ()=>netUyar('Kod: ' + NET.kod));
+  else netUyar('Kod: ' + NET.kod);
+};
+$('#lobi-basla').onclick = () => netGonder({ t:'basla' });
+$('#lobi-cik').onclick = netKapat;
+$('#net-bitis-cik').onclick = netKapat;
+$('#net-tekrar').onclick = () => netGonder({ t:'tekrar' });
+
+/* ---------- ekran çizimi ---------- */
+function netCiz(){
+  const d = NET.d;
+  if(!d) return;
+  NET.ben = d.ben;
+  if(d.faz === 'lobi')  { lobiCiz(d);      ekranGoster('ekran-lobi'); }
+  if(d.faz === 'secim') { netSecimCiz(d);  ekranGoster('ekran-net-secim'); }
+  if(d.faz === 'oyun')  { oyunCiz(d);      ekranGoster('ekran-net'); }
+  if(d.faz === 'bitis') { netBitisCiz(d);  ekranGoster('ekran-net-bitis'); }
+  netSayacKur(d);
+}
+
+function lobiCiz(d){
+  $('#lobi-kod').textContent = d.kod;
+  const liste = $('#lobi-oyuncular'); liste.innerHTML = '';
+  for(let i=0;i<2;i++){
+    const o = d.oyuncular[i];
+    const el = document.createElement('div');
+    el.className = 'lobi-oyuncu' + (o ? '' : ' bos');
+    el.innerHTML = o
+      ? `<span>${o.ad}${i===d.ben?' (sen)':''}</span><span class="rol">${i===0?'kurucu':'rakip'}${o.bagli?'':' • bağlantı yok'}</span>`
+      : `<span>Rakip bekleniyor…</span><span class="rol">boş</span>`;
+    liste.appendChild(el);
+  }
+  lobiAyarCiz(d);
+  const bas = $('#lobi-basla');
+  const kurucu = d.ben === 0;
+  bas.style.display = kurucu ? '' : 'none';
+  bas.disabled = d.oyuncular.length < 2;
+  bas.textContent = d.oyuncular.length < 2 ? 'RAKİP BEKLENİYOR…' : 'BAŞLAT';
+  $('#lobi-ipucu').textContent = kurucu
+    ? 'Kodu rakibine söyle. Havuzu, süreyi ve tahmin hakkını aşağıdan değiştirebilirsin.'
+    : 'Odaya girdin. Kurucu ayarları seçip başlatınca takım seçimine geçeceğiz.';
+}
+
+/* Lobide oda ayarları: havuz, süre, tahmin hakkı — sadece kurucu değiştirir */
+function lobiAyarCiz(d){
+  const kap = $('#lobi-ayar');
+  const h = HAVUZLAR[d.havuz] || HAVUZLAR['super-lig'];
+  if(d.ben !== 0){
+    kap.className = 'lobi-ayar';
+    kap.innerHTML =
+      `<span>${h.ad} · ${takimlariGetir(d.havuz).length} takım</span>` +
+      `<span>${d.sure ? d.sure + ' sn tur' : 'süresiz'}</span>` +
+      `<span>${d.hakAyar} tahmin hakkı</span>`;
+    return;
+  }
+  kap.className = 'lobi-ayar kurucu';
+  const cip = (etkin, etiket, alt) =>
+    `<button class="lobi-cip${etkin ? ' secili' : ''}">${etiket}${alt ? `<small>${alt}</small>` : ''}</button>`;
+
+  kap.innerHTML = `
+    <div class="lobi-grup">
+      <span class="etiket">Takım havuzu</span>
+      <div class="cipler" id="lb-havuz">${Object.entries(HAVUZLAR).map(([k,v]) =>
+        cip(k === d.havuz, v.ad, takimlariGetir(k).length + ' takım')).join('')}</div>
+    </div>
+    <div class="lobi-grup">
+      <span class="etiket">Tur süresi</span>
+      <div class="cipler" id="lb-sure">${[15,30,45,0].map(x =>
+        cip(x === d.sure, x ? x + ' sn' : 'Süresiz')).join('')}</div>
+    </div>
+    <div class="lobi-grup">
+      <span class="etiket">Tahmin hakkı</span>
+      <div class="cipler" id="lb-hak">${[1,2,3].map(x =>
+        cip(x === d.hakAyar, x + ' hak')).join('')}</div>
+    </div>`;
+
+  const yolla = (yeniAyar) => {
+    Object.assign(S.ayar, yeniAyar);          // bir dahaki odaya da taşınsın
+    ayarKaydet();
+    netGonder({ t:'ayar', havuz:S.ayar.havuz, sure:S.ayar.sure, hak:S.ayar.hak });
+  };
+  const anahtarlar = Object.keys(HAVUZLAR);
+  $$('#lb-havuz .lobi-cip').forEach((b,i) => b.onclick = () => yolla({ havuz:anahtarlar[i] }));
+  $$('#lb-sure .lobi-cip').forEach((b,i)  => b.onclick = () => yolla({ sure:[15,30,45,0][i] }));
+  $$('#lb-hak .lobi-cip').forEach((b,i)   => b.onclick = () => yolla({ hak:[1,2,3][i] }));
+}
+
+function netSecimCiz(d){
+  const rakip = d.oyuncular[1 - d.ben];
+  $('#net-secim-durum').textContent = rakip && rakip.secti ? 'Rakip seçti ✓' : 'Rakip seçiyor…';
+  if($('#net-secim-izgara').dataset.havuz === d.havuz) return;   // tekrar çizme
+  $('#net-secim-izgara').dataset.havuz = d.havuz;
+  netSecimListele('');
+}
+function netSecimListele(q){
+  const d = NET.d;
+  const iz = $('#net-secim-izgara'); iz.innerHTML = '';
+  const n = norm((q||'').trim());
+  takimlariGetir(d.havuz)
+    .filter(t => !n || norm(t.ad).includes(n) || norm(t.sehir).includes(n) || norm(t.lig).includes(n))
+    .forEach(t => iz.appendChild(takimKarti(t, ()=>{
+      netGonder({ t:'takim', id:t.id });
+      $('#net-secim-durum').textContent = t.ad + ' seçildi ✓';
+    })));
+}
+$('#net-secim-ara').oninput = e => netSecimListele(e.target.value);
+
+function oyunCiz(d){
+  const ben = d.oyuncular[d.ben], rakip = d.oyuncular[1 - d.ben];
+  const benimSiram = d.sira === d.ben;
+  const takim = ben.takim ? takimBul(ben.takim) : null;
+
+  $('#net-ben-ad').textContent = ben.ad;
+  $('#net-hak').textContent = '🎯 ' + ben.hak;
+  $('#net-rakip-ad').textContent = rakip ? rakip.ad : 'Rakip';
+  $('#net-cevrim').className = 'cevrim' + (rakip && rakip.bagli ? ' acik' : '');
+
+  /* kendi arman — kilitli */
+  const alan = $('#net-arma-alan');
+  if(takim && alan.dataset.takim !== takim.id){
+    alan.dataset.takim = takim.id;
+    const eski = $('.arma', alan); if(eski) eski.remove();
+    alan.insertAdjacentHTML('afterbegin', arma(takim));
+    $('#net-takim-ad').textContent = takim.ad;
+    $('#net-takim-detay').textContent = `${takim.sehir} • ${takim.kurulus} • ${takim.lig}`;
+  }
+
+  const rozet = $('#net-rozet');
+  rozet.className = 'net-rozet ' + (benimSiram ? 'sen' : 'rakip');
+  rozet.textContent = benimSiram
+    ? (d.bekleyen === 'soru' ? 'Sıra sende — soru sor' : 'Cevabı bekliyorsun')
+    : (d.bekleyen === 'soru' ? rakip.ad + ' soru yazıyor…' : 'Cevap sırası sende');
+
+  /* akış */
+  const akis = $('#net-akis');
+  // cevap beklenirken son soru zaten büyük kutuda duruyor, akışta tekrar etmesin
+  let gecmis = d.kayit;
+  if(d.bekleyen === 'cevap' && gecmis.length && gecmis[gecmis.length-1].tip === 'soru') gecmis = gecmis.slice(0,-1);
+  akis.innerHTML = gecmis.slice(-8).map(k => {
+    const kim = d.oyuncular[k.kim] ? d.oyuncular[k.kim].ad : '?';
+    if(k.tip === 'soru')   return `<div class="satir"><span class="etiket2">${kim} sordu</span>${kacir(k.metin)}</div>`;
+    if(k.tip === 'cevap')  return `<div class="satir ${k.metin==='EVET'?'evet':'hayir'}"><span class="etiket2">${kim}</span>${k.metin}</div>`;
+    if(k.tip === 'yanlis') { const t = takimBul(k.metin); return `<div class="satir hayir"><span class="etiket2">${kim} tahmin</span>${t?t.ad:k.metin} — yanlış</div>`; }
+    if(k.tip === 'pas')    return `<div class="satir sistem">${kim} turu pas geçti</div>`;
+    if(k.tip === 'sure')   return `<div class="satir sistem">${kim}: süre doldu</div>`;
+    return '';
+  }).join('');
+  akis.scrollTop = akis.scrollHeight;
+
+  /* aksiyonlar */
+  const a = $('#net-aksiyon');
+  if(benimSiram && d.bekleyen === 'soru'){
+    a.innerHTML = `
+      <div class="soru-satir">
+        <input id="net-soru" class="girdi" maxlength="140" placeholder="Evet/hayır sorusu yaz…" autocomplete="off">
+        <button id="net-sor">SOR</button>
+      </div>
+      <div class="satir-btn">
+        <button class="tahmin" id="net-tahmin">TAHMİN ET</button>
+        <button id="net-pas">PAS</button>
+        <button class="dar" id="net-fikir" title="Soru fikri">💡</button>
+        <button class="dar" id="net-eleme" title="Eleme tahtası">📋</button>
+      </div>`;
+    const inp = $('#net-soru');
+    const yolla = () => {
+      const metin = inp.value.trim();
+      if(!metin){ netUyar('Önce soruyu yaz.'); return; }
+      netGonder({ t:'soru', metin });
+      inp.value = '';
+    };
+    $('#net-sor').onclick = yolla;
+    inp.onkeydown = e => { if(e.key === 'Enter') yolla(); };
+    $('#net-tahmin').onclick = netTahminAc;
+    $('#net-pas').onclick = () => netGonder({ t:'pas' });
+    $('#net-fikir').onclick = () => { inp.value = SORULAR[Math.floor(Math.random()*SORULAR.length)]; inp.focus(); };
+    $('#net-eleme').onclick = netElemeAc;
+  } else if(!benimSiram && d.bekleyen === 'cevap'){
+    a.innerHTML = `
+      <div class="buyuk-soru">“${kacir(d.sonSoru)}”</div>
+      <div class="satir-btn">
+        <button class="evet" id="net-evet">EVET</button>
+        <button class="hayir" id="net-hayir">HAYIR</button>
+        <button class="dar" id="net-eleme" title="Eleme tahtası">📋</button>
+      </div>`;
+    $('#net-evet').onclick  = () => netGonder({ t:'cevap', evet:true });
+    $('#net-hayir').onclick = () => netGonder({ t:'cevap', evet:false });
+    $('#net-eleme').onclick = netElemeAc;
+  } else if(benimSiram && d.bekleyen === 'cevap'){
+    a.innerHTML = `
+      <div class="buyuk-soru">“${kacir(d.sonSoru)}”</div>
+      <div class="bekle">${rakip.ad} cevaplıyor…</div>
+      <div class="satir-btn"><button class="dar" id="net-eleme" style="flex:1">📋 Eleme tahtası</button></div>`;
+    $('#net-eleme').onclick = netElemeAc;
+  } else {
+    a.innerHTML = `
+      <div class="bekle">${rakip.ad} sorusunu yazıyor…</div>
+      <div class="satir-btn"><button class="dar" id="net-eleme" style="flex:1">📋 Eleme tahtası</button></div>`;
+    $('#net-eleme').onclick = netElemeAc;
+  }
+}
+function kacir(s){ return String(s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* Online modda kilit yok: telefon senin, rakip zaten karşı taraftan
+   göremiyor — takımın sürekli açık dursun. */
+
+/* sayaç: sunucu kalan saniyeyi yollar, ekranda yerel sayarız */
+function netSayacKur(d){
+  clearInterval(NET.sayacId);
+  const e = $('#net-sayac');
+  if(d.faz !== 'oyun' || d.kalan === null || d.kalan === undefined){
+    e.textContent = d.faz === 'oyun' ? '∞' : '–';
+    e.classList.remove('az');
+    return;
+  }
+  NET.kalan = d.kalan;
+  const ciz = () => {
+    e.textContent = NET.kalan + '"';
+    e.classList.toggle('az', NET.kalan <= 5);
+  };
+  ciz();
+  NET.sayacId = setInterval(()=>{
+    NET.kalan = Math.max(0, NET.kalan - 1);
+    ciz();
+    if(NET.kalan === 0) clearInterval(NET.sayacId);
+  }, 1000);
+}
+
+/* ---------- tam ekran katmanlar ---------- */
+function tamKatman(baslik, kartTikla, elemeModu){
+  if($('#tam-katman')) return;
+  const k = document.createElement('div');
+  k.id = 'tam-katman'; k.className = 'tam-katman';
+  k.innerHTML = `
+    <div class="katman-ust"><h3>${baslik}</h3><button class="kapat">KAPAT</button></div>
+    <input class="girdi ara" placeholder="Takım ya da şehir ara…" autocomplete="off">
+    <div class="izgara"></div>`;
+  document.body.appendChild(k);
+  const iz = $('.izgara', k);
+  const ciz = q => {
+    iz.innerHTML = '';
+    const n = norm((q||'').trim());
+    takimlariGetir(NET.d.havuz)
+      .filter(t => !n || norm(t.ad).includes(n) || norm(t.sehir).includes(n) || norm(t.lig).includes(n))
+      .forEach(t => {
+        const kart = takimKarti(t, ()=> kartTikla(t, kart, k));
+        if(elemeModu && NET.elenen.has(t.id)) kart.classList.add('elendi');
+        iz.appendChild(kart);
+      });
+  };
+  $('.ara', k).oninput = e => ciz(e.target.value);
+  $('.kapat', k).onclick = () => k.remove();
+  ciz('');
+}
+function netElemeAc(){
+  tamKatman('Eleme tahtası — elediğini işaretle', (t, kart)=>{
+    if(NET.elenen.has(t.id)){ NET.elenen.delete(t.id); kart.classList.remove('elendi'); }
+    else { NET.elenen.add(t.id); kart.classList.add('elendi'); }
+  }, true);
+}
+function netTahminAc(){
+  tamKatman('Rakibin takımı hangisi?', (t, kart, katman)=>{
+    katman.remove();
+    netGonder({ t:'tahmin', id:t.id });
+  }, false);
+}
+
+/* ---------- bitiş ---------- */
+function netBitisCiz(d){
+  const kazandim = d.kazanan === d.ben;
+  const ben = d.oyuncular[d.ben], rakip = d.oyuncular[1 - d.ben];
+  $('#net-bitis-kupa').textContent = kazandim ? '🏆' : '😤';
+  $('#net-bitis-baslik').textContent = kazandim ? 'Bildin, kazandın!' : rakip.ad + ' kazandı';
+  $('#net-bitis-alt').innerHTML = d.sebep === 'tahmin'
+    ? (kazandim ? `<b>${adBul(rakip)}</b> takımını ${ben.soru} soruda çözdün.`
+                : `Takımın <b>${adBul(ben)}</b>’di, rakip ${rakip.soru} soruda buldu.`)
+    : (kazandim ? 'Rakip tahmin haklarını tüketti.' : 'Tahmin hakkın bitti.');
+  $('#net-bitis-acilis').innerHTML = d.oyuncular.map((o,i)=>{
+    const t = o.takim ? takimBul(o.takim) : null;
+    return `<div class="oyuncu-sonuc">
+      ${t ? arma(t) : ''}
+      <div class="kim">${o.ad}${i===d.kazanan?' 👑':''}</div>
+      <div class="tkm">${t ? t.ad : '—'}</div>
+      <div class="kim" style="margin-top:6px;color:#6d7a8d">${o.soru} soru</div>
+    </div>`;
+  }).join('');
+}
+function adBul(o){ const t = o.takim ? takimBul(o.takim) : null; return t ? t.ad : '?'; }
+
+/* ---------- açılış: ?oda=KOD ile gelindiyse ---------- */
+(function netAcilis(){
+  try {
+    const s = localStorage.getItem('takimtut_sunucu');
+    if(s) NET.sunucu = s;
+  } catch(e){}
+  const kod = new URLSearchParams(location.search).get('oda');
+  if(kod){
+    $$('.mod').forEach(x => x.classList.toggle('aktif', x.dataset.mod === 'online'));
+    $('#net-kod').value = kod.toUpperCase().slice(0,4);
+    $('#net-sunucu').value = NET.sunucu || netVarsayilanSunucu();
+    ekranGoster('ekran-online');
+    netMesaj('Oda kodu hazır: ' + kod.toUpperCase() + ' — adını yazıp KATIL’a bas.');
+  }
+})();
+
+/* ================= TAKIM TUT — gerçek logo çekici =================
+   Kulüp armalarını Wikipedia'dan bulur (adres tarayıcıda çekilir,
+   sonuç localStorage'a yazılır — ikinci açılışta anında gelir).
+
+   Not: bu dosya sadece internet varken iş görür. Logoyu bulamazsa
+   oyun stilize armayla devam eder, hiçbir şey kırılmaz.
+   Tamamen çevrimdışı/gömülü logo istersen: python3 tools/logo-cek.py
+   ================================================================== */
+
+const LOGO_ANAHTAR = 'takimtut_logo_v1';
+const LOGO_OMRU    = 30 * 24 * 3600 * 1000;   // 30 gün sonra tazele
+const LOGO_ESZAMAN = 5;                        // aynı anda kaç istek
+
+function logoOnbellekOku(){
+  try {
+    const ham = JSON.parse(localStorage.getItem(LOGO_ANAHTAR) || '{}');
+    const simdi = Date.now();
+    const temiz = {};
+    for(const [id, kayit] of Object.entries(ham)){
+      if(kayit && simdi - (kayit.z || 0) < LOGO_OMRU) temiz[id] = kayit;
+    }
+    return temiz;
+  } catch(e){ return {}; }
+}
+function logoOnbellekYaz(ob){
+  try { localStorage.setItem(LOGO_ANAHTAR, JSON.stringify(ob)); } catch(e){}
+}
+
+/* Wikipedia arama + sayfa görseli. pilicense=any → kulüp armaları da gelir. */
+async function logoAra(t, dil){
+  const sorgu = encodeURIComponent(`${t.ad} ${t.sehir} futbol kulübü`.trim());
+  const url = `https://${dil}.wikipedia.org/w/api.php?action=query&format=json&origin=*` +
+              `&prop=pageimages&pithumbsize=200&pilicense=any` +
+              `&generator=search&gsrsearch=${sorgu}&gsrlimit=3`;
+  const y = await fetch(url, { mode:'cors' });
+  if(!y.ok) return null;
+  const veri = await y.json();
+  const sayfalar = veri && veri.query && veri.query.pages;
+  if(!sayfalar) return null;
+
+  const ilkKelime = norm(t.ad).split(' ')[0];
+  const adaylar = Object.values(sayfalar)
+    .filter(p => p.thumbnail && p.thumbnail.source)
+    .sort((a,b) => (a.index||9) - (b.index||9));
+  // başlığı takım adıyla örtüşen ilk sonucu tercih et
+  const isabet = adaylar.find(p => norm(p.title).includes(ilkKelime)) || adaylar[0];
+  return isabet ? isabet.thumbnail.source : null;
+}
+
+async function logoBul(t){
+  // Türkiye takımları için önce tr.wikipedia, sonra en
+  const diller = ['sl','1l','tr'].includes(t.grup) ? ['tr','en'] : ['en','tr'];
+  for(const d of diller){
+    try { const u = await logoAra(t, d); if(u) return u; } catch(e){}
+  }
+  return null;
+}
+
+/* Ekranda o an duran armaları tazele */
+function logolariTazele(){
+  document.querySelectorAll('[data-tid]').forEach(el => {
+    const id = el.dataset.tid;
+    if(el.tagName === 'IMG' && LOGOLAR[id] && el.src !== LOGOLAR[id]) el.src = LOGOLAR[id];
+  });
+  // stilize çizilmiş kartlar varsa görünen listeyi yeniden çiz
+  if($('#ekran-secim') && $('#ekran-secim').classList.contains('aktif')) secimListele($('#secim-ara').value);
+  if($('#ekran-net-secim') && $('#ekran-net-secim').classList.contains('aktif')) netSecimListele($('#net-secim-ara').value);
+}
+
+async function logolariYukle(){
+  if(LOGO_MODU !== 'gercek') return;
+  const onbellek = logoOnbellekOku();
+  for(const [id, k] of Object.entries(onbellek)) if(k.u) LOGOLAR[id] = k.u;
+  if(Object.keys(LOGOLAR).length) logolariTazele();
+
+  const eksik = TAKIMLAR.filter(t => !(t.id in onbellek));
+  if(!eksik.length || !navigator.onLine) return;
+
+  let i = 0, degisti = 0;
+  const isci = async () => {
+    while(i < eksik.length){
+      const t = eksik[i++];
+      let url = null;
+      try { url = await logoBul(t); } catch(e){}
+      onbellek[t.id] = { u:url, z:Date.now() };
+      if(url){ LOGOLAR[t.id] = url; degisti++; }
+      if(degisti && degisti % 10 === 0){ logoOnbellekYaz(onbellek); logolariTazele(); }
+    }
+  };
+  await Promise.all(Array.from({length: LOGO_ESZAMAN}, isci));
+  logoOnbellekYaz(onbellek);
+  logolariTazele();
+}
+
+/* gömülü logolar (tools/logo-cek.py çıktısı) varsa onlar kazanır */
+if(typeof GOMULU_LOGOLAR === 'object' && GOMULU_LOGOLAR){
+  Object.assign(LOGOLAR, GOMULU_LOGOLAR);
+}
+/* LOGO_MODU 'stil' oldugu surece bu modul hicbir sey yapmaz; gercek
+   logolari denemek istersen teams.js icinde LOGO_MODU='gercek' yap. */
+if(LOGO_MODU === 'gercek') setTimeout(logolariYukle, 300);
+
+</script>
+</body>
+</html>
