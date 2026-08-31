@@ -34,6 +34,30 @@ rakibin takımını bulmaya çalışır. **212 takım**, süreli turlar, iki oyn
 5. Sırası gelen soruyu **yazar**, diğeri EVET / HAYIR'a basar. Süreyi ve sırayı sunucu tutar,
    iki telefon asla ayrışmaz. Bağlantı koparsa aynı kodla girince oyun kaldığı yerden devam eder.
 
+### En hızlı yol: bedava link (domain almadan)
+
+Bilgisayarında sunucuyu çalıştır, Cloudflare'in ücretsiz tüneliyle internete aç:
+
+```bash
+# 1) terminal — sunucu
+cd online-server && pip install -r requirements.txt
+uvicorn main:app --port 8000
+
+# 2) terminal — bedava https link (hesap gerekmez)
+cloudflared tunnel --url http://localhost:8000
+```
+
+İkinci komut sana `https://rastgele-kelimeler.trycloudflare.com` gibi bir adres yazar.
+**O linki arkadaşına at** — ikiniz de açın, biri ODA KUR desin, öteki kodu girsin. Ücretsiz,
+domain gerekmez, hesap gerekmez. Sen terminali kapatınca link kapanır.
+
+`cloudflared` kurulumu: macOS `brew install cloudflared` · Windows `winget install Cloudflare.cloudflared`
+· Linux: [cloudflared releases](https://github.com/cloudflare/cloudflared/releases).
+
+Bilgisayarını açık tutmak istemiyorsan ücretsiz barındırma da olur: **Render** (free web service,
+`xxx.onrender.com` adresi bedava, uzun süre kullanılmazsa uykuya dalar, ilk açılış ~1 dk) ya da
+Railway. İkisinde de **Root Directory: `online-server`** ver.
+
 ### Oda sunucusunu çalıştırma
 
 Lokal (iki telefon aynı wifi'de):
@@ -79,11 +103,17 @@ içindeki tek satırı düzeltmen yeter:
 //  bayrak: s=deniz kenarı  b=başkent  a=Avrupa kupası var
 ```
 
-### Armalar hakkında
+### Logolar
 
-Kulüplerin gerçek armaları telifli olduğu için her arma, takımın **gerçek renk / desen /
-kuruluş yılı** verisinden kod içinde SVG olarak üretilir (`armaSVG`). Takım ilk bakışta
-tanınır, telif sorunu olmaz.
+Oyun açıldığında `assets/js/logo.js` kulüplerin **gerçek armalarını** Wikipedia'dan çeker
+(önce tr, sonra en) ve adresleri localStorage'a yazar — ikinci açılışta anında gelir.
+Bir logo bulunamazsa ya da yüklenemezse o takım, kendi **gerçek renk / desen / kuruluş yılı**
+verisinden üretilen stilize kalkanla çizilir; oyun hiç aksamaz.
+
+Gerçek logolar internet ister. Tamamen çevrimdışı (ya da claude.ai önizlemesi) için logoların
+dosyaya gömülmesi gerekir — bu ortamda ağ kapalı olduğu için indirilemedi.
+
+Kulüp armaları tescilli markadır: arkadaşınla oynamak sorun değil, ticari dağıtım için uygun değil.
 
 ## Diğer özellikler
 

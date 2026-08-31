@@ -120,7 +120,7 @@ function secimListele(q){
 function takimKarti(t, tikla){
   const d = document.createElement('button');
   d.className = 'kart'; d.type = 'button';
-  d.innerHTML = `${armaSVG(t)}<div class="isim">${t.ad}</div><div class="lig">${t.lig}</div>`;
+  d.innerHTML = `${arma(t)}<div class="isim">${t.ad}</div><div class="lig">${t.lig}</div>`;
   d.onclick = tikla;
   return d;
 }
@@ -153,7 +153,7 @@ function sahaCiz(){
       </div>
 
       <div class="arma-alan">
-        ${armaSVG(t)}
+        ${arma(t)}
         <div class="takim-bilgi">
           <div class="ad">${t.ad}</div>
           <div class="detay">${t.sehir} • ${t.kurulus} • ${t.lig}</div>
@@ -357,7 +357,7 @@ function bitir(kazanan, sebep){
     : `${r.ad} tahmin haklarını tüketti. ${k.ad} otomatik kazandı.`;
   $('#bitis-acilis').innerHTML = S.oyuncular.map((o,i)=>`
     <div class="oyuncu-sonuc">
-      ${armaSVG(o.takim)}
+      ${arma(o.takim)}
       <div class="kim">${o.ad}${i===kazanan?' 👑':''}</div>
       <div class="tkm">${o.takim.ad}</div>
       <div class="kim" style="margin-top:6px;color:#6d7a8d">${o.soru} soru</div>

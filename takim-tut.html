@@ -76,6 +76,7 @@ button{font-family:inherit;cursor:pointer;border:none}
   display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--yazi)
 }
 .kart .arma{width:52px;height:auto;display:block}
+img.arma{object-fit:contain}
 .kart .isim{font-size:11px;font-weight:700;line-height:1.2;text-align:center}
 .kart .lig{font-size:9px;color:var(--soluk)}
 .kart:active{border-color:var(--vurgu)}
@@ -120,7 +121,7 @@ button{font-family:inherit;cursor:pointer;border:none}
 
 /* arma alanı + kilit */
 .arma-alan{flex:1 1 auto;position:relative;display:flex;align-items:center;justify-content:center;min-height:0;padding-bottom:44px;touch-action:none;cursor:pointer}
-.arma-alan .arma{height:100%;max-height:100%;width:auto;max-width:70%;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5))}
+.arma-alan .arma{height:100%;max-height:100%;width:auto;max-width:70%;object-fit:contain;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5))}
 .takim-bilgi{position:absolute;bottom:2px;left:0;right:0;text-align:center;pointer-events:none}
 .takim-bilgi .ad{font-family:var(--display);font-weight:900;font-size:clamp(17px,4.6vw,26px);letter-spacing:-.3px}
 .takim-bilgi .detay{font-size:11px;color:var(--soluk);margin-top:2px}
@@ -789,6 +790,36 @@ function _desenIcerik(t){
   }
 }
 
+/* -------------------- GERÇEK LOGOLAR --------------------
+   LOGOLAR[takimId] = resim adresi ya da data: URI.
+   İki yoldan dolar:
+     1) assets/js/logos.js  — tools/logo-cek.py ile üretilen gömülü sürüm
+        (internet gerekmez, tek dosya sürümde de çalışır)
+     2) assets/js/logo.js   — tarayıcı açılışta Wikipedia'dan çeker, sonucu
+        localStorage'a yazar
+   Logo yoksa aşağıdaki stilize arma çizilir, oyun hiç aksamaz.        */
+const LOGOLAR = Object.create(null);
+let LOGO_MODU = 'gercek';           // 'gercek' | 'stil'
+
+/* Ekrana çizilecek arma: gerçek logo varsa o, yoksa stilize kalkan */
+function arma(t){
+  const kaynak = LOGO_MODU === 'gercek' ? LOGOLAR[t.id] : null;
+  if(kaynak){
+    return `<img class="arma logo" src="${kaynak}" alt="${t.ad} logosu" loading="lazy" `+
+           `data-tid="${t.id}" onerror="this.replaceWith(logoYedek('${t.id}'))">`;
+  }
+  return armaSVG(t);
+}
+/* <img> yüklenemezse stilize armaya düş */
+function logoYedek(id){
+  const t = takimBul(id);
+  const kap = document.createElement('span');
+  kap.className = 'arma-yedek';
+  kap.innerHTML = t ? armaSVG(t) : '';
+  delete LOGOLAR[id];
+  return kap.firstElementChild || kap;
+}
+
 /* Takımın stilize armasını SVG string olarak döner */
 function armaSVG(t){
   const uid = 'c' + t.id + '_' + Math.random().toString(36).slice(2,7);
@@ -952,7 +983,7 @@ function secimListele(q){
 function takimKarti(t, tikla){
   const d = document.createElement('button');
   d.className = 'kart'; d.type = 'button';
-  d.innerHTML = `${armaSVG(t)}<div class="isim">${t.ad}</div><div class="lig">${t.lig}</div>`;
+  d.innerHTML = `${arma(t)}<div class="isim">${t.ad}</div><div class="lig">${t.lig}</div>`;
   d.onclick = tikla;
   return d;
 }
@@ -985,7 +1016,7 @@ function sahaCiz(){
       </div>
 
       <div class="arma-alan">
-        ${armaSVG(t)}
+        ${arma(t)}
         <div class="takim-bilgi">
           <div class="ad">${t.ad}</div>
           <div class="detay">${t.sehir} • ${t.kurulus} • ${t.lig}</div>
@@ -1189,7 +1220,7 @@ function bitir(kazanan, sebep){
     : `${r.ad} tahmin haklarını tüketti. ${k.ad} otomatik kazandı.`;
   $('#bitis-acilis').innerHTML = S.oyuncular.map((o,i)=>`
     <div class="oyuncu-sonuc">
-      ${armaSVG(o.takim)}
+      ${arma(o.takim)}
       <div class="kim">${o.ad}${i===kazanan?' 👑':''}</div>
       <div class="tkm">${o.takim.ad}</div>
       <div class="kim" style="margin-top:6px;color:#6d7a8d">${o.soru} soru</div>
@@ -1421,7 +1452,7 @@ function oyunCiz(d){
   if(takim && alan.dataset.takim !== takim.id){
     alan.dataset.takim = takim.id;
     const eski = $('.arma', alan); if(eski) eski.remove();
-    alan.insertAdjacentHTML('afterbegin', armaSVG(takim));
+    alan.insertAdjacentHTML('afterbegin', arma(takim));
     $('#net-takim-ad').textContent = takim.ad;
     $('#net-takim-detay').textContent = `${takim.sehir} • ${takim.kurulus} • ${takim.lig}`;
     netKilitBagla();
@@ -1588,7 +1619,7 @@ function netBitisCiz(d){
   $('#net-bitis-acilis').innerHTML = d.oyuncular.map((o,i)=>{
     const t = o.takim ? takimBul(o.takim) : null;
     return `<div class="oyuncu-sonuc">
-      ${t ? armaSVG(t) : ''}
+      ${t ? arma(t) : ''}
       <div class="kim">${o.ad}${i===d.kazanan?' 👑':''}</div>
       <div class="tkm">${t ? t.ad : '—'}</div>
       <div class="kim" style="margin-top:6px;color:#6d7a8d">${o.soru} soru</div>
@@ -1612,6 +1643,106 @@ function adBul(o){ const t = o.takim ? takimBul(o.takim) : null; return t ? t.ad
     netMesaj('Oda kodu hazır: ' + kod.toUpperCase() + ' — adını yazıp KATIL’a bas.');
   }
 })();
+
+/* ================= TAKIM TUT — gerçek logo çekici =================
+   Kulüp armalarını Wikipedia'dan bulur (adres tarayıcıda çekilir,
+   sonuç localStorage'a yazılır — ikinci açılışta anında gelir).
+
+   Not: bu dosya sadece internet varken iş görür. Logoyu bulamazsa
+   oyun stilize armayla devam eder, hiçbir şey kırılmaz.
+   Tamamen çevrimdışı/gömülü logo istersen: python3 tools/logo-cek.py
+   ================================================================== */
+
+const LOGO_ANAHTAR = 'takimtut_logo_v1';
+const LOGO_OMRU    = 30 * 24 * 3600 * 1000;   // 30 gün sonra tazele
+const LOGO_ESZAMAN = 5;                        // aynı anda kaç istek
+
+function logoOnbellekOku(){
+  try {
+    const ham = JSON.parse(localStorage.getItem(LOGO_ANAHTAR) || '{}');
+    const simdi = Date.now();
+    const temiz = {};
+    for(const [id, kayit] of Object.entries(ham)){
+      if(kayit && simdi - (kayit.z || 0) < LOGO_OMRU) temiz[id] = kayit;
+    }
+    return temiz;
+  } catch(e){ return {}; }
+}
+function logoOnbellekYaz(ob){
+  try { localStorage.setItem(LOGO_ANAHTAR, JSON.stringify(ob)); } catch(e){}
+}
+
+/* Wikipedia arama + sayfa görseli. pilicense=any → kulüp armaları da gelir. */
+async function logoAra(t, dil){
+  const sorgu = encodeURIComponent(`${t.ad} ${t.sehir} futbol kulübü`.trim());
+  const url = `https://${dil}.wikipedia.org/w/api.php?action=query&format=json&origin=*` +
+              `&prop=pageimages&pithumbsize=200&pilicense=any` +
+              `&generator=search&gsrsearch=${sorgu}&gsrlimit=3`;
+  const y = await fetch(url, { mode:'cors' });
+  if(!y.ok) return null;
+  const veri = await y.json();
+  const sayfalar = veri && veri.query && veri.query.pages;
+  if(!sayfalar) return null;
+
+  const ilkKelime = norm(t.ad).split(' ')[0];
+  const adaylar = Object.values(sayfalar)
+    .filter(p => p.thumbnail && p.thumbnail.source)
+    .sort((a,b) => (a.index||9) - (b.index||9));
+  // başlığı takım adıyla örtüşen ilk sonucu tercih et
+  const isabet = adaylar.find(p => norm(p.title).includes(ilkKelime)) || adaylar[0];
+  return isabet ? isabet.thumbnail.source : null;
+}
+
+async function logoBul(t){
+  // Türkiye takımları için önce tr.wikipedia, sonra en
+  const diller = ['sl','1l','tr'].includes(t.grup) ? ['tr','en'] : ['en','tr'];
+  for(const d of diller){
+    try { const u = await logoAra(t, d); if(u) return u; } catch(e){}
+  }
+  return null;
+}
+
+/* Ekranda o an duran armaları tazele */
+function logolariTazele(){
+  document.querySelectorAll('[data-tid]').forEach(el => {
+    const id = el.dataset.tid;
+    if(el.tagName === 'IMG' && LOGOLAR[id] && el.src !== LOGOLAR[id]) el.src = LOGOLAR[id];
+  });
+  // stilize çizilmiş kartlar varsa görünen listeyi yeniden çiz
+  if($('#ekran-secim') && $('#ekran-secim').classList.contains('aktif')) secimListele($('#secim-ara').value);
+  if($('#ekran-net-secim') && $('#ekran-net-secim').classList.contains('aktif')) netSecimListele($('#net-secim-ara').value);
+}
+
+async function logolariYukle(){
+  if(LOGO_MODU !== 'gercek') return;
+  const onbellek = logoOnbellekOku();
+  for(const [id, k] of Object.entries(onbellek)) if(k.u) LOGOLAR[id] = k.u;
+  if(Object.keys(LOGOLAR).length) logolariTazele();
+
+  const eksik = TAKIMLAR.filter(t => !(t.id in onbellek));
+  if(!eksik.length || !navigator.onLine) return;
+
+  let i = 0, degisti = 0;
+  const isci = async () => {
+    while(i < eksik.length){
+      const t = eksik[i++];
+      let url = null;
+      try { url = await logoBul(t); } catch(e){}
+      onbellek[t.id] = { u:url, z:Date.now() };
+      if(url){ LOGOLAR[t.id] = url; degisti++; }
+      if(degisti && degisti % 10 === 0){ logoOnbellekYaz(onbellek); logolariTazele(); }
+    }
+  };
+  await Promise.all(Array.from({length: LOGO_ESZAMAN}, isci));
+  logoOnbellekYaz(onbellek);
+  logolariTazele();
+}
+
+/* gömülü logolar (tools/logo-cek.py çıktısı) varsa onlar kazanır */
+if(typeof GOMULU_LOGOLAR === 'object' && GOMULU_LOGOLAR){
+  Object.assign(LOGOLAR, GOMULU_LOGOLAR);
+}
+setTimeout(logolariYukle, 300);
 
 </script>
 </body>

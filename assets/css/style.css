@@ -64,6 +64,7 @@ button{font-family:inherit;cursor:pointer;border:none}
   display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--yazi)
 }
 .kart .arma{width:52px;height:auto;display:block}
+img.arma{object-fit:contain}
 .kart .isim{font-size:11px;font-weight:700;line-height:1.2;text-align:center}
 .kart .lig{font-size:9px;color:var(--soluk)}
 .kart:active{border-color:var(--vurgu)}
@@ -108,7 +109,7 @@ button{font-family:inherit;cursor:pointer;border:none}
 
 /* arma alanı + kilit */
 .arma-alan{flex:1 1 auto;position:relative;display:flex;align-items:center;justify-content:center;min-height:0;padding-bottom:44px;touch-action:none;cursor:pointer}
-.arma-alan .arma{height:100%;max-height:100%;width:auto;max-width:70%;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5))}
+.arma-alan .arma{height:100%;max-height:100%;width:auto;max-width:70%;object-fit:contain;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5))}
 .takim-bilgi{position:absolute;bottom:2px;left:0;right:0;text-align:center;pointer-events:none}
 .takim-bilgi .ad{font-family:var(--display);font-weight:900;font-size:clamp(17px,4.6vw,26px);letter-spacing:-.3px}
 .takim-bilgi .detay{font-size:11px;color:var(--soluk);margin-top:2px}

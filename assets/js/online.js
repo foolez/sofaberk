@@ -216,7 +216,7 @@ function oyunCiz(d){
   if(takim && alan.dataset.takim !== takim.id){
     alan.dataset.takim = takim.id;
     const eski = $('.arma', alan); if(eski) eski.remove();
-    alan.insertAdjacentHTML('afterbegin', armaSVG(takim));
+    alan.insertAdjacentHTML('afterbegin', arma(takim));
     $('#net-takim-ad').textContent = takim.ad;
     $('#net-takim-detay').textContent = `${takim.sehir} • ${takim.kurulus} • ${takim.lig}`;
     netKilitBagla();
@@ -383,7 +383,7 @@ function netBitisCiz(d){
   $('#net-bitis-acilis').innerHTML = d.oyuncular.map((o,i)=>{
     const t = o.takim ? takimBul(o.takim) : null;
     return `<div class="oyuncu-sonuc">
-      ${t ? armaSVG(t) : ''}
+      ${t ? arma(t) : ''}
       <div class="kim">${o.ad}${i===d.kazanan?' 👑':''}</div>
       <div class="tkm">${t ? t.ad : '—'}</div>
       <div class="kim" style="margin-top:6px;color:#6d7a8d">${o.soru} soru</div>

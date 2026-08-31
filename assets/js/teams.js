@@ -284,6 +284,36 @@ function _desenIcerik(t){
   }
 }
 
+/* -------------------- GERÇEK LOGOLAR --------------------
+   LOGOLAR[takimId] = resim adresi ya da data: URI.
+   İki yoldan dolar:
+     1) assets/js/logos.js  — tools/logo-cek.py ile üretilen gömülü sürüm
+        (internet gerekmez, tek dosya sürümde de çalışır)
+     2) assets/js/logo.js   — tarayıcı açılışta Wikipedia'dan çeker, sonucu
+        localStorage'a yazar
+   Logo yoksa aşağıdaki stilize arma çizilir, oyun hiç aksamaz.        */
+const LOGOLAR = Object.create(null);
+let LOGO_MODU = 'gercek';           // 'gercek' | 'stil'
+
+/* Ekrana çizilecek arma: gerçek logo varsa o, yoksa stilize kalkan */
+function arma(t){
+  const kaynak = LOGO_MODU === 'gercek' ? LOGOLAR[t.id] : null;
+  if(kaynak){
+    return `<img class="arma logo" src="${kaynak}" alt="${t.ad} logosu" loading="lazy" `+
+           `data-tid="${t.id}" onerror="this.replaceWith(logoYedek('${t.id}'))">`;
+  }
+  return armaSVG(t);
+}
+/* <img> yüklenemezse stilize armaya düş */
+function logoYedek(id){
+  const t = takimBul(id);
+  const kap = document.createElement('span');
+  kap.className = 'arma-yedek';
+  kap.innerHTML = t ? armaSVG(t) : '';
+  delete LOGOLAR[id];
+  return kap.firstElementChild || kap;
+}
+
 /* Takımın stilize armasını SVG string olarak döner */
 function armaSVG(t){
   const uid = 'c' + t.id + '_' + Math.random().toString(36).slice(2,7);
