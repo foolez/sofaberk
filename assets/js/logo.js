@@ -96,4 +96,6 @@ async function logolariYukle(){
 if(typeof GOMULU_LOGOLAR === 'object' && GOMULU_LOGOLAR){
   Object.assign(LOGOLAR, GOMULU_LOGOLAR);
 }
-setTimeout(logolariYukle, 300);
+/* LOGO_MODU 'stil' oldugu surece bu modul hicbir sey yapmaz; gercek
+   logolari denemek istersen teams.js icinde LOGO_MODU='gercek' yap. */
+if(LOGO_MODU === 'gercek') setTimeout(logolariYukle, 300);

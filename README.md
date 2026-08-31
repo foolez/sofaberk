@@ -118,17 +118,20 @@ içindeki tek satırı düzeltmen yeter:
 //  bayrak: s=deniz kenarı  b=başkent  a=Avrupa kupası var
 ```
 
-### Logolar
+### Armalar
 
-Oyun açıldığında `assets/js/logo.js` kulüplerin **gerçek armalarını** Wikipedia'dan çeker
-(önce tr, sonra en) ve adresleri localStorage'a yazar — ikinci açılışta anında gelir.
-Bir logo bulunamazsa ya da yüklenemezse o takım, kendi **gerçek renk / desen / kuruluş yılı**
-verisinden üretilen stilize kalkanla çizilir; oyun hiç aksamaz.
+Her arma, takımın **gerçek renk / desen / kuruluş yılı** verisinden kod içinde SVG olarak
+üretilir (`armaSVG`). İnternet gerekmez, hep aynı görünür, telif sorunu olmaz.
 
-Gerçek logolar internet ister. Tamamen çevrimdışı (ya da claude.ai önizlemesi) için logoların
-dosyaya gömülmesi gerekir — bu ortamda ağ kapalı olduğu için indirilemedi.
+Gerçek kulüp armalarını denemek istersen `assets/js/teams.js` içinde tek satır:
 
-Kulüp armaları tescilli markadır: arkadaşınla oynamak sorun değil, ticari dağıtım için uygun değil.
+```js
+let LOGO_MODU = 'gercek';   // varsayılan: 'stil'
+```
+
+Bu modda `assets/js/logo.js` armaları Wikipedia'dan çeker ve adresleri localStorage'a yazar;
+bulunamayan takım stilize kalkanla çizilir. İnternet ister ve sonuç kulüpten kulüe değişir —
+varsayılan olarak kapalıdır.
 
 ## Diğer özellikler
 

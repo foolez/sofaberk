@@ -293,7 +293,9 @@ function _desenIcerik(t){
         localStorage'a yazar
    Logo yoksa aşağıdaki stilize arma çizilir, oyun hiç aksamaz.        */
 const LOGOLAR = Object.create(null);
-let LOGO_MODU = 'gercek';           // 'gercek' | 'stil'
+/* 'stil'  = herkes icin stilize kalkan (varsayilan, internet gerekmez)
+   'gercek'= Wikipedia'dan gercek kulup armalarini cek (assets/js/logo.js)  */
+let LOGO_MODU = 'stil';
 
 /* Ekrana çizilecek arma: gerçek logo varsa o, yoksa stilize kalkan */
 function arma(t){
