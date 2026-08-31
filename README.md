@@ -34,7 +34,22 @@ rakibin takımını bulmaya çalışır. **212 takım**, süreli turlar, iki oyn
 5. Sırası gelen soruyu **yazar**, diğeri EVET / HAYIR'a basar. Süreyi ve sırayı sunucu tutar,
    iki telefon asla ayrışmaz. Bağlantı koparsa aynı kodla girince oyun kaldığı yerden devam eder.
 
-### En hızlı yol: bedava link (domain almadan)
+### Windows'ta tek tık (en kolayı)
+
+1. Depoyu ZIP indir: **Code → Download ZIP** ya da doğrudan
+   [bu link](https://github.com/foolez/sofaberk/archive/refs/heads/claude/team-guessing-game-nu86uq.zip).
+2. ZIP'e sağ tık → **Tümünü ayıkla** (örn. `C:\takimtut`).
+3. Klasördeki **`baslat.bat`** dosyasına çift tıkla.
+
+Script Python'u kontrol eder, sunucu paketlerini kurar, `cloudflared`'i indirir, sunucuyu
+başlatır ve ekrana `https://....trycloudflare.com` diye bir adres yazar.
+**O adresi arkadaşına gönder** — ikiniz de açın, biri ODA KUR desin, öteki kodu girsin.
+Pencereyi kapatınca link kapanır.
+
+> Python kurulu değilse script kurmayı dener; kurulum bitince pencereyi kapatıp
+> `baslat.bat`'a tekrar çift tıkla (PATH'in yenilenmesi için).
+
+### Elle kurulum: bedava link (domain almadan)
 
 Bilgisayarında sunucuyu çalıştır, Cloudflare'in ücretsiz tüneliyle internete aç:
 
