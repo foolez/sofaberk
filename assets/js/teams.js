@@ -161,7 +161,7 @@ function armaSVG(t, opt={}){
     ${_desenIcerik(t, uid)}
     <rect x="0" y="96" width="200" height="52" fill="${seritZemin}" opacity=".95"/>
     <text x="100" y="133" text-anchor="middle" font-size="40" font-weight="900"
-          font-family="Impact, 'Arial Black', system-ui, sans-serif" fill="${seritYazi}"
+          font-family="'Archivo Black', 'Arial Black', Impact, system-ui, sans-serif" fill="${seritYazi}"
           letter-spacing="1">${t.kisa}</text>
     <rect x="60" y="154" width="80" height="30" rx="15" fill="#000" opacity=".38"/>
     <text x="100" y="176" text-anchor="middle" font-size="22" font-weight="800"

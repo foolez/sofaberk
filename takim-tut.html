@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0d13">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+<title>Takım Tut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@500;700;800&display=swap">
+<style>
+/* ================= TAKIM TUT — stil ================= */
+:root{
+  --zemin:#0a0d13; --panel:#141922; --panel2:#1b2230; --cizgi:#28303f;
+  --yazi:#eef2f8; --soluk:#93a0b4;
+  --vurgu:#38e08a; --vurgu2:#ffd23f; --kirmizi:#ff4d5e; --mavi:#4aa3ff;
+  --gol:16px;
+  --display:'Archivo Black','Arial Black',Impact,system-ui,sans-serif;
+  --govde:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -10%, #16202e 0%, var(--zemin) 60%);
+  color:var(--yazi); font-family:var(--govde);
+  overflow:hidden; overscroll-behavior:none;
+}
+button{font-family:inherit;cursor:pointer;border:none}
+
+.ekran{position:fixed;inset:0;display:none;overflow:auto;-webkit-overflow-scrolling:touch}
+.ekran.aktif{display:block}
+
+/* ---------- KURULUM ---------- */
+.kurulum-kutu{max-width:560px;margin:0 auto;padding:28px 20px 44px;text-align:center}
+.logo-yazi{font-family:var(--display);font-weight:900;font-size:clamp(38px,11vw,64px);letter-spacing:-1px;margin:14px 0 4px;line-height:.95;text-wrap:balance}
+.logo-yazi span{color:var(--vurgu)}
+.slogan{color:var(--soluk);margin:0 0 26px;font-size:14px;line-height:1.6}
+.alan{text-align:left;margin-bottom:20px}
+.etiket{display:block;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--soluk);margin-bottom:8px;font-weight:700}
+.kucuk-etiket{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--soluk);font-weight:700}
+.girdi{
+  width:100%;background:var(--panel);border:1.5px solid var(--cizgi);color:var(--yazi);
+  padding:14px 16px;border-radius:var(--gol);font-size:16px;font-weight:600;outline:none
+}
+.girdi:focus{border-color:var(--vurgu)}
+.ikili{display:flex;align-items:center;gap:10px}
+.vs{font-weight:900;color:var(--soluk);font-size:13px}
+.secenekler{display:flex;gap:8px;flex-wrap:wrap}
+.secenek{
+  flex:1 1 auto;min-width:96px;background:var(--panel);border:1.5px solid var(--cizgi);color:var(--yazi);
+  padding:12px 10px;border-radius:14px;font-size:14px;font-weight:700;display:flex;flex-direction:column;gap:3px;
+  transition:.15s
+}
+.secenek small{font-weight:600;font-size:11px;color:var(--soluk)}
+.secenek.secili{border-color:var(--vurgu);background:#12251c;color:var(--vurgu)}
+.secenek.secili small{color:#6fdca6}
+.buyuk-btn{
+  width:100%;background:var(--vurgu);color:#05130c;padding:18px;border-radius:var(--gol);
+  font-family:var(--display);font-weight:900;font-size:17px;letter-spacing:.5px;margin-top:6px;box-shadow:0 8px 24px rgba(56,224,138,.25)
+}
+.buyuk-btn:active{transform:translateY(1px)}
+.ikincil-btn{width:100%;background:transparent;border:1.5px solid var(--cizgi);color:var(--soluk);padding:14px;border-radius:var(--gol);font-weight:700;margin-top:10px}
+.ipucu{color:var(--soluk);font-size:12px;line-height:1.7;margin-top:18px}
+.ipucu b{color:var(--vurgu2)}
+
+/* ---------- SEÇİM ---------- */
+#ekran-secim{padding:18px 14px 30px}
+.secim-ust{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.secim-ust h2{margin:2px 0 0;font-size:23px;font-family:var(--display);font-weight:900}
+.uyari-rozet{background:#2a1c1c;color:#ff9aa4;border:1px solid #4a2a2f;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700}
+.ara{margin-bottom:14px}
+.izgara{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;padding-bottom:40px}
+.kart{
+  background:var(--panel);border:1.5px solid var(--cizgi);border-radius:14px;padding:10px 6px 8px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--yazi)
+}
+.kart .arma{width:52px;height:auto;display:block}
+.kart .isim{font-size:11px;font-weight:700;line-height:1.2;text-align:center}
+.kart .lig{font-size:9px;color:var(--soluk)}
+.kart:active{border-color:var(--vurgu)}
+.kart.elendi{opacity:.32}
+.kart.elendi .isim{text-decoration:line-through}
+
+/* ---------- DEVİR / BİTİŞ ---------- */
+.devir-kutu,.bitis-kutu{max-width:460px;margin:0 auto;padding:60px 22px;text-align:center}
+.devir-ikon{font-size:64px;margin-bottom:10px}
+.devir-kutu h2,.bitis-kutu h2{font-family:var(--display);font-weight:900;font-size:26px;margin:0 0 8px;line-height:1.15;text-wrap:balance}
+.devir-kutu p,.bitis-kutu p{color:var(--soluk);margin:0 0 26px;line-height:1.6}
+.acilis{display:flex;gap:14px;justify-content:center;margin-bottom:26px;flex-wrap:wrap}
+.acilis .oyuncu-sonuc{background:var(--panel);border:1.5px solid var(--cizgi);border-radius:16px;padding:14px 16px;min-width:140px}
+.acilis .arma{width:76px;margin:0 auto 8px;display:block}
+.acilis .kim{font-size:11px;color:var(--soluk);text-transform:uppercase;letter-spacing:1.2px;font-weight:700}
+.acilis .tkm{font-weight:800;font-size:15px;margin-top:2px}
+.bitis-btnler{max-width:320px;margin:0 auto}
+
+/* ================= OYUN — SPLIT SCREEN ================= */
+#ekran-oyun{overflow:hidden}
+.saha{position:absolute;inset:0;display:flex;flex-direction:column}
+.yari{
+  position:relative;flex:1 1 50%;min-height:0;display:flex;flex-direction:column;
+  padding:12px 12px;gap:8px;transition:background .25s, box-shadow .25s;
+  background:var(--panel);border:2px solid transparent;overflow:hidden
+}
+.yari.ust{transform:rotate(180deg)}
+.yari.pasif{background:#0f141c}
+.yari.sirasi{border-color:var(--vurgu);background:#101c17;box-shadow:inset 0 0 60px rgba(56,224,138,.10)}
+.yari.cevap-sirasi{border-color:var(--mavi);background:#0f1722;box-shadow:inset 0 0 60px rgba(74,163,255,.10)}
+
+.yari-ust-serit{display:flex;justify-content:space-between;align-items:center;gap:8px;flex:0 0 auto}
+.oyuncu-adi{font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+.durum-rozet{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:#232c3a;color:var(--soluk)}
+.durum-rozet.sor{background:#12351f;color:var(--vurgu)}
+.durum-rozet.cevapla{background:#122536;color:var(--mavi)}
+.sayac-mini{font-variant-numeric:tabular-nums;font-weight:900;font-size:16px;color:var(--soluk)}
+.sayac-mini.az{color:var(--kirmizi)}
+
+/* arma alanı + kilit */
+.arma-alan{flex:1 1 auto;position:relative;display:flex;align-items:center;justify-content:center;min-height:0;padding-bottom:44px;touch-action:none;cursor:pointer}
+.arma-alan .arma{height:100%;max-height:100%;width:auto;max-width:70%;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5))}
+.takim-bilgi{position:absolute;bottom:2px;left:0;right:0;text-align:center;pointer-events:none}
+.takim-bilgi .ad{font-family:var(--display);font-weight:900;font-size:clamp(17px,4.6vw,26px);letter-spacing:-.3px}
+.takim-bilgi .detay{font-size:11px;color:var(--soluk);margin-top:2px}
+.kilit{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  background:linear-gradient(180deg,#161c26,#101620);border:2px dashed var(--cizgi);border-radius:18px;
+  color:var(--soluk);font-weight:800;letter-spacing:.5px;user-select:none;-webkit-user-select:none;text-align:center;padding:10px
+}
+.kilit .kilit-ikon{font-size:34px}
+.kilit .kilit-alt{font-size:11px;font-weight:600;color:#6d7a8d;max-width:230px;line-height:1.5}
+.kilit.gizli{display:none}
+
+/* kontroller */
+.kontrol{display:flex;gap:8px;flex:0 0 auto}
+.kontrol button{
+  flex:1;padding:14px 6px;border-radius:14px;font-weight:900;font-size:14px;
+  background:var(--panel2);color:var(--yazi);border:1.5px solid var(--cizgi);letter-spacing:.3px
+}
+.kontrol button:disabled{opacity:.32}
+.kontrol .evet{background:#12351f;border-color:#1f6b3d;color:#5ef0a4}
+.kontrol .hayir{background:#351218;border-color:#6b1f2a;color:#ff8a96}
+.kontrol .tahmin{background:#2e2708;border-color:#6b5a1f;color:var(--vurgu2)}
+.kontrol .pas{flex:0 0 84px;font-size:12px}
+.kontrol .eleme,.kontrol .fikir{flex:0 0 54px;font-size:18px;padding:12px 2px}
+.kontrol .fikir{background:#26221a;border-color:#5a4c22}
+
+.mesaj{
+  flex:0 0 auto;min-height:34px;display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:12px;font-weight:700;color:var(--soluk);text-align:center;line-height:1.35
+}
+.mesaj .rozet-evet{color:var(--vurgu)} .mesaj .rozet-hayir{color:var(--kirmizi)}
+.hak{font-size:10px;color:var(--soluk);font-weight:700}
+
+/* orta şerit */
+.orta-serit{
+  position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);height:44px;
+  display:flex;align-items:center;justify-content:center;gap:14px;pointer-events:none;z-index:5
+}
+.orta-sayac{
+  background:#0a0d13;border:2px solid var(--cizgi);color:var(--yazi);font-family:var(--display);font-weight:900;font-size:18px;
+  min-width:58px;text-align:center;padding:6px 10px;border-radius:999px;font-variant-numeric:tabular-nums
+}
+.orta-sayac.az{border-color:var(--kirmizi);color:var(--kirmizi);animation:nabiz .8s infinite}
+.orta-bilgi{background:#0a0d13;border:2px solid var(--cizgi);color:var(--soluk);font-size:11px;font-weight:800;padding:7px 12px;border-radius:999px;letter-spacing:.8px;text-transform:uppercase}
+@keyframes nabiz{50%{transform:scale(1.08)}}
+
+/* yarı içi katman (tahmin / eleme) */
+.katman{
+  position:absolute;inset:0;background:#0c1016;z-index:8;display:flex;flex-direction:column;padding:10px;gap:8px
+}
+.katman-ust{display:flex;justify-content:space-between;align-items:center;gap:8px;flex:0 0 auto}
+.katman-ust h3{margin:0;font-size:14px}
+.katman .kapat{background:var(--panel2);border:1.5px solid var(--cizgi);color:var(--soluk);border-radius:10px;padding:8px 12px;font-weight:800;font-size:12px}
+.katman .ara{margin:0;padding:10px 12px;font-size:14px;flex:0 0 auto}
+.katman .izgara{overflow:auto;flex:1 1 auto;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:7px;padding-bottom:6px;align-content:start}
+.katman .kart{padding:7px 4px 6px;border-radius:11px;gap:4px}
+.katman .kart .arma{width:34px}
+.katman .kart .isim{font-size:9.5px}
+.katman .kart .lig{display:none}
+
+@media (min-height:760px){ .kart .arma{width:60px} }
+
+</style>
+</head>
+<body>
+
+
+
+<!-- ============ 1) KURULUM ============ -->
+<section id="ekran-kurulum" class="ekran aktif">
+  <div class="kurulum-kutu">
+    <h1 class="logo-yazi">TAKIM<span>TUT</span></h1>
+    <p class="slogan">Sen takımını tutarsın, o seninkini bilmeye çalışır.<br>Evet / Hayır. Sırayla. Süreli.</p>
+
+    <div class="alan">
+      <label class="etiket">Oyuncular</label>
+      <div class="ikili">
+        <input id="ad1" class="girdi" maxlength="14" placeholder="1. Oyuncu" value="Oyuncu 1">
+        <span class="vs">VS</span>
+        <input id="ad2" class="girdi" maxlength="14" placeholder="2. Oyuncu" value="Oyuncu 2">
+      </div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Takım havuzu</label>
+      <div id="havuz-secim" class="secenekler"></div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Tur süresi</label>
+      <div class="secenekler" id="sure-secim">
+        <button class="secenek" data-sure="15">15 sn<small>hızlı</small></button>
+        <button class="secenek secili" data-sure="30">30 sn<small>normal</small></button>
+        <button class="secenek" data-sure="45">45 sn<small>sakin</small></button>
+        <button class="secenek" data-sure="0">Süresiz<small>rahat</small></button>
+      </div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Takım nasıl belirlensin?</label>
+      <div class="secenekler" id="dagitim-secim">
+        <button class="secenek secili" data-dagitim="rastgele">Rastgele<small>oyun dağıtsın</small></button>
+        <button class="secenek" data-dagitim="secim">Kendim seçeyim<small>gizli seçim</small></button>
+      </div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Tahmin hakkı</label>
+      <div class="secenekler" id="hak-secim">
+        <button class="secenek" data-hak="1">1 hak<small>tek şans</small></button>
+        <button class="secenek secili" data-hak="2">2 hak<small>önerilen</small></button>
+        <button class="secenek" data-hak="3">3 hak<small>bol keseden</small></button>
+      </div>
+    </div>
+
+    <button id="basla" class="buyuk-btn">OYUNU BAŞLAT</button>
+    <p class="ipucu">Telefonu iki oyuncunun arasına yatır. Üst yarı karşındaki için ters çevrilidir.
+      Kendi takımını görmek için <b>“BASILI TUT & GÖR”</b>e bas — rakip senin ekranına bakmasın.</p>
+  </div>
+</section>
+
+<!-- ============ 2) GİZLİ SEÇİM ============ -->
+<section id="ekran-secim" class="ekran">
+  <div class="secim-ust">
+    <div>
+      <div class="kucuk-etiket">Sıra sende</div>
+      <h2 id="secim-oyuncu">Oyuncu 1</h2>
+    </div>
+    <div class="uyari-rozet">Rakip bakmasın 👀</div>
+  </div>
+  <input id="secim-ara" class="girdi ara" placeholder="Takım ara…" autocomplete="off">
+  <div id="secim-izgara" class="izgara"></div>
+</section>
+
+<!-- ============ 3) DEVİR TESLİM ============ -->
+<section id="ekran-devir" class="ekran">
+  <div class="devir-kutu">
+    <div class="devir-ikon">🤝</div>
+    <h2 id="devir-baslik">Telefonu 2. Oyuncuya ver</h2>
+    <p id="devir-alt">Sen hazırsın. Şimdi sıra onda.</p>
+    <button id="devir-btn" class="buyuk-btn">HAZIRIM</button>
+  </div>
+</section>
+
+<!-- ============ 4) OYUN (SPLIT SCREEN) ============ -->
+<section id="ekran-oyun" class="ekran">
+  <div class="saha" id="saha"></div>
+  <div class="orta-serit">
+    <div class="orta-sayac" id="orta-sayac">30</div>
+    <div class="orta-bilgi" id="orta-bilgi">Tur 1</div>
+  </div>
+</section>
+
+<!-- ============ 5) BİTİŞ ============ -->
+<section id="ekran-bitis" class="ekran">
+  <div class="bitis-kutu">
+    <div id="bitis-kupa" class="devir-ikon">🏆</div>
+    <h2 id="bitis-baslik">Kazandı!</h2>
+    <p id="bitis-alt"></p>
+    <div class="acilis" id="bitis-acilis"></div>
+    <div class="bitis-btnler">
+      <button id="tekrar" class="buyuk-btn">TEKRAR OYNA</button>
+      <button id="menu" class="ikincil-btn">Ana menü</button>
+    </div>
+  </div>
+</section>
+
+<script>
+/* =============================================================
+   TAKIM TUT — takım veritabanı + arma (logo) üreteci
+   -------------------------------------------------------------
+   Kulüplerin gerçek armaları telifli olduğu için burada her takım
+   için kendi renk/desen bilgisinden STİLİZE bir arma üretiliyor.
+   Renkler, desen, şehir, kuruluş yılı gerçek -> takım hemen tanınıyor,
+   telif sorunu da yok.
+   ============================================================= */
+
+const TAKIMLAR = [
+  /* ---------------- SÜPER LİG ---------------- */
+  { id:'gs',  ad:'Galatasaray',      kisa:'GS',  sehir:'İstanbul', ulke:'Türkiye', lig:'Süper Lig', kurulus:1905, renkler:['#F5B301','#A32638'], desen:'stripes', lakap:'Cimbom',      sahil:true,  baskent:false, avrupa:true,  havuz:'tr' },
+  { id:'fb',  ad:'Fenerbahçe',       kisa:'FB',  sehir:'İstanbul', ulke:'Türkiye', lig:'Süper Lig', kurulus:1907, renkler:['#FFED00','#12326E'], desen:'stripes', lakap:'Kanarya',     sahil:true,  baskent:false, avrupa:false, havuz:'tr' },
+  { id:'bjk', ad:'Beşiktaş',         kisa:'BJK', sehir:'İstanbul', ulke:'Türkiye', lig:'Süper Lig', kurulus:1903, renkler:['#111111','#FFFFFF'], desen:'stripes', lakap:'Kara Kartal', sahil:true,  baskent:false, avrupa:false, havuz:'tr' },
+  { id:'ts',  ad:'Trabzonspor',      kisa:'TS',  sehir:'Trabzon',  ulke:'Türkiye', lig:'Süper Lig', kurulus:1967, renkler:['#6E1B37','#2C6DB5'], desen:'stripes', lakap:'Fırtına',     sahil:true,  baskent:false, avrupa:false, havuz:'tr' },
+  { id:'ibfk',ad:'Başakşehir',       kisa:'İBFK',sehir:'İstanbul', ulke:'Türkiye', lig:'Süper Lig', kurulus:1990, renkler:['#0A2A5B','#F26522'], desen:'halves',  lakap:'Turuncu-Lacivert', sahil:true, baskent:false, avrupa:false, havuz:'tr' },
+  { id:'ksp', ad:'Kasımpaşa',        kisa:'KSP', sehir:'İstanbul', ulke:'Türkiye', lig:'Süper Lig', kurulus:1921, renkler:['#12326E','#FFFFFF'], desen:'stripes', lakap:'Paşa',        sahil:true,  baskent:false, avrupa:false, havuz:'tr' },
+  { id:'kon', ad:'Konyaspor',        kisa:'KON', sehir:'Konya',    ulke:'Türkiye', lig:'Süper Lig', kurulus:1922, renkler:['#0B6B3A','#FFFFFF'], desen:'stripes', lakap:'Anadolu Kartalı', sahil:false, baskent:false, avrupa:false, havuz:'tr' },
+  { id:'ant', ad:'Antalyaspor',      kisa:'ANT', sehir:'Antalya',  ulke:'Türkiye', lig:'Süper Lig', kurulus:1966, renkler:['#D2172A','#FFFFFF'], desen:'stripes', lakap:'Akrepler',    sahil:true,  baskent:false, avrupa:false, havuz:'tr' },
+  { id:'aln', ad:'Alanyaspor',       kisa:'ALN', sehir:'Alanya',   ulke:'Türkiye', lig:'Süper Lig', kurulus:1948, renkler:['#F47B20','#0B6B3A'], desen:'halves',  lakap:'Akdeniz Fırtınası', sahil:true, baskent:false, avrupa:false, havuz:'tr' },
+  { id:'rize',ad:'Çaykur Rizespor',  kisa:'RİZ', sehir:'Rize',     ulke:'Türkiye', lig:'Süper Lig', kurulus:1953, renkler:['#0B6B3A','#1B65B0'], desen:'stripes', lakap:'Yeşil-Mavi',  sahil:true,  baskent:false, avrupa:false, havuz:'tr' },
+  { id:'sam', ad:'Samsunspor',       kisa:'SAM', sehir:'Samsun',   ulke:'Türkiye', lig:'Süper Lig', kurulus:1965, renkler:['#D2172A','#FFFFFF'], desen:'hoops',   lakap:'Kızıl Şimşekler', sahil:true, baskent:false, avrupa:false, havuz:'tr' },
+  { id:'gfk', ad:'Gaziantep FK',     kisa:'GFK', sehir:'Gaziantep',ulke:'Türkiye', lig:'Süper Lig', kurulus:1969, renkler:['#D2172A','#111111'], desen:'stripes', lakap:'Şahinler',    sahil:false, baskent:false, avrupa:false, havuz:'tr' },
+  { id:'kay', ad:'Kayserispor',      kisa:'KAY', sehir:'Kayseri',  ulke:'Türkiye', lig:'Süper Lig', kurulus:1966, renkler:['#F5B301','#A32638'], desen:'halves',  lakap:'Erciyes Kartalı', sahil:false, baskent:false, avrupa:false, havuz:'tr' },
+  { id:'siv', ad:'Sivasspor',        kisa:'SİV', sehir:'Sivas',    ulke:'Türkiye', lig:'Süper Lig', kurulus:1967, renkler:['#D2172A','#FFFFFF'], desen:'hoops',   lakap:'Yiğidolar',   sahil:false, baskent:false, avrupa:false, havuz:'tr' },
+  { id:'goz', ad:'Göztepe',          kisa:'GÖZ', sehir:'İzmir',    ulke:'Türkiye', lig:'Süper Lig', kurulus:1925, renkler:['#F5B301','#A32638'], desen:'halves',  lakap:'Göz Göz',     sahil:true,  baskent:false, avrupa:false, havuz:'tr' },
+  { id:'eyp', ad:'Eyüpspor',         kisa:'EYP', sehir:'İstanbul', ulke:'Türkiye', lig:'Süper Lig', kurulus:1919, renkler:['#5B2A86','#F5D000'], desen:'stripes', lakap:'Mor-Sarı',    sahil:true,  baskent:false, avrupa:false, havuz:'tr' },
+  { id:'bod', ad:'Bodrum FK',        kisa:'BOD', sehir:'Bodrum',   ulke:'Türkiye', lig:'Süper Lig', kurulus:1931, renkler:['#0B6B3A','#FFFFFF'], desen:'hoops',   lakap:'Yeşil-Beyaz', sahil:true,  baskent:false, avrupa:false, havuz:'tr' },
+  { id:'hat', ad:'Hatayspor',        kisa:'HAT', sehir:'Hatay',    ulke:'Türkiye', lig:'Süper Lig', kurulus:1967, renkler:['#6E1B37','#FFFFFF'], desen:'stripes', lakap:'Bordo-Beyaz', sahil:true,  baskent:false, avrupa:false, havuz:'tr' },
+
+  /* ------------- TÜRKİYE KLASİKLERİ ------------- */
+  { id:'ads', ad:'Adana Demirspor',  kisa:'ADS', sehir:'Adana',    ulke:'Türkiye', lig:'Türkiye', kurulus:1940, renkler:['#12326E','#FFFFFF'], desen:'stripes', lakap:'Şimşekler',  sahil:false, baskent:false, avrupa:false, havuz:'tr2' },
+  { id:'brs', ad:'Bursaspor',        kisa:'BRS', sehir:'Bursa',    ulke:'Türkiye', lig:'Türkiye', kurulus:1963, renkler:['#0B6B3A','#FFFFFF'], desen:'stripes', lakap:'Timsah',     sahil:false, baskent:false, avrupa:false, havuz:'tr2' },
+  { id:'ank', ad:'MKE Ankaragücü',   kisa:'ANK', sehir:'Ankara',   ulke:'Türkiye', lig:'Türkiye', kurulus:1910, renkler:['#F5B301','#12326E'], desen:'stripes', lakap:'Başkentin Ateşi', sahil:false, baskent:true, avrupa:false, havuz:'tr2' },
+  { id:'gbb', ad:'Gençlerbirliği',   kisa:'GBB', sehir:'Ankara',   ulke:'Türkiye', lig:'Türkiye', kurulus:1923, renkler:['#A32638','#111111'], desen:'stripes', lakap:'Ankara Rüzgarı', sahil:false, baskent:true, avrupa:false, havuz:'tr2' },
+  { id:'koc', ad:'Kocaelispor',      kisa:'KOC', sehir:'Kocaeli',  ulke:'Türkiye', lig:'Türkiye', kurulus:1966, renkler:['#0B6B3A','#111111'], desen:'stripes', lakap:'Körfezin Fırtınası', sahil:true, baskent:false, avrupa:false, havuz:'tr2' },
+  { id:'esk', ad:'Eskişehirspor',    kisa:'ESK', sehir:'Eskişehir',ulke:'Türkiye', lig:'Türkiye', kurulus:1965, renkler:['#A32638','#111111'], desen:'stripes', lakap:'Es Es',      sahil:false, baskent:false, avrupa:false, havuz:'tr2' },
+  { id:'dnz', ad:'Denizlispor',      kisa:'DNZ', sehir:'Denizli',  ulke:'Türkiye', lig:'Türkiye', kurulus:1966, renkler:['#0B6B3A','#111111'], desen:'halves',  lakap:'Horoz',      sahil:false, baskent:false, avrupa:false, havuz:'tr2' },
+  { id:'kgm', ad:'F. Karagümrük',    kisa:'KGM', sehir:'İstanbul', ulke:'Türkiye', lig:'Türkiye', kurulus:1926, renkler:['#A32638','#111111'], desen:'halves',  lakap:'Kırmızı-Siyah', sahil:true, baskent:false, avrupa:false, havuz:'tr2' },
+  { id:'alt', ad:'Altay',            kisa:'ALT', sehir:'İzmir',    ulke:'Türkiye', lig:'Türkiye', kurulus:1914, renkler:['#111111','#FFFFFF'], desen:'stripes', lakap:'Siyah Kartallar', sahil:true, baskent:false, avrupa:false, havuz:'tr2' },
+  { id:'mlt', ad:'Yeni Malatyaspor', kisa:'MLT', sehir:'Malatya',  ulke:'Türkiye', lig:'Türkiye', kurulus:1986, renkler:['#F5B301','#111111'], desen:'halves',  lakap:'Kayısılar',  sahil:false, baskent:false, avrupa:false, havuz:'tr2' },
+  { id:'gir', ad:'Giresunspor',      kisa:'GİR', sehir:'Giresun',  ulke:'Türkiye', lig:'Türkiye', kurulus:1967, renkler:['#0B6B3A','#FFFFFF'], desen:'halves',  lakap:'Çotanaklar', sahil:true,  baskent:false, avrupa:false, havuz:'tr2' },
+  { id:'ums', ad:'Ümraniyespor',     kisa:'ÜMS', sehir:'İstanbul', ulke:'Türkiye', lig:'Türkiye', kurulus:1938, renkler:['#A32638','#FFFFFF'], desen:'sash',    lakap:'Kırmızı-Beyaz', sahil:true, baskent:false, avrupa:false, havuz:'tr2' },
+  { id:'ist', ad:'İstanbulspor',     kisa:'İST', sehir:'İstanbul', ulke:'Türkiye', lig:'Türkiye', kurulus:1926, renkler:['#F5B301','#111111'], desen:'stripes', lakap:'Sarı-Siyah', sahil:true,  baskent:false, avrupa:false, havuz:'tr2' },
+
+  /* ---------------- PREMIER LEAGUE ---------------- */
+  { id:'mci', ad:'Manchester City',  kisa:'MCI', sehir:'Manchester', ulke:'İngiltere', lig:'Premier Lig', kurulus:1880, renkler:['#6CABDD','#FFFFFF'], desen:'solid',  lakap:'Citizens', sahil:false, baskent:false, avrupa:true,  havuz:'eu' },
+  { id:'mun', ad:'Manchester United',kisa:'MUN', sehir:'Manchester', ulke:'İngiltere', lig:'Premier Lig', kurulus:1878, renkler:['#DA291C','#111111'], desen:'solid',  lakap:'Kızıl Şeytanlar', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'liv', ad:'Liverpool',        kisa:'LIV', sehir:'Liverpool',  ulke:'İngiltere', lig:'Premier Lig', kurulus:1892, renkler:['#C8102E','#FFFFFF'], desen:'solid',  lakap:'Kırmızılar', sahil:true,  baskent:false, avrupa:true,  havuz:'eu' },
+  { id:'ars', ad:'Arsenal',          kisa:'ARS', sehir:'Londra',     ulke:'İngiltere', lig:'Premier Lig', kurulus:1886, renkler:['#EF0107','#FFFFFF'], desen:'sash',   lakap:'Topçular', sahil:false, baskent:true,  avrupa:true,  havuz:'eu' },
+  { id:'che', ad:'Chelsea',          kisa:'CHE', sehir:'Londra',     ulke:'İngiltere', lig:'Premier Lig', kurulus:1905, renkler:['#034694','#FFFFFF'], desen:'solid',  lakap:'Mavi Aslanlar', sahil:false, baskent:true, avrupa:true, havuz:'eu' },
+  { id:'tot', ad:'Tottenham',        kisa:'TOT', sehir:'Londra',     ulke:'İngiltere', lig:'Premier Lig', kurulus:1882, renkler:['#FFFFFF','#132257'], desen:'halves', lakap:'Horozlar', sahil:false, baskent:true,  avrupa:true,  havuz:'eu' },
+  { id:'new', ad:'Newcastle United', kisa:'NEW', sehir:'Newcastle',  ulke:'İngiltere', lig:'Premier Lig', kurulus:1892, renkler:['#111111','#FFFFFF'], desen:'stripes',lakap:'Saksağanlar', sahil:true, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'avl', ad:'Aston Villa',      kisa:'AVL', sehir:'Birmingham', ulke:'İngiltere', lig:'Premier Lig', kurulus:1874, renkler:['#670E36','#95BFE5'], desen:'stripes',lakap:'Villans', sahil:false, baskent:false, avrupa:true,  havuz:'eu' },
+  { id:'eve', ad:'Everton',          kisa:'EVE', sehir:'Liverpool',  ulke:'İngiltere', lig:'Premier Lig', kurulus:1878, renkler:['#003399','#FFFFFF'], desen:'solid',  lakap:'Toffees', sahil:true,  baskent:false, avrupa:false, havuz:'eu' },
+  { id:'whu', ad:'West Ham United',  kisa:'WHU', sehir:'Londra',     ulke:'İngiltere', lig:'Premier Lig', kurulus:1895, renkler:['#7A263A','#1BB1E7'], desen:'solid',  lakap:'Çekiççiler', sahil:false, baskent:true, avrupa:true, havuz:'eu' },
+
+  /* ---------------- LALIGA ---------------- */
+  { id:'rma', ad:'Real Madrid',      kisa:'RMA', sehir:'Madrid',    ulke:'İspanya', lig:'LaLiga', kurulus:1902, renkler:['#FFFFFF','#FEBE10'], desen:'solid',  lakap:'Kraliyet', sahil:false, baskent:true,  avrupa:true, havuz:'eu' },
+  { id:'fcb', ad:'Barcelona',        kisa:'FCB', sehir:'Barcelona', ulke:'İspanya', lig:'LaLiga', kurulus:1899, renkler:['#A50044','#004D98'], desen:'stripes',lakap:'Blaugrana', sahil:true, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'atm', ad:'Atlético Madrid',  kisa:'ATM', sehir:'Madrid',    ulke:'İspanya', lig:'LaLiga', kurulus:1903, renkler:['#CB3524','#FFFFFF'], desen:'stripes',lakap:'Yatağancılar', sahil:false, baskent:true, avrupa:true, havuz:'eu' },
+  { id:'sev', ad:'Sevilla',          kisa:'SEV', sehir:'Sevilla',   ulke:'İspanya', lig:'LaLiga', kurulus:1890, renkler:['#FFFFFF','#D0021B'], desen:'halves', lakap:'Endülüs', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'val', ad:'Valencia',         kisa:'VAL', sehir:'Valencia',  ulke:'İspanya', lig:'LaLiga', kurulus:1919, renkler:['#FFFFFF','#F18E00'], desen:'halves', lakap:'Yarasalar', sahil:true, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'ath', ad:'Athletic Bilbao',  kisa:'ATH', sehir:'Bilbao',    ulke:'İspanya', lig:'LaLiga', kurulus:1898, renkler:['#EE2523','#FFFFFF'], desen:'stripes',lakap:'Aslanlar', sahil:true, baskent:false, avrupa:false, havuz:'eu' },
+  { id:'rso', ad:'Real Sociedad',    kisa:'RSO', sehir:'San Sebastián', ulke:'İspanya', lig:'LaLiga', kurulus:1909, renkler:['#0067B1','#FFFFFF'], desen:'stripes',lakap:'Txuri-urdin', sahil:true, baskent:false, avrupa:false, havuz:'eu' },
+  { id:'vil', ad:'Villarreal',       kisa:'VIL', sehir:'Villarreal',ulke:'İspanya', lig:'LaLiga', kurulus:1923, renkler:['#FFE667','#005187'], desen:'solid',  lakap:'Sarı Denizaltı', sahil:true, baskent:false, avrupa:true, havuz:'eu' },
+
+  /* ---------------- SERIE A ---------------- */
+  { id:'juv', ad:'Juventus',         kisa:'JUV', sehir:'Torino',   ulke:'İtalya', lig:'Serie A', kurulus:1897, renkler:['#111111','#FFFFFF'], desen:'stripes',lakap:'Yaşlı Kadın', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'mil', ad:'Milan',            kisa:'MIL', sehir:'Milano',   ulke:'İtalya', lig:'Serie A', kurulus:1899, renkler:['#FB090B','#111111'], desen:'stripes',lakap:'Rossoneri', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'int', ad:'Inter',            kisa:'INT', sehir:'Milano',   ulke:'İtalya', lig:'Serie A', kurulus:1908, renkler:['#0068A8','#111111'], desen:'stripes',lakap:'Nerazzurri', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'nap', ad:'Napoli',           kisa:'NAP', sehir:'Napoli',   ulke:'İtalya', lig:'Serie A', kurulus:1926, renkler:['#12A0D7','#FFFFFF'], desen:'solid',  lakap:'Partenopei', sahil:true, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'rom', ad:'Roma',             kisa:'ROM', sehir:'Roma',     ulke:'İtalya', lig:'Serie A', kurulus:1927, renkler:['#8E1F2F','#F0BC42'], desen:'solid',  lakap:'Kurtlar', sahil:false, baskent:true, avrupa:true, havuz:'eu' },
+  { id:'laz', ad:'Lazio',            kisa:'LAZ', sehir:'Roma',     ulke:'İtalya', lig:'Serie A', kurulus:1900, renkler:['#87D8F7','#FFFFFF'], desen:'solid',  lakap:'Kartallar', sahil:false, baskent:true, avrupa:true, havuz:'eu' },
+  { id:'ata', ad:'Atalanta',         kisa:'ATA', sehir:'Bergamo',  ulke:'İtalya', lig:'Serie A', kurulus:1907, renkler:['#1D2D5C','#111111'], desen:'stripes',lakap:'La Dea', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'fio', ad:'Fiorentina',       kisa:'FIO', sehir:'Floransa', ulke:'İtalya', lig:'Serie A', kurulus:1926, renkler:['#59308F','#FFFFFF'], desen:'solid',  lakap:'Viola', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+
+  /* ---------------- BUNDESLIGA ---------------- */
+  { id:'bay', ad:'Bayern München',   kisa:'FCB', sehir:'Münih',     ulke:'Almanya', lig:'Bundesliga', kurulus:1900, renkler:['#DC052D','#FFFFFF'], desen:'solid',  lakap:'Bavyera Devi', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'bvb', ad:'Borussia Dortmund',kisa:'BVB', sehir:'Dortmund',  ulke:'Almanya', lig:'Bundesliga', kurulus:1909, renkler:['#FDE100','#111111'], desen:'solid',  lakap:'Arılar', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'rbl', ad:'RB Leipzig',       kisa:'RBL', sehir:'Leipzig',   ulke:'Almanya', lig:'Bundesliga', kurulus:2009, renkler:['#DD0741','#FFFFFF'], desen:'solid',  lakap:'Boğalar', sahil:false, baskent:false, avrupa:false, havuz:'eu' },
+  { id:'lev', ad:'Bayer Leverkusen', kisa:'B04', sehir:'Leverkusen',ulke:'Almanya', lig:'Bundesliga', kurulus:1904, renkler:['#E32219','#111111'], desen:'halves', lakap:'Aspirinciler', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'s04', ad:'Schalke 04',       kisa:'S04', sehir:'Gelsenkirchen', ulke:'Almanya', lig:'Bundesliga', kurulus:1904, renkler:['#004D9D','#FFFFFF'], desen:'solid', lakap:'Madenciler', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'sge', ad:'Eintracht Frankfurt', kisa:'SGE', sehir:'Frankfurt', ulke:'Almanya', lig:'Bundesliga', kurulus:1899, renkler:['#111111','#E1000F'], desen:'stripes',lakap:'Kartallar', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+
+  /* ---------------- LIGUE 1 & DİĞER ---------------- */
+  { id:'psg', ad:'Paris Saint-Germain', kisa:'PSG', sehir:'Paris',  ulke:'Fransa', lig:'Ligue 1', kurulus:1970, renkler:['#004170','#DA291C'], desen:'sash',   lakap:'Parisliler', sahil:false, baskent:true, avrupa:true, havuz:'eu' },
+  { id:'om',  ad:'Marseille',        kisa:'OM',  sehir:'Marsilya', ulke:'Fransa', lig:'Ligue 1', kurulus:1899, renkler:['#FFFFFF','#2FAEE0'], desen:'solid',  lakap:'Phocéens', sahil:true,  baskent:false, avrupa:true, havuz:'eu' },
+  { id:'ol',  ad:'Lyon',             kisa:'OL',  sehir:'Lyon',     ulke:'Fransa', lig:'Ligue 1', kurulus:1950, renkler:['#FFFFFF','#122E62'], desen:'halves', lakap:'Les Gones', sahil:false, baskent:false, avrupa:false, havuz:'eu' },
+  { id:'asm', ad:'Monaco',           kisa:'ASM', sehir:'Monako',   ulke:'Monako', lig:'Ligue 1', kurulus:1924, renkler:['#E63329','#FFFFFF'], desen:'halves', lakap:'Kırmızı-Beyazlar', sahil:true, baskent:true, avrupa:false, havuz:'eu' },
+  { id:'aja', ad:'Ajax',             kisa:'AJA', sehir:'Amsterdam',ulke:'Hollanda', lig:'Eredivisie', kurulus:1900, renkler:['#FFFFFF','#D2122E'], desen:'sash', lakap:'Amsterdam', sahil:false, baskent:true, avrupa:true, havuz:'eu' },
+  { id:'psv', ad:'PSV Eindhoven',    kisa:'PSV', sehir:'Eindhoven',ulke:'Hollanda', lig:'Eredivisie', kurulus:1913, renkler:['#ED1C24','#FFFFFF'], desen:'stripes', lakap:'Boertjes', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'fey', ad:'Feyenoord',        kisa:'FEY', sehir:'Rotterdam',ulke:'Hollanda', lig:'Eredivisie', kurulus:1908, renkler:['#CE1317','#FFFFFF'], desen:'halves', lakap:'Rotterdam', sahil:true, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'por', ad:'Porto',            kisa:'FCP', sehir:'Porto',    ulke:'Portekiz', lig:'Primeira Liga', kurulus:1893, renkler:['#003DA5','#FFFFFF'], desen:'stripes', lakap:'Ejderhalar', sahil:true, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'ben', ad:'Benfica',          kisa:'SLB', sehir:'Lizbon',   ulke:'Portekiz', lig:'Primeira Liga', kurulus:1904, renkler:['#E30613','#FFFFFF'], desen:'solid', lakap:'Kartallar', sahil:true, baskent:true, avrupa:true, havuz:'eu' },
+  { id:'spo', ad:'Sporting CP',      kisa:'SCP', sehir:'Lizbon',   ulke:'Portekiz', lig:'Primeira Liga', kurulus:1906, renkler:['#008057','#FFFFFF'], desen:'hoops', lakap:'Aslanlar', sahil:true, baskent:true, avrupa:true, havuz:'eu' },
+  { id:'cel', ad:'Celtic',           kisa:'CEL', sehir:'Glasgow',  ulke:'İskoçya', lig:'İskoçya Ligi', kurulus:1887, renkler:['#018749','#FFFFFF'], desen:'hoops', lakap:'Bhoys', sahil:false, baskent:false, avrupa:true, havuz:'eu' },
+  { id:'ran', ad:'Rangers',          kisa:'RAN', sehir:'Glasgow',  ulke:'İskoçya', lig:'İskoçya Ligi', kurulus:1872, renkler:['#1B458F','#FFFFFF'], desen:'solid', lakap:'Gers', sahil:false, baskent:false, avrupa:false, havuz:'eu' },
+];
+
+const HAVUZLAR = {
+  'super-lig': { ad:'Süper Lig',        aciklama:'18 takım — klasik akşam maçı',      filtre: t => t.havuz==='tr' },
+  'turkiye':   { ad:'Türkiye (Geniş)',  aciklama:'Süper Lig + eski efsaneler (30)',   filtre: t => t.havuz==='tr' || t.havuz==='tr2' },
+  'avrupa':    { ad:'Avrupa Devleri',   aciklama:'Avrupa’nın 45 büyük kulübü',        filtre: t => t.havuz==='eu' },
+  'hepsi':     { ad:'Hepsi Karışık',    aciklama:'Tüm takımlar — zor mod',            filtre: () => true },
+};
+
+/* -------------------- ARMA (LOGO) ÜRETECİ -------------------- */
+
+function _parlaklik(hex){
+  const h = hex.replace('#','');
+  const r = parseInt(h.slice(0,2),16), g = parseInt(h.slice(2,4),16), b = parseInt(h.slice(4,6),16);
+  return (0.299*r + 0.587*g + 0.114*b) / 255;
+}
+function kontrastRenk(hex){ return _parlaklik(hex) > 0.6 ? '#101318' : '#FFFFFF'; }
+
+/* Desen dolgusu: kalkanın içini takımın desenine göre boyar */
+function _desenIcerik(t, uid){
+  const [a, b] = t.renkler;
+  switch(t.desen){
+    case 'stripes': { // dikey çubuklar
+      let s = `<rect x="0" y="0" width="200" height="240" fill="${a}"/>`;
+      for(let i=0;i<5;i++) s += `<rect x="${20+i*40}" y="0" width="20" height="240" fill="${b}"/>`;
+      return s;
+    }
+    case 'hoops': { // yatay bantlar
+      let s = `<rect x="0" y="0" width="200" height="240" fill="${a}"/>`;
+      for(let i=0;i<5;i++) s += `<rect x="0" y="${24+i*48}" width="200" height="24" fill="${b}"/>`;
+      return s;
+    }
+    case 'halves':
+      return `<rect x="0" y="0" width="100" height="240" fill="${a}"/><rect x="100" y="0" width="100" height="240" fill="${b}"/>`;
+    case 'sash':
+      return `<rect x="0" y="0" width="200" height="240" fill="${a}"/>`+
+             `<path d="M -20 200 L 150 -20 L 220 30 L 50 250 Z" fill="${b}"/>`;
+    default:
+      return `<rect x="0" y="0" width="200" height="240" fill="${a}"/>`;
+  }
+}
+
+/* Takımın stilize armasını SVG string olarak döner */
+function armaSVG(t, opt={}){
+  const uid = 'c'+t.id+'_'+Math.random().toString(36).slice(2,7);
+  const cerceve = _parlaklik(t.renkler[0]) > 0.75 ? '#101318' : '#F7F7F7';
+  const yaziRengi = kontrastRenk(t.renkler[0]);
+  const seritZemin = t.renkler[1];
+  const seritYazi = kontrastRenk(t.renkler[1]);
+  const kalkan = 'M100 4 L192 40 C192 150 160 210 100 236 C40 210 8 150 8 40 Z';
+  return `
+<svg viewBox="0 0 200 260" class="arma" role="img" aria-label="${t.ad} arması" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="${uid}"><path d="${kalkan}"/></clipPath>
+    <linearGradient id="${uid}g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".28"/>
+      <stop offset=".55" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity=".28"/>
+    </linearGradient>
+  </defs>
+  <path d="${kalkan}" fill="${cerceve}" transform="translate(0,0)"/>
+  <g clip-path="url(#${uid})">
+    ${_desenIcerik(t, uid)}
+    <rect x="0" y="96" width="200" height="52" fill="${seritZemin}" opacity=".95"/>
+    <text x="100" y="133" text-anchor="middle" font-size="40" font-weight="900"
+          font-family="'Archivo Black', 'Arial Black', Impact, system-ui, sans-serif" fill="${seritYazi}"
+          letter-spacing="1">${t.kisa}</text>
+    <rect x="60" y="154" width="80" height="30" rx="15" fill="#000" opacity=".38"/>
+    <text x="100" y="176" text-anchor="middle" font-size="22" font-weight="800"
+          font-family="system-ui, sans-serif" fill="#FFFFFF" opacity=".95">${t.kurulus}</text>
+    <rect x="0" y="0" width="200" height="240" fill="url(#${uid}g)"/>
+  </g>
+  <path d="${kalkan}" fill="none" stroke="${cerceve}" stroke-width="7"/>
+  <path d="${kalkan}" fill="none" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+</svg>`;
+}
+
+function takimlariGetir(havuzKey){
+  const h = HAVUZLAR[havuzKey] || HAVUZLAR['super-lig'];
+  return TAKIMLAR.filter(h.filtre);
+}
+
+/* ================= TAKIM TUT — oyun motoru ================= */
+const $  = (s, k=document) => k.querySelector(s);
+const $$ = (s, k=document) => [...k.querySelectorAll(s)];
+
+const SORULAR = [
+  'Takımın renklerinde kırmızı var mı?',
+  'Renklerinde siyah var mı?',
+  'Formasında dikey çubuklar var mı?',
+  'Şehri deniz kenarında mı?',
+  '1950’den önce mi kuruldu?',
+  'Takımın Avrupa kupası var mı?',
+  'Bir başkent takımı mı?',
+  'İstanbul takımı mı?',
+  'Adı bir şehir adıyla mı bitiyor?',
+  'Türkiye’den mi?',
+  'Şu an Süper Lig’de mi?',
+  'Adı iki kelimeden mi oluşuyor?',
+  'Renklerinde sarı var mı?',
+  'Adında “spor” geçiyor mu?',
+];
+
+const S = {
+  ayar: { havuz:'super-lig', sure:30, dagitim:'rastgele', hak:2 },
+  oyuncular: [],
+  havuz: [],
+  sira: 0,          // soruyu soran oyuncu
+  tur: 1,
+  kalan: 0,
+  timer: null,
+  secimSirasi: 0,
+};
+
+/* ---------- yardımcılar ---------- */
+const ekranGoster = id => { $$('.ekran').forEach(e=>e.classList.remove('aktif')); $('#'+id).classList.add('aktif'); };
+const titret = ms => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
+const karistir = a => a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
+const norm = s => s.toLocaleLowerCase('tr').replace(/[çğıöşü]/g, c=>({'ç':'c','ğ':'g','ı':'i','ö':'o','ş':'s','ü':'u'}[c]));
+
+function ayarKaydet(){ try{ localStorage.setItem('takimtut', JSON.stringify(S.ayar)); }catch(e){} }
+function ayarYukle(){
+  try{ const v = JSON.parse(localStorage.getItem('takimtut')||'null'); if(v) Object.assign(S.ayar, v); }catch(e){}
+}
+
+/* ================= KURULUM EKRANI ================= */
+function kurulumHazirla(){
+  ayarYukle();
+  const hs = $('#havuz-secim'); hs.innerHTML = '';
+  Object.entries(HAVUZLAR).forEach(([k,v])=>{
+    const b = document.createElement('button');
+    b.className = 'secenek' + (S.ayar.havuz===k ? ' secili':'');
+    b.dataset.havuz = k;
+    b.innerHTML = `${v.ad}<small>${takimlariGetir(k).length} takım</small>`;
+    b.onclick = ()=>{ S.ayar.havuz=k; $$('#havuz-secim .secenek').forEach(x=>x.classList.toggle('secili', x.dataset.havuz===k)); ayarKaydet(); };
+    hs.appendChild(b);
+  });
+  grupBagla('#sure-secim','sure','sure', Number);
+  grupBagla('#dagitim-secim','dagitim','dagitim', String);
+  grupBagla('#hak-secim','hak','hak', Number);
+}
+function grupBagla(sel, dataAdi, ayarAdi, tip){
+  $$(sel+' .secenek').forEach(b=>{
+    b.classList.toggle('secili', tip(b.dataset[dataAdi]) === S.ayar[ayarAdi]);
+    b.onclick = ()=>{
+      S.ayar[ayarAdi] = tip(b.dataset[dataAdi]);
+      $$(sel+' .secenek').forEach(x=>x.classList.toggle('secili', x===b));
+      ayarKaydet();
+    };
+  });
+}
+
+$('#basla').onclick = ()=>{
+  S.havuz = takimlariGetir(S.ayar.havuz);
+  S.oyuncular = [0,1].map(i=>({
+    ad: ($('#ad'+(i+1)).value.trim() || ('Oyuncu '+(i+1))).slice(0,14),
+    takim: null, kalanHak: S.ayar.hak, soru: 0, elenen: new Set(),
+  }));
+  S.tur = 1; S.sira = 0;
+
+  if(S.ayar.dagitim === 'rastgele'){
+    const iki = karistir(S.havuz).slice(0,2);
+    S.oyuncular[0].takim = iki[0];
+    S.oyuncular[1].takim = iki[1];
+    devirGoster(0, 'Takımlar dağıtıldı!', 'Telefonu masaya yatır, ' + S.oyuncular[0].ad + ' ve ' + S.oyuncular[1].ad + ' karşılıklı otursun.', oyunuBaslat);
+  } else {
+    S.secimSirasi = 0;
+    devirGoster(0, 'Telefonu ' + S.oyuncular[0].ad + '’a ver', 'Takımını gizlice seçeceksin. Rakip bakmasın.', secimEkrani);
+  }
+};
+
+/* ================= DEVİR TESLİM ================= */
+let devirDevam = null;
+function devirGoster(_, baslik, alt, sonra){
+  $('#devir-baslik').textContent = baslik;
+  $('#devir-alt').textContent = alt;
+  devirDevam = sonra;
+  ekranGoster('ekran-devir');
+}
+$('#devir-btn').onclick = ()=>{ const f = devirDevam; devirDevam = null; f && f(); };
+
+/* ================= GİZLİ SEÇİM ================= */
+function secimEkrani(){
+  const o = S.oyuncular[S.secimSirasi];
+  $('#secim-oyuncu').textContent = o.ad;
+  $('#secim-ara').value = '';
+  secimListele('');
+  ekranGoster('ekran-secim');
+}
+$('#secim-ara').oninput = e => secimListele(e.target.value);
+
+function secimListele(q){
+  const iz = $('#secim-izgara'); iz.innerHTML = '';
+  const ara = norm(q.trim());
+  S.havuz.filter(t => !ara || norm(t.ad).includes(ara) || norm(t.sehir).includes(ara) || norm(t.kisa).includes(ara))
+    .forEach(t => iz.appendChild(takimKarti(t, ()=>{
+      S.oyuncular[S.secimSirasi].takim = t;
+      if(S.secimSirasi === 0){
+        S.secimSirasi = 1;
+        devirGoster(1, 'Telefonu ' + S.oyuncular[1].ad + '’a ver', 'Sıra onda — o da takımını gizlice seçecek.', secimEkrani);
+      } else {
+        devirGoster(0, 'Hazırsınız!', 'Telefonu ikinizin arasına yatırın. Üst yarı ters çevrilidir.', oyunuBaslat);
+      }
+    })));
+}
+
+function takimKarti(t, tikla){
+  const d = document.createElement('button');
+  d.className = 'kart'; d.type = 'button';
+  d.innerHTML = `${armaSVG(t)}<div class="isim">${t.ad}</div><div class="lig">${t.sehir}</div>`;
+  d.onclick = tikla;
+  return d;
+}
+
+/* ================= OYUN ================= */
+function oyunuBaslat(){
+  ekranGoster('ekran-oyun');
+  sahaCiz();
+  turBasla(true);
+}
+
+function sahaCiz(){
+  const saha = $('#saha');
+  saha.innerHTML = '';
+  [0,1].forEach(i=>{
+    const o = S.oyuncular[i];
+    const t = o.takim;
+    const y = document.createElement('div');
+    y.className = 'yari ' + (i===0 ? 'ust':'alt');
+    y.id = 'yari-'+i;
+    y.innerHTML = `
+      <div class="yari-ust-serit">
+        <div class="oyuncu-adi">${o.ad} <span class="hak" id="hak-${i}">🎯 ${o.kalanHak}</span></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="durum-rozet" id="rozet-${i}">bekliyor</span>
+          <span class="sayac-mini" id="minisayac-${i}">–</span>
+        </div>
+      </div>
+
+      <div class="arma-alan">
+        ${armaSVG(t)}
+        <div class="takim-bilgi">
+          <div class="ad">${t.ad}</div>
+          <div class="detay">${t.sehir} • ${t.kurulus} • ${t.lig}</div>
+        </div>
+        <div class="kilit" id="kilit-${i}">
+          <div class="kilit-ikon">🔒</div>
+          <div>BASILI TUT &amp; GÖR</div>
+          <div class="kilit-alt">Takımın gizli. Sadece sen görmelisin — parmağını çekince tekrar kilitlenir.</div>
+        </div>
+      </div>
+
+      <div class="mesaj" id="mesaj-${i}">Oyun başlıyor…</div>
+
+      <div class="kontrol" id="kontrol-${i}">
+        <button class="evet"   data-rol="evet">EVET</button>
+        <button class="hayir"  data-rol="hayir">HAYIR</button>
+        <button class="tahmin" data-rol="tahmin">TAHMİN ET</button>
+        <button class="pas"    data-rol="pas">PAS</button>
+        <button class="fikir"  data-rol="fikir" title="Soru fikri">💡</button>
+        <button class="eleme"  data-rol="eleme" title="Eleme tahtası">📋</button>
+      </div>`;
+    saha.appendChild(y);
+
+    /* kilit: arma alanına basılı tut & gör */
+    const kilit = $('#kilit-'+i, y);
+    const alan  = $('.arma-alan', y);
+    const ac    = e => { e.preventDefault(); kilit.classList.add('gizli'); };
+    const kapat = () => kilit.classList.remove('gizli');
+    alan.addEventListener('pointerdown', ac);
+    ['pointerup','pointercancel','pointerleave'].forEach(ev => alan.addEventListener(ev, kapat));
+    document.addEventListener('pointerup', kapat);
+    document.addEventListener('pointercancel', kapat);
+
+    /* kontroller */
+    $$('#kontrol-'+i+' button', y).forEach(b=>{
+      b.onclick = () => kontrolTik(i, b.dataset.rol);
+    });
+  });
+}
+
+function kontrolTik(i, rol){
+  const soran = S.sira, cevaplayan = 1 - S.sira;
+  if(rol === 'eleme'){ elemeAc(i); return; }
+  if(rol === 'fikir'){
+    if(i !== soran) return;
+    mesaj(i, '💡 ' + SORULAR[Math.floor(Math.random()*SORULAR.length)]);
+    return;
+  }
+  if(rol === 'evet' || rol === 'hayir'){
+    if(i !== cevaplayan) return;
+    cevapVer(rol === 'evet');
+  }
+  if(rol === 'tahmin'){ if(i !== soran) return; tahminAc(i); }
+  if(rol === 'pas'){ if(i !== soran) return; mesaj(soran, 'Turu pas geçtin.'); mesaj(cevaplayan, 'Rakip pas geçti.'); siraDegis(); }
+}
+
+function cevapVer(evetMi){
+  const soran = S.sira, cevaplayan = 1 - S.sira;
+  S.oyuncular[soran].soru++;
+  titret(30);
+  mesaj(soran, evetMi
+    ? '<span class="rozet-evet">✅ Cevap: EVET</span>'
+    : '<span class="rozet-hayir">❌ Cevap: HAYIR</span>');
+  mesaj(cevaplayan, evetMi ? 'Cevabın: EVET' : 'Cevabın: HAYIR');
+  siraDegis();
+}
+
+function siraDegis(){
+  S.sira = 1 - S.sira;
+  S.tur++;
+  turBasla(false);
+}
+
+function turBasla(ilk){
+  const soran = S.sira, cevaplayan = 1 - S.sira;
+  $('#yari-'+soran).className = 'yari ' + (soran===0?'ust ':'alt ') + 'sirasi';
+  $('#yari-'+cevaplayan).className = 'yari ' + (cevaplayan===0?'ust ':'alt ') + 'cevap-sirasi';
+  $('#rozet-'+soran).textContent = 'SEN SOR';       $('#rozet-'+soran).className = 'durum-rozet sor';
+  $('#rozet-'+cevaplayan).textContent = 'SEN CEVAPLA'; $('#rozet-'+cevaplayan).className = 'durum-rozet cevapla';
+
+  butonDurum(soran,      { evet:false, hayir:false, tahmin:true,  pas:true,  fikir:true  });
+  butonDurum(cevaplayan, { evet:true,  hayir:true,  tahmin:false, pas:false, fikir:false });
+
+  if(ilk){
+    mesaj(soran, 'Sıra sende: rakibe <b>evet/hayır</b>lık bir soru sor.');
+    mesaj(cevaplayan, 'Rakip soracak. Kendi takımına göre cevapla.');
+  } else {
+    ekle(soran, 'Sıra sende — soru sor.');
+    ekle(cevaplayan, 'Rakibin sorusunu cevapla.');
+  }
+  $('#orta-bilgi').textContent = 'Tur ' + S.tur + ' • ' + S.oyuncular[soran].ad + ' soruyor';
+  sayacBaslat();
+}
+
+/* rolüne uymayan butonu tamamen gizle — 5 buton dar ekrana sığmıyor */
+function butonDurum(i, harita){
+  $$('#kontrol-'+i+' button').forEach(b=>{
+    const r = b.dataset.rol;
+    if(!(r in harita)) return;          // eleme tahtası her zaman açık
+    b.style.display = harita[r] ? '' : 'none';
+    b.disabled = !harita[r];
+  });
+}
+
+function mesaj(i, html){ $('#mesaj-'+i).innerHTML = html; }
+function ekle(i, html){ $('#mesaj-'+i).innerHTML = html; }
+
+/* ---------- sayaç ---------- */
+function sayacBaslat(){
+  clearInterval(S.timer);
+  if(!S.ayar.sure){
+    $('#orta-sayac').textContent = '∞'; $('#orta-sayac').classList.remove('az');
+    [0,1].forEach(i=>{ $('#minisayac-'+i).textContent = '∞'; $('#minisayac-'+i).classList.remove('az'); });
+    return;
+  }
+  S.kalan = S.ayar.sure;
+  sayacCiz();
+  S.timer = setInterval(()=>{
+    S.kalan--;
+    sayacCiz();
+    if(S.kalan <= 0){
+      clearInterval(S.timer);
+      titret([60,60,60]);
+      const soran = S.sira, cevaplayan = 1 - S.sira;
+      mesaj(soran, '⏱ Süren doldu! Tur rakibe geçti.');
+      mesaj(cevaplayan, '⏱ Rakibin süresi doldu. Sıra sende.');
+      siraDegis();
+    }
+  }, 1000);
+}
+function sayacCiz(){
+  const az = S.kalan <= 5;
+  const s = $('#orta-sayac'); s.textContent = S.kalan; s.classList.toggle('az', az);
+  [0,1].forEach(i=>{ const m = $('#minisayac-'+i); m.textContent = S.kalan + '"'; m.classList.toggle('az', az); });
+}
+
+/* ---------- katman (tahmin & eleme) ---------- */
+function katmanAc(i, baslik, kartTikla, elemeModu){
+  const y = $('#yari-'+i);
+  if($('.katman', y)) return;
+  const k = document.createElement('div');
+  k.className = 'katman';
+  k.innerHTML = `
+    <div class="katman-ust"><h3>${baslik}</h3><button class="kapat">KAPAT</button></div>
+    <input class="girdi ara" placeholder="Takım ara…" autocomplete="off">
+    <div class="izgara"></div>`;
+  y.appendChild(k);
+  const iz = $('.izgara', k), ara = $('.ara', k);
+  const ciz = q => {
+    iz.innerHTML = '';
+    const n = norm(q.trim());
+    S.havuz.filter(t=>!n || norm(t.ad).includes(n) || norm(t.sehir).includes(n) || norm(t.kisa).includes(n))
+      .forEach(t=>{
+        const kart = takimKarti(t, ()=> kartTikla(t, kart));
+        if(elemeModu && S.oyuncular[i].elenen.has(t.id)) kart.classList.add('elendi');
+        iz.appendChild(kart);
+      });
+  };
+  ara.oninput = e => ciz(e.target.value);
+  $('.kapat', k).onclick = ()=> k.remove();
+  ciz('');
+}
+
+function elemeAc(i){
+  katmanAc(i, 'Eleme tahtası — elediğini işaretle', (t, kart)=>{
+    const e = S.oyuncular[i].elenen;
+    if(e.has(t.id)){ e.delete(t.id); kart.classList.remove('elendi'); }
+    else { e.add(t.id); kart.classList.add('elendi'); }
+  }, true);
+}
+
+function tahminAc(i){
+  katmanAc(i, 'Rakibin takımı hangisi?', (t)=>{
+    $('.katman', $('#yari-'+i)).remove();
+    tahminYap(i, t);
+  }, false);
+}
+
+function tahminYap(i, t){
+  const rakip = 1 - i;
+  const dogru = S.oyuncular[rakip].takim.id === t.id;
+  if(dogru){ bitir(i, 'tahmin'); return; }
+  const o = S.oyuncular[i];
+  o.kalanHak--;
+  $('#hak-'+i).textContent = '🎯 ' + o.kalanHak;
+  titret(120);
+  if(o.kalanHak <= 0){ bitir(rakip, 'hak'); return; }
+  mesaj(i, `❌ <b>${t.ad}</b> değil! Kalan tahmin hakkın: ${o.kalanHak}`);
+  mesaj(rakip, `Rakip <b>${t.ad}</b> dedi, tutturamadı. Sıra sende.`);
+  siraDegis();
+}
+
+/* ---------- bitiş ---------- */
+function bitir(kazanan, sebep){
+  clearInterval(S.timer);
+  titret([80,50,80,50,160]);
+  const k = S.oyuncular[kazanan], r = S.oyuncular[1-kazanan];
+  $('#bitis-baslik').textContent = k.ad + ' kazandı! 🏆';
+  $('#bitis-alt').innerHTML = sebep === 'tahmin'
+    ? `<b>${r.takim.ad}</b> takımını <b>${k.soru}</b> soruda bildi. Toplam ${S.tur} tur sürdü.`
+    : `${r.ad} tahmin haklarını tüketti. ${k.ad} otomatik kazandı.`;
+  $('#bitis-acilis').innerHTML = S.oyuncular.map((o,i)=>`
+    <div class="oyuncu-sonuc">
+      ${armaSVG(o.takim)}
+      <div class="kim">${o.ad}${i===kazanan?' 👑':''}</div>
+      <div class="tkm">${o.takim.ad}</div>
+      <div class="kim" style="margin-top:6px;color:#6d7a8d">${o.soru} soru</div>
+    </div>`).join('');
+  ekranGoster('ekran-bitis');
+}
+
+$('#tekrar').onclick = ()=>{ ekranGoster('ekran-kurulum'); $('#basla').click(); };
+$('#menu').onclick   = ()=>{ clearInterval(S.timer); ekranGoster('ekran-kurulum'); };
+
+/* başlat */
+kurulumHazirla();
+
+</script>
+</body>
+</html>

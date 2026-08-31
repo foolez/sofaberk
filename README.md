@@ -3,7 +3,9 @@
 İki kişilik, **bölünmüş ekranlı**, **sıralı ve süreli** takım tahmin oyunu.
 Herkes bir takım tutar; sırayla **evet / hayır** sorusu sorup rakibin takımını bulmaya çalışır.
 
-👉 Oynamak için: `index.html` dosyasını aç. Kurulum, derleme, sunucu gerekmez.
+👉 **Hemen oyna:** https://claude.ai/code/artifact/cbf1213f-9fc9-4f66-92e8-d957d69a04a7
+👉 Ya da `takim-tut.html` dosyasını indirip çift tıkla — tek dosya, kurulum/sunucu gerekmez.
+   (Kaynak sürüm: `index.html` + `assets/`)
 
 ## Nasıl oynanır
 
@@ -47,7 +49,15 @@ index.html            ekranlar (kurulum / gizli seçim / oyun / bitiş)
 assets/css/style.css  arayüz + split-screen düzeni
 assets/js/teams.js    takım veritabanı + arma üreteci
 assets/js/game.js     tur, süre, tahmin ve eleme mantığı
+takim-tut.html        tek dosya sürüm (üretilen çıktı — elle düzenleme)
+tools/build.py        kaynakları tek dosyada birleştirir
 sofascore-backend/    (ilgisiz) Scout Terminal SofaScore köprü servisi
+```
+
+Kaynakları değiştirdikten sonra tek dosyayı tazele:
+
+```bash
+python3 tools/build.py
 ```
 
 ## Yayına alma
