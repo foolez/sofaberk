@@ -440,11 +440,8 @@ img.arma{object-fit:contain}
         <div class="ad" id="net-takim-ad"></div>
         <div class="detay" id="net-takim-detay"></div>
       </div>
-      <div class="kilit" id="net-kilit">
-        <div class="kilit-ikon">🔒</div>
-        <div>BASILI TUT &amp; GÖR</div>
-        <div class="kilit-alt">Takımın sadece bu telefonda. Rakip asla göremez.</div>
-      </div>
+      <!-- online modda kilit yok: telefon senin, rakip zaten göremiyor -->
+      <div class="kilit gizli" id="net-kilit"></div>
     </div>
 
     <div class="net-rozet" id="net-rozet">Sıra sende</div>
@@ -720,7 +717,7 @@ const _SATIRLAR = [
   ['zen','Zenit','ZEN','St. Petersburg','Rusya',1925,'12326E','87CEEB','solid','dg','sa'],
   ['spm','Spartak Moskova','SPM','Moskova','Rusya',1922,'A32638','FFFFFF','sash','dg','b'],
   ['cka','CSKA Moskova','CSKA','Moskova','Rusya',1911,'A32638','12326E','halves','dg','ba'],
-  ['slz','RB Salzburg','SLZ','Salzburg','Avusturya',1933,'A32638','FFFFFF','solid','dg',''],
+  ['salz','RB Salzburg','SLZ','Salzburg','Avusturya',1933,'A32638','FFFFFF','solid','dg',''],
   ['rpd','Rapid Wien','RAP','Viyana','Avusturya',1899,'00A752','FFFFFF','halves','dg','b'],
   ['bas','Basel','BAS','Basel','İsviçre',1893,'A32638','12326E','halves','dg',''],
   ['ybb','Young Boys','YB','Bern','İsviçre',1898,'F5D000','111111','stripes','dg','b'],
@@ -745,13 +742,229 @@ const _SATIRLAR = [
   ['ahl','Al Ahly','AHLY','Kahire','Mısır',1907,'A32638','FFFFFF','solid','dn','b'],
   ['mia','Inter Miami','MIA','Miami','ABD',2018,'F8B7CD','111111','solid','dn','s'],
   ['lag','LA Galaxy','LAG','Los Angeles','ABD',1994,'FFFFFF','12326E','solid','dn','s'],
+  ['lok','Lokomotiv Moskova','LOK','Moskova','Rusya',1922,'0B6B3A','A32638','halves','ru','b'],
+  ['dnm','Dinamo Moskova','DIN','Moskova','Rusya',1923,'12326E','FFFFFF','halves','ru','b'],
+  ['krd','Krasnodar','KRD','Krasnodar','Rusya',2008,'111111','00A752','stripes','ru',''],
+  ['rub','Rubin Kazan','RUB','Kazan','Rusya',1958,'A32638','0B6B3A','halves','ru',''],
+  ['ros','Rostov','ROS','Rostov','Rusya',1930,'F5B301','12326E','halves','ru',''],
+  ['sam2','Krylia Sovetov','KRY','Samara','Rusya',1942,'12326E','FFFFFF','stripes','ru',''],
+  ['dnp','Dnipro-1','DNP','Dnipro','Ukrayna',2017,'12326E','F5B301','halves','ru',''],
+  ['zor','Zorya Luhansk','ZOR','Luhansk','Ukrayna',1923,'111111','FFFFFF','stripes','ru',''],
+  ['pol','Polissya','POL','Jitomir','Ukrayna',2016,'0B6B3A','FFFFFF','halves','ru',''],
+  ['olx','Oleksandriya','OLK','Oleksandriya','Ukrayna',1990,'F5B301','111111','stripes','ru',''],
+  ['ast','Astana','AST','Astana','Kazakistan',2009,'12326E','F5B301','halves','kz','b'],
+  ['kai','Kairat','KAI','Almatı','Kazakistan',1954,'F5B301','111111','stripes','kz',''],
+  ['tob','Tobol','TOB','Kostanay','Kazakistan',1967,'12326E','FFFFFF','stripes','kz',''],
+  ['orda','Ordabasy','ORB','Şımkent','Kazakistan',1998,'0B6B3A','FFFFFF','halves','kz',''],
+  ['akt','Aktobe','AKT','Aktöbe','Kazakistan',1967,'A32638','FFFFFF','stripes','kz',''],
+  ['qar','Qarabağ','QAR','Ağdam','Azerbaycan',1951,'FFFFFF','111111','halves','kz',''],
+  ['nef','Neftçi','NEF','Bakü','Azerbaycan',1937,'FFFFFF','111111','stripes','kz','sb'],
+  ['sbh','Sabah','SBH','Bakü','Azerbaycan',2017,'12326E','FFFFFF','solid','kz','sb'],
+  ['dtb','Dinamo Tiflis','DTB','Tiflis','Gürcistan',1925,'12326E','FFFFFF','solid','kz','ba'],
+  ['tku','Torpedo Kutaisi','TKU','Kutaisi','Gürcistan',1946,'A32638','111111','halves','kz',''],
+  ['pyu','Pyunik','PYU','Erivan','Ermenistan',1992,'F5B301','12326E','halves','kz','b'],
+  ['ara','Ararat-Armenia','ARA','Erivan','Ermenistan',2017,'A32638','FFFFFF','stripes','kz','b'],
+  ['bat','BATE Borisov','BATE','Barysav','Belarus',1973,'F5B301','12326E','stripes','kz',''],
+  ['dmn','Dinamo Minsk','DMN','Minsk','Belarus',1927,'12326E','FFFFFF','solid','kz','b'],
+  ['shf','Sheriff Tiraspol','SHF','Tiraspol','Moldova',1997,'F5B301','111111','halves','kz',''],
+  ['mls2','Milsami','MIL2','Orhei','Moldova',2005,'0B6B3A','F5B301','stripes','kz',''],
+  ['bodo','Bodø/Glimt','BOD2','Bodø','Norveç',1916,'F5B301','111111','solid','eu2','s'],
+  ['mol','Molde','MOL','Molde','Norveç',1911,'12326E','FFFFFF','solid','eu2','s'],
+  ['ros2','Rosenborg','RBK','Trondheim','Norveç',1917,'FFFFFF','111111','solid','eu2','s'],
+  ['brn','Brann','BRA','Bergen','Norveç',1908,'A32638','FFFFFF','solid','eu2','s'],
+  ['aik','AIK','AIK','Stockholm','İsveç',1891,'111111','F5B301','solid','eu2','sb'],
+  ['dju','Djurgården','DIF','Stockholm','İsveç',1891,'12326E','87CEEB','stripes','eu2','sb'],
+  ['hck','BK Häcken','HAC','Göteborg','İsveç',1940,'F5B301','111111','stripes','eu2','s'],
+  ['elf','Elfsborg','ELF','Borås','İsveç',1904,'F5B301','111111','stripes','eu2',''],
+  ['ifk','IFK Göteborg','IFK','Göteborg','İsveç',1904,'12326E','FFFFFF','stripes','eu2','sa'],
+  ['fcm2','Midtjylland','FCM2','Herning','Danimarka',1999,'111111','A32638','stripes','eu2',''],
+  ['brb','Brøndby','BIF','Kopenhag','Danimarka',1964,'F5B301','12326E','halves','eu2','sb'],
+  ['agf','AGF Aarhus','AGF','Aarhus','Danimarka',1880,'FFFFFF','12326E','stripes','eu2','s'],
+  ['hjk','HJK Helsinki','HJK','Helsinki','Finlandiya',1907,'12326E','FFFFFF','stripes','eu2','sb'],
+  ['kup','KuPS','KUPS','Kuopio','Finlandiya',1923,'F5B301','111111','halves','eu2',''],
+  ['bre2','Breiðablik','BRE2','Kópavogur','İzlanda',1950,'0B6B3A','FFFFFF','stripes','eu2','s'],
+  ['val2','Valur','VAL2','Reykjavík','İzlanda',1911,'A32638','FFFFFF','stripes','eu2','sb'],
+  ['flo','Flora Tallinn','FLO','Tallinn','Estonya',1990,'0B6B3A','FFFFFF','stripes','eu2','sb'],
+  ['lev2','Levadia','LEV2','Tallinn','Estonya',1998,'0B6B3A','111111','stripes','eu2','sb'],
+  ['rfs','RFS','RFS','Riga','Letonya',2005,'6E1B37','FFFFFF','solid','eu2','sb'],
+  ['rga','Riga FC','RGA','Riga','Letonya',2014,'111111','FFFFFF','halves','eu2','sb'],
+  ['zal','Žalgiris','ZAL','Vilnius','Litvanya',1947,'0B6B3A','FFFFFF','stripes','eu2','b'],
+  ['pnv','Panevėžys','PNV','Panevėžys','Litvanya',2015,'12326E','FFFFFF','solid','eu2',''],
+  ['lec2','Lech Poznań','LEC2','Poznań','Polonya',1922,'12326E','FFFFFF','stripes','eu2',''],
+  ['rak','Raków','RAK','Częstochowa','Polonya',1921,'A32638','12326E','halves','eu2',''],
+  ['jag','Jagiellonia','JAG','Białystok','Polonya',1920,'F5B301','A32638','stripes','eu2',''],
+  ['pog','Pogoń Szczecin','POG','Szczecin','Polonya',1948,'12326E','6E1B37','stripes','eu2','s'],
+  ['wis','Wisła Kraków','WIS','Kraków','Polonya',1906,'FFFFFF','A32638','sash','eu2',''],
+  ['plz','Viktoria Plzeň','PLZ','Plzeň','Çekya',1911,'A32638','12326E','stripes','eu2',''],
+  ['ban2','Baník Ostrava','BAN2','Ostrava','Çekya',1922,'12326E','FFFFFF','stripes','eu2',''],
+  ['slo','Slovan Bratislava','SLO','Bratislava','Slovakya',1919,'87CEEB','FFFFFF','solid','eu2','b'],
+  ['trn','Spartak Trnava','TRN','Trnava','Slovakya',1923,'A32638','111111','halves','eu2',''],
+  ['pus','Puskás Akadémia','PUS','Felcsút','Macaristan',2005,'12326E','FFFFFF','stripes','eu2',''],
+  ['feh','Fehérvár','FEH','Székesfehérvár','Macaristan',1941,'A32638','12326E','halves','eu2',''],
+  ['stu','Sturm Graz','STU','Graz','Avusturya',1909,'111111','FFFFFF','stripes','eu2',''],
+  ['las','LASK','LASK','Linz','Avusturya',1908,'111111','FFFFFF','halves','eu2',''],
+  ['awi','Austria Wien','AUW','Viyana','Avusturya',1911,'5B2A86','FFFFFF','solid','eu2','b'],
+  ['srv','Servette','SRV','Cenevre','İsviçre',1890,'6E1B37','FFFFFF','solid','eu2',''],
+  ['lug','Lugano','LUG','Lugano','İsviçre',1908,'111111','FFFFFF','halves','eu2',''],
+  ['sga','St. Gallen','SGA','St. Gallen','İsviçre',1879,'0B6B3A','FFFFFF','stripes','eu2',''],
+  ['zur','FC Zürich','ZUR','Zürih','İsviçre',1896,'FFFFFF','12326E','halves','eu2',''],
+  ['gnt','Gent','GNT','Gent','Belçika',1900,'12326E','FFFFFF','stripes','eu2',''],
+  ['ant2','Antwerp','ANT2','Anvers','Belçika',1880,'A32638','FFFFFF','solid','eu2','s'],
+  ['usg','Union SG','USG','Brüksel','Belçika',1897,'F5B301','12326E','halves','eu2','b'],
+  ['cer','Cercle Brugge','CER','Brugge','Belçika',1899,'0B6B3A','111111','stripes','eu2',''],
+  ['lud','Ludogorets','LUD','Razgrad','Bulgaristan',1945,'0B6B3A','FFFFFF','stripes','eu2',''],
+  ['lvs','Levski Sofya','LVS','Sofya','Bulgaristan',1914,'12326E','FFFFFF','halves','eu2','b'],
+  ['cks','CSKA Sofya','CSKS','Sofya','Bulgaristan',1948,'A32638','FFFFFF','solid','eu2','b'],
+  ['cfr','CFR Cluj','CFR','Cluj','Romanya',1907,'6E1B37','FFFFFF','stripes','eu2',''],
+  ['ucv','U. Craiova','UCV','Craiova','Romanya',1991,'12326E','FFFFFF','halves','eu2',''],
+  ['rap2','Rapid Bükreş','RAP2','Bükreş','Romanya',1923,'6E1B37','F5B301','stripes','eu2','b'],
+  ['voj','Vojvodina','VOJ','Novi Sad','Sırbistan',1914,'A32638','FFFFFF','stripes','eu2',''],
+  ['cuk','Čukarički','CUK','Belgrad','Sırbistan',1926,'F5B301','111111','halves','eu2','b'],
+  ['rij','Rijeka','RIJ','Rijeka','Hırvatistan',1946,'FFFFFF','12326E','halves','eu2','s'],
+  ['osi','Osijek','OSI','Osijek','Hırvatistan',1947,'12326E','FFFFFF','stripes','eu2',''],
+  ['olj','Olimpija','OLJ','Ljubljana','Slovenya',1911,'0B6B3A','FFFFFF','stripes','eu2','b'],
+  ['mar','Maribor','MAR','Maribor','Slovenya',1960,'5B2A86','F5B301','halves','eu2',''],
+  ['cel2','Celje','CEL2','Celje','Slovenya',1919,'F5B301','12326E','stripes','eu2',''],
+  ['zrn','Zrinjski','ZRN','Mostar','Bosna',1905,'A32638','FFFFFF','stripes','eu2',''],
+  ['fks','FK Sarajevo','FKS','Saraybosna','Bosna',1946,'6E1B37','FFFFFF','solid','eu2','b'],
+  ['bor','Borac','BOR','Banja Luka','Bosna',1926,'A32638','12326E','halves','eu2',''],
+  ['shk2','Shkëndija','SHK2','Tetova','K. Makedonya',1979,'A32638','111111','stripes','eu2',''],
+  ['vrd','Vardar','VRD','Üsküp','K. Makedonya',1947,'A32638','111111','halves','eu2','b'],
+  ['tir','KF Tirana','TIR','Tiran','Arnavutluk',1920,'12326E','FFFFFF','stripes','eu2','b'],
+  ['ptz','Partizani','PTZ','Tiran','Arnavutluk',1946,'A32638','FFFFFF','solid','eu2','b'],
+  ['bal','Ballkani','BAL','Suva Reka','Kosova',1947,'A32638','12326E','halves','eu2',''],
+  ['drt','Drita','DRT','Gjilan','Kosova',1947,'12326E','FFFFFF','stripes','eu2',''],
+  ['bud','Budućnost','BUD','Podgorica','Karadağ',1925,'12326E','FFFFFF','stripes','eu2','b'],
+  ['ari','Aris','ARI','Selanik','Yunanistan',1914,'F5B301','111111','halves','eu2','s'],
+  ['apo','APOEL','APO','Lefkoşa','Kıbrıs',1926,'12326E','F5B301','halves','eu2','b'],
+  ['omo','Omonia','OMO','Lefkoşa','Kıbrıs',1948,'0B6B3A','FFFFFF','stripes','eu2','b'],
+  ['paf','Pafos','PAF','Baf','Kıbrıs',2014,'12326E','FFFFFF','solid','eu2','s'],
+  ['mtl','Maccabi Tel Aviv','MTA','Tel Aviv','İsrail',1906,'F5B301','12326E','stripes','eu2','s'],
+  ['mhf','Maccabi Haifa','MHF','Hayfa','İsrail',1913,'0B6B3A','FFFFFF','stripes','eu2','s'],
+  ['hbs','Hapoel Beer Şeva','HBS','Beer Şeva','İsrail',1949,'A32638','FFFFFF','solid','eu2',''],
+  ['bjr','Beitar Kudüs','BJR','Kudüs','İsrail',1936,'F5B301','111111','stripes','eu2','b'],
+  ['hea','Hearts','HEA','Edinburgh','İskoçya',1874,'6E1B37','FFFFFF','solid','eu2','b'],
+  ['hib','Hibernian','HIB','Edinburgh','İskoçya',1875,'0B6B3A','FFFFFF','halves','eu2','b'],
+  ['abd','Aberdeen','ABD','Aberdeen','İskoçya',1903,'A32638','FFFFFF','solid','eu2','s'],
+  ['shr','Shamrock Rovers','SHR','Dublin','İrlanda',1899,'0B6B3A','FFFFFF','hoops','eu2','sb'],
+  ['boh','Bohemians','BOH','Dublin','İrlanda',1890,'A32638','111111','stripes','eu2','sb'],
+  ['lin','Linfield','LIN','Belfast','K. İrlanda',1886,'12326E','FFFFFF','solid','eu2','s'],
+  ['lar','Larne','LAR','Larne','K. İrlanda',1889,'A32638','111111','halves','eu2','s'],
+  ['tns','The New Saints','TNS','Oswestry','Galler',1959,'0B6B3A','FFFFFF','stripes','eu2',''],
+  ['lri','Lincoln Red Imps','LRI','Cebelitarık','Cebelitarık',1976,'111111','A32638','stripes','eu2','sb'],
+  ['kik','KÍ Klaksvík','KI','Klaksvík','Faroe',1904,'12326E','FFFFFF','stripes','eu2','s'],
+  ['hbt','HB Tórshavn','HB','Tórshavn','Faroe',1904,'12326E','FFFFFF','stripes','eu2','sb'],
+  ['ham','Hamrun Spartans','HAM','Ħamrun','Malta',1907,'A32638','111111','stripes','eu2','s'],
+  ['flr','Floriana','FLR','Floriana','Malta',1894,'0B6B3A','FFFFFF','stripes','eu2','s'],
+  ['dif','Differdange 03','DIF','Differdange','Lüksemburg',2003,'A32638','111111','halves','eu2',''],
+  ['dud','F91 Dudelange','DUD','Dudelange','Lüksemburg',1991,'F5B301','111111','stripes','eu2',''],
+  ['ies','Inter Escaldes','IES','Escaldes','Andorra',1991,'12326E','FFFFFF','solid','eu2',''],
+  ['tfi','Tre Fiori','TFI','Fiorentino','San Marino',1949,'F5B301','12326E','halves','eu2',''],
+  ['lafc','Los Angeles FC','LAFC','Los Angeles','MLS',2014,'111111','F5B301','halves','na','s'],
+  ['sea','Seattle Sounders','SEA','Seattle','MLS',2007,'0B6B3A','12326E','stripes','na','s'],
+  ['atl','Atlanta United','ATL','Atlanta','MLS',2014,'A32638','111111','stripes','na',''],
+  ['nyc','New York City FC','NYC','New York','MLS',2013,'87CEEB','12326E','halves','na','s'],
+  ['rbny','New York Red Bulls','RBNY','New York','MLS',1994,'A32638','FFFFFF','solid','na','s'],
+  ['ptl','Portland Timbers','POR2','Portland','MLS',2009,'0B6B3A','F5B301','stripes','na',''],
+  ['clbc','Columbus Crew','CLB2','Columbus','MLS',1994,'F5B301','111111','halves','na',''],
+  ['tor','Toronto FC','TOR2','Toronto','MLS',2005,'A32638','FFFFFF','stripes','na','s'],
+  ['phi','Philadelphia Union','PHI','Philadelphia','MLS',2008,'12326E','F5B301','stripes','na','s'],
+  ['sdg','San Diego FC','SDFC','San Diego','MLS',2023,'12326E','F5B301','halves','na','s'],
+  ['ame','Club América','AME','Meksiko','Liga MX',1916,'F5D000','12326E','solid','na','ba'],
+  ['chv','Guadalajara (Chivas)','CHV','Guadalajara','Liga MX',1906,'A32638','FFFFFF','stripes','na','a'],
+  ['cru','Cruz Azul','CAZ','Meksiko','Liga MX',1927,'12326E','FFFFFF','solid','na','ba'],
+  ['pum','Pumas UNAM','PUM','Meksiko','Liga MX',1954,'F5B301','12326E','halves','na','ba'],
+  ['tig','Tigres UANL','TIG','Monterrey','Liga MX',1960,'F5B301','12326E','stripes','na','a'],
+  ['mty','Monterrey','MTY','Monterrey','Liga MX',1945,'12326E','FFFFFF','stripes','na','a'],
+  ['tol','Toluca','TOL','Toluca','Liga MX',1917,'A32638','FFFFFF','stripes','na',''],
+  ['pac','Pachuca','PAC','Pachuca','Liga MX',1901,'12326E','FFFFFF','stripes','na','a'],
+  ['rac','Racing Club','RAC','Buenos Aires','Arjantin',1903,'87CEEB','FFFFFF','stripes','sam','sba'],
+  ['ind','Independiente','IND','Buenos Aires','Arjantin',1905,'A32638','FFFFFF','solid','sam','sba'],
+  ['sanl','San Lorenzo','SLZ','Buenos Aires','Arjantin',1908,'12326E','A32638','stripes','sam','sba'],
+  ['estu','Estudiantes','EST2','La Plata','Arjantin',1905,'A32638','FFFFFF','stripes','sam','sa'],
+  ['vel','Vélez Sarsfield','VEL','Buenos Aires','Arjantin',1910,'FFFFFF','12326E','sash','sam','sba'],
+  ['new2','Newells Old Boys','NOB','Rosario','Arjantin',1903,'A32638','111111','halves','sam',''],
+  ['roc','Rosario Central','CEN','Rosario','Arjantin',1889,'F5B301','12326E','stripes','sam',''],
+  ['gre','Grêmio','GRE','Porto Alegre','Brezilya',1903,'87CEEB','111111','stripes','sam','sa'],
+  ['int2','Internacional','INT2','Porto Alegre','Brezilya',1909,'A32638','FFFFFF','solid','sam','sa'],
+  ['cru2','Cruzeiro','CRU','Belo Horizonte','Brezilya',1921,'12326E','FFFFFF','solid','sam','a'],
+  ['cam','Atlético Mineiro','CAM','Belo Horizonte','Brezilya',1908,'111111','FFFFFF','stripes','sam','a'],
+  ['bot','Botafogo','BOT','Rio de Janeiro','Brezilya',1904,'111111','FFFFFF','stripes','sam','sa'],
+  ['vas','Vasco da Gama','VAS','Rio de Janeiro','Brezilya',1898,'111111','FFFFFF','sash','sam','s'],
+  ['flu','Fluminense','FLU','Rio de Janeiro','Brezilya',1902,'6E1B37','0B6B3A','stripes','sam','sa'],
+  ['bah','Bahia','BAH','Salvador','Brezilya',1931,'12326E','A32638','stripes','sam','s'],
+  ['for','Fortaleza','FOR','Fortaleza','Brezilya',1918,'12326E','A32638','stripes','sam','s'],
+  ['nac','Nacional','NAC','Montevideo','Uruguay',1899,'FFFFFF','12326E','solid','sam','sba'],
+  ['def','Defensor Sporting','DEF','Montevideo','Uruguay',1913,'5B2A86','FFFFFF','solid','sam','sb'],
+  ['ldu','LDU Quito','LDU','Quito','Ekvador',1930,'FFFFFF','111111','solid','sam','ba'],
+  ['bsc','Barcelona SC','BSC','Guayaquil','Ekvador',1925,'F5B301','A32638','stripes','sam','s'],
+  ['idv','Independiente del Valle','IDV','Sangolquí','Ekvador',1958,'111111','A32638','stripes','sam','a'],
+  ['oli','Olimpia','OLI','Asunción','Paraguay',1902,'FFFFFF','111111','solid','sam','ba'],
+  ['cer2','Cerro Porteño','CER2','Asunción','Paraguay',1912,'A32638','12326E','stripes','sam','b'],
+  ['liber','Libertad','LIB','Asunción','Paraguay',1905,'111111','FFFFFF','stripes','sam','b'],
+  ['blv','Bolívar','BOL2','La Paz','Bolivya',1925,'87CEEB','FFFFFF','solid','sam','b'],
+  ['str','The Strongest','STR','La Paz','Bolivya',1908,'F5B301','111111','stripes','sam','b'],
+  ['uni','Universitario','UNI','Lima','Peru',1924,'FFFFFF','A32638','solid','sam','sb'],
+  ['ali','Alianza Lima','ALI','Lima','Peru',1901,'12326E','FFFFFF','solid','sam','sb'],
+  ['spc','Sporting Cristal','SPC','Lima','Peru',1955,'87CEEB','FFFFFF','solid','sam','sb'],
+  ['unc','U. de Chile','UCH','Santiago','Şili',1927,'12326E','A32638','solid','sam','ba'],
+  ['ucc','U. Católica','UCC','Santiago','Şili',1937,'FFFFFF','12326E','sash','sam','b'],
+  ['atn','Atlético Nacional','ATN','Medellín','Kolombiya',1947,'0B6B3A','FFFFFF','stripes','sam','a'],
+  ['mll2','Millonarios','MLL2','Bogotá','Kolombiya',1946,'12326E','FFFFFF','solid','sam','b'],
+  ['jun','Junior','JUN','Barranquilla','Kolombiya',1924,'A32638','FFFFFF','stripes','sam','s'],
+  ['adc','América de Cali','ADC','Cali','Kolombiya',1927,'A32638','FFFFFF','solid','sam',''],
+  ['car','Caracas FC','CAR','Karakas','Venezuela',1967,'A32638','FFFFFF','stripes','sam','b'],
+  ['auc','Auckland City','AUC','Auckland','Yeni Zelanda',2004,'12326E','FFFFFF','stripes','ok','sa'],
+  ['wel','Wellington Phoenix','WEL','Wellington','Yeni Zelanda',2007,'F5B301','111111','solid','ok','sb'],
+  ['mvi','Melbourne Victory','MVI','Melbourne','Avustralya',2004,'12326E','FFFFFF','stripes','ok','s'],
+  ['mci2','Melbourne City','MCY','Melbourne','Avustralya',2009,'87CEEB','FFFFFF','solid','ok','s'],
+  ['syd','Sydney FC','SYD','Sidney','Avustralya',2004,'87CEEB','12326E','halves','ok','s'],
+  ['wsw','Western Sydney','WSW','Sidney','Avustralya',2012,'A32638','111111','stripes','ok','s'],
+  ['cmr','Central Coast Mariners','CCM','Gosford','Avustralya',2004,'F5B301','12326E','stripes','ok','s'],
+  ['adl','Adelaide United','ADL','Adelaide','Avustralya',2003,'A32638','12326E','stripes','ok','s'],
+  ['itt','Al Ittihad','ITT','Cidde','S. Arabistan',1927,'F5B301','111111','stripes','as','sa'],
+  ['ahi','Al Ahli','AHLI','Cidde','S. Arabistan',1937,'0B6B3A','FFFFFF','stripes','as','s'],
+  ['shb','Al Shabab','SHB','Riyad','S. Arabistan',1947,'FFFFFF','111111','halves','as','b'],
+  ['urw','Urawa Reds','URW','Saitama','Japonya',1950,'A32638','111111','solid','as','a'],
+  ['kaw','Kawasaki Frontale','KAW','Kawasaki','Japonya',1955,'87CEEB','111111','stripes','as','sa'],
+  ['kas','Kashima Antlers','KAS','Kashima','Japonya',1947,'6E1B37','FFFFFF','solid','as','sa'],
+  ['gam','Gamba Osaka','GAM','Osaka','Japonya',1980,'12326E','111111','stripes','as','sa'],
+  ['jeo','Jeonbuk Hyundai','JEO','Jeonju','G. Kore',1994,'0B6B3A','FFFFFF','solid','as','a'],
+  ['uls','Ulsan HD','ULS','Ulsan','G. Kore',1983,'12326E','F5B301','stripes','as','sa'],
+  ['fcs2','FC Seoul','SEO','Seul','G. Kore',1983,'A32638','111111','stripes','as','ba'],
+  ['shp','Shanghai Port','SHP','Şanghay','Çin',2005,'A32638','111111','solid','as','s'],
+  ['gua','Guangzhou FC','GUA','Guangzhou','Çin',1954,'A32638','FFFFFF','solid','as','sa'],
+  ['per','Persepolis','PER','Tahran','İran',1963,'A32638','FFFFFF','stripes','as','b'],
+  ['est3','Esteghlal','EST3','Tahran','İran',1945,'12326E','FFFFFF','stripes','as','ba'],
+  ['sad','Al Sadd','SADD','Doha','Katar',1969,'FFFFFF','111111','solid','as','ba'],
+  ['duh','Al Duhail','DUH','Doha','Katar',2009,'A32638','111111','stripes','as','b'],
+  ['ain','Al Ain','AIN','Al Ain','BAE',1968,'5B2A86','FFFFFF','solid','as','a'],
+  ['zam','Zamalek','ZAM','Kahire','Mısır',1911,'FFFFFF','A32638','solid','af','ba'],
+  ['pyr','Pyramids FC','PYR','Kahire','Mısır',2008,'87CEEB','FFFFFF','solid','af','ba'],
+  ['wac','Wydad Casablanca','WAC','Kazablanka','Fas',1937,'A32638','FFFFFF','solid','af','sa'],
+  ['rca','Raja Casablanca','RCA','Kazablanka','Fas',1949,'0B6B3A','FFFFFF','solid','af','sa'],
+  ['esp2','Espérance Tunis','EST4','Tunus','Tunus',1919,'F5B301','A32638','stripes','af','ba'],
+  ['csx','Club Africain','CSA','Tunus','Tunus',1920,'A32638','FFFFFF','stripes','af','ba'],
+  ['mca','MC Alger','MCA','Cezayir','Cezayir',1921,'0B6B3A','A32638','halves','af','sba'],
+  ['esset','ES Sétif','ESS','Sétif','Cezayir',1958,'111111','FFFFFF','stripes','af','a'],
+  ['msd','Mamelodi Sundowns','SUN2','Pretoria','G. Afrika',1970,'F5B301','12326E','solid','af','ba'],
+  ['kai2','Kaizer Chiefs','KZC','Johannesburg','G. Afrika',1970,'F5B301','111111','solid','af',''],
+  ['ori','Orlando Pirates','ORL','Johannesburg','G. Afrika',1937,'111111','FFFFFF','solid','af','a'],
+  ['sim','Simba SC','SIM','Darüsselam','Tanzanya',1936,'A32638','FFFFFF','solid','af','sb'],
+  ['tpm','TP Mazembe','TPM','Lubumbashi','Kongo',1939,'111111','FFFFFF','solid','af','a'],
+  ['enu','Enyimba','ENY','Aba','Nijerya',1976,'12326E','FFFFFF','solid','af','a'],
 ];
 
 const _GRUP_ADI = {
   sl:'Süper Lig', '1l':'TFF 1. Lig', tr:'Türkiye klasikleri',
   pl:'Premier Lig', ll:'LaLiga', sa:'Serie A', bl:'Bundesliga', l1:'Ligue 1',
-  ed:'Eredivisie', pt:'Primeira Liga', dg:'Avrupa', dn:'Dünya',
+  ed:'Eredivisie', pt:'Primeira Liga', dg:'Avrupa', eu2:'Avrupa kupaları',
+  ru:'Rusya/Ukrayna', kz:'Kazakistan/Kafkasya',
+  na:'Kuzey Amerika', sam:'Güney Amerika', ok:'Okyanusya', as:'Asya', af:'Afrika', dn:'Dünya',
 };
+
+const AVRUPA_GRUPLARI = ['pl','ll','sa','bl','l1','ed','pt','dg','eu2','ru','kz'];
+const DUNYA_GRUPLARI  = ['na','sam','ok','as','af','dn'];
 
 const TAKIMLAR = _SATIRLAR.map(([id, ad, kisa, sehir, lig, kurulus, r1, r2, desen, grup, bay]) => ({
   id, ad, kisa, sehir, lig, kurulus, desen, grup,
@@ -762,14 +975,21 @@ const TAKIMLAR = _SATIRLAR.map(([id, ad, kisa, sehir, lig, kurulus, r1, r2, dese
 }));
 
 const HAVUZLAR = {
-  'super-lig': { ad:'Süper Lig',      aciklama:'18 takım',            filtre: t => t.grup === 'sl' },
-  'turkiye':   { ad:'Türkiye',        aciklama:'Süper Lig + 1. Lig + klasikler', filtre: t => ['sl','1l','tr'].includes(t.grup) },
-  'top5':      { ad:'Avrupa 5 Büyük', aciklama:'PL, LaLiga, Serie A, Bundesliga, Ligue 1', filtre: t => ['pl','ll','sa','bl','l1'].includes(t.grup) },
-  'avrupa':    { ad:'Tüm Avrupa',     aciklama:'5 büyük lig + Hollanda, Portekiz ve diğerleri', filtre: t => ['pl','ll','sa','bl','l1','ed','pt','dg'].includes(t.grup) },
-  'hepsi':     { ad:'Hepsi',          aciklama:'Türkiye + Avrupa + dünya — zor mod', filtre: () => true },
+  'super-lig': { ad:'Süper Lig',   aciklama:'Sadece Süper Lig',
+                 filtre: t => t.grup === 'sl' },
+  'turkiye':   { ad:'Türkiye',     aciklama:'Süper Lig + 1. Lig + klasikler',
+                 filtre: t => ['sl','1l','tr'].includes(t.grup) },
+  'top5':      { ad:'Avrupa 5 Büyük', aciklama:'PL, LaLiga, Serie A, Bundesliga, Ligue 1',
+                 filtre: t => ['pl','ll','sa','bl','l1'].includes(t.grup) },
+  'avrupa':    { ad:'Tüm Avrupa',  aciklama:'ŞL, Avrupa Ligi ve Konferans Ligi kulüpleri — Rusya, Kafkasya, adalar dahil',
+                 filtre: t => AVRUPA_GRUPLARI.includes(t.grup) || t.grup === 'sl' },
+  'dunya':     { ad:'Dünya',       aciklama:'Amerika, Asya, Afrika, Okyanusya',
+                 filtre: t => DUNYA_GRUPLARI.includes(t.grup) },
+  'hepsi':     { ad:'Hepsi',       aciklama:'Bütün takımlar — en zor mod',
+                 filtre: () => true },
 };
 
-/* -------------------- ARMA (LOGO) ÜRETECİ -------------------- */
+/* -------------------- ARMA ÜRETECİ — yardımcılar -------------------- */
 
 function _parlaklik(hex){
   const h = hex.replace('#','');
@@ -1509,7 +1729,6 @@ function oyunCiz(d){
     alan.insertAdjacentHTML('afterbegin', arma(takim));
     $('#net-takim-ad').textContent = takim.ad;
     $('#net-takim-detay').textContent = `${takim.sehir} • ${takim.kurulus} • ${takim.lig}`;
-    netKilitBagla();
   }
 
   const rozet = $('#net-rozet');
@@ -1587,17 +1806,8 @@ function oyunCiz(d){
 }
 function kacir(s){ return String(s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
-/* kendi armanı görmek için basılı tut */
-function netKilitBagla(){
-  const alan = $('#net-arma-alan'), kilit = $('#net-kilit');
-  if(alan.dataset.bagli) return;
-  alan.dataset.bagli = '1';
-  const ac = e => { e.preventDefault(); kilit.classList.add('gizli'); };
-  const kapa = () => kilit.classList.remove('gizli');
-  alan.addEventListener('pointerdown', ac);
-  ['pointerup','pointercancel','pointerleave'].forEach(ev => alan.addEventListener(ev, kapa));
-  document.addEventListener('pointerup', kapa);
-}
+/* Online modda kilit yok: telefon senin, rakip zaten karşı taraftan
+   göremiyor — takımın sürekli açık dursun. */
 
 /* sayaç: sunucu kalan saniyeyi yollar, ekranda yerel sayarız */
 function netSayacKur(d){

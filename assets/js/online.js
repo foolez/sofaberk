@@ -259,7 +259,6 @@ function oyunCiz(d){
     alan.insertAdjacentHTML('afterbegin', arma(takim));
     $('#net-takim-ad').textContent = takim.ad;
     $('#net-takim-detay').textContent = `${takim.sehir} • ${takim.kurulus} • ${takim.lig}`;
-    netKilitBagla();
   }
 
   const rozet = $('#net-rozet');
@@ -337,17 +336,8 @@ function oyunCiz(d){
 }
 function kacir(s){ return String(s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
-/* kendi armanı görmek için basılı tut */
-function netKilitBagla(){
-  const alan = $('#net-arma-alan'), kilit = $('#net-kilit');
-  if(alan.dataset.bagli) return;
-  alan.dataset.bagli = '1';
-  const ac = e => { e.preventDefault(); kilit.classList.add('gizli'); };
-  const kapa = () => kilit.classList.remove('gizli');
-  alan.addEventListener('pointerdown', ac);
-  ['pointerup','pointercancel','pointerleave'].forEach(ev => alan.addEventListener(ev, kapa));
-  document.addEventListener('pointerup', kapa);
-}
+/* Online modda kilit yok: telefon senin, rakip zaten karşı taraftan
+   göremiyor — takımın sürekli açık dursun. */
 
 /* sayaç: sunucu kalan saniyeyi yollar, ekranda yerel sayarız */
 function netSayacKur(d){

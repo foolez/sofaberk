@@ -1,7 +1,7 @@
 # ⚽ TAKIM TUT
 
 İki kişilik takım tahmin oyunu. Herkes bir takım tutar, sırayla **evet / hayır** sorusu sorup
-rakibin takımını bulmaya çalışır. **212 takım**, süreli turlar, iki oynama şekli:
+rakibin takımını bulmaya çalışır. **423 takım**, süreli turlar, iki oynama şekli:
 
 | Mod | Nasıl | Ne gerekir |
 |---|---|---|
@@ -29,8 +29,10 @@ rakibin takımını bulmaya çalışır. **212 takım**, süreli turlar, iki oyn
 2. Bir kişi **Online → ODA KUR** der, ekranda 4 haneli kod çıkar (örn. `JV43`).
    Koda dokununca kod + davet linki (`...?oda=JV43`) panoya kopyalanır.
 3. Diğeri aynı adresi açar, **Online → kodu yazar → KATIL**. Linke tıklarsa kod hazır gelir.
-4. Kurucu **BAŞLAT** der; ikisi de kendi telefonundan takımını seçer.
+4. Kurucu lobide **havuzu, süreyi ve tahmin hakkını** seçer (rakibin ekranına anında yansır),
+   sonra **BAŞLAT** der; ikisi de kendi telefonundan takımını seçer.
    Rakibin takımı sunucudan karşı tarafa **hiç gönderilmez**, oyun bitene kadar gerçekten gizlidir.
+   Kendi arman ekranda açık durur — telefon senin, kilide gerek yok.
 5. Sırası gelen soruyu **yazar**, diğeri EVET / HAYIR'a basar. Süreyi ve sırayı sunucu tutar,
    iki telefon asla ayrışmaz. Bağlantı koparsa aynı kodla girince oyun kaldığı yerden devam eder.
 
@@ -98,25 +100,34 @@ Oyunu başka yerden (GitHub Pages, tek dosya) açtıysan oraya sunucunun adresin
 
 ## Takımlar
 
-212 takım, havuz seçilebilir:
+423 takım, havuz seçilebilir (yerelde ana menüden, online'da lobiden):
 
-| Havuz | Takım |
-|---|---|
-| Süper Lig | 18 |
-| Türkiye (Süper Lig + TFF 1. Lig + klasikler) | 50 |
-| Avrupa 5 Büyük (PL, LaLiga, Serie A, Bundesliga, Ligue 1) | 96 |
-| Tüm Avrupa (+ Eredivisie, Primeira, diğerleri) | 148 |
-| Hepsi (+ dünya kulüpleri) | 212 |
+| Havuz | Takım | İçerik |
+|---|---|---|
+| Süper Lig | 18 | |
+| Türkiye | 50 | Süper Lig + TFF 1. Lig + klasikler |
+| Avrupa 5 Büyük | 96 | PL, LaLiga, Serie A, Bundesliga, Ligue 1 |
+| Tüm Avrupa | 284 | ŞL / Avrupa Ligi / Konferans Ligi kulüpleri — İskandinavya, Balkanlar, Baltık, Rusya, Ukrayna, Kazakistan, Kafkasya, İsrail, Kıbrıs, adalar dahil |
+| Dünya | 107 | MLS + Liga MX, Güney Amerika, Okyanusya, Asya, Afrika |
+| Hepsi | 423 | |
 
-Kadrolar 2025-26 sezonuna göre; bir takım eksikse veya yanlışsa `assets/js/teams.js`
-içindeki tek satırı düzeltmen yeter:
+Veritabanının kaynağı `tools/takimlar.py`. Takım eklemek/düzeltmek için oradaki satırı değiştir,
+sonra üreticiyi çalıştır:
 
-```js
-// [id, ad, kısa, şehir, lig, kuruluş, renk1, renk2, desen, grup, bayrak]
-['gs','Galatasaray','GS','İstanbul','Süper Lig',1905,'F5B301','A32638','stripes','sl','sa'],
-//  desen : stripes | hoops | halves | sash | solid
-//  bayrak: s=deniz kenarı  b=başkent  a=Avrupa kupası var
+```python
+# (id, ad, kısa, şehir, lig, kuruluş, renk1, renk2, desen, grup, bayrak)
+('gs','Galatasaray','GS','İstanbul','Süper Lig',1905,'F5B301','A32638','stripes','sl','sa'),
+#  desen : stripes | hoops | halves | sash | solid
+#  bayrak: s=deniz kenarı  b=başkent  a=Avrupa/kıta kupası var
 ```
+
+```bash
+python3 tools/takim-uret.py   # assets/js/teams.js'i tazeler (çakışan id ve bozuk satırı yakalar)
+python3 tools/build.py        # tek dosya sürümü tazeler
+```
+
+Kadrolar 2025-26 sezonuna göre. Küçük liglerdeki bazı kulüplerin kuruluş yılı/renkleri
+yaklaşık olabilir — yanlış gördüğün satırı düzeltmen yeter.
 
 ### Armalar
 
@@ -146,7 +157,9 @@ varsayılan olarak kapalıdır.
 ```
 index.html               ekranlar (kurulum / seçim / yerel oyun / online / bitiş)
 assets/css/style.css     arayüz, split-screen ve online düzen
-assets/js/teams.js       212 takım + arma üreteci
+assets/js/teams.js       423 takım + arma üreteci (üretilen liste)
+tools/takimlar.py        takım veritabanının kaynağı
+tools/takim-uret.py      takimlar.py -> teams.js
 assets/js/game.js        aynı cihazda mod: tur, süre, tahmin, eleme
 assets/js/online.js      online mod: WebSocket istemcisi ve ekranları
 online-server/main.py    oda sunucusu (FastAPI + WebSocket), oyunu da servis eder
