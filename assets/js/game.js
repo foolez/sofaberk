@@ -20,7 +20,7 @@ const SORULAR = [
 ];
 
 const S = {
-  ayar: { havuz:'super-lig', sure:30, dagitim:'rastgele', hak:2 },
+  ayar: { havuz:'super-lig', sure:30, duzen:'yatay', hak:2 },
   oyuncular: [],
   havuz: [],
   sira: 0,          // soruyu soran oyuncu
@@ -54,7 +54,7 @@ function kurulumHazirla(){
     hs.appendChild(b);
   });
   grupBagla('#sure-secim','sure','sure', Number);
-  grupBagla('#dagitim-secim','dagitim','dagitim', String);
+  grupBagla('#duzen-secim','duzen','duzen', String);
   grupBagla('#hak-secim','hak','hak', Number);
 }
 function grupBagla(sel, dataAdi, ayarAdi, tip){
@@ -76,15 +76,8 @@ $('#basla').onclick = ()=>{
   }));
   S.tur = 1; S.sira = 0;
 
-  if(S.ayar.dagitim === 'rastgele'){
-    const iki = karistir(S.havuz).slice(0,2);
-    S.oyuncular[0].takim = iki[0];
-    S.oyuncular[1].takim = iki[1];
-    devirGoster(0, 'Takımlar dağıtıldı!', 'Telefonu masaya yatır, ' + S.oyuncular[0].ad + ' ve ' + S.oyuncular[1].ad + ' karşılıklı otursun.', oyunuBaslat);
-  } else {
-    S.secimSirasi = 0;
-    devirGoster(0, 'Telefonu ' + S.oyuncular[0].ad + '’a ver', 'Takımını gizlice seçeceksin. Rakip bakmasın.', secimEkrani);
-  }
+  S.secimSirasi = 0;
+  devirGoster(0, 'Telefon ' + S.oyuncular[0].ad + '’da', 'Takımını gizlice sen seçiyorsun. Rakip bakmasın.', secimEkrani);
 };
 
 /* ================= DEVİR TESLİM ================= */
@@ -117,7 +110,9 @@ function secimListele(q){
         S.secimSirasi = 1;
         devirGoster(1, 'Telefonu ' + S.oyuncular[1].ad + '’a ver', 'Sıra onda — o da takımını gizlice seçecek.', secimEkrani);
       } else {
-        devirGoster(0, 'Hazırsınız!', 'Telefonu ikinizin arasına yatırın. Üst yarı ters çevrilidir.', oyunuBaslat);
+        devirGoster(0, 'Hazırsınız!', S.ayar.duzen === 'yatay'
+          ? 'Telefonu yan çevirin ve yan yana oturun: sol taraf ' + S.oyuncular[0].ad + ', sağ taraf ' + S.oyuncular[1].ad + '.'
+          : 'Telefonu aranıza yatırın. Üst yarı ' + S.oyuncular[0].ad + ' için ters çevrilidir.', oyunuBaslat);
       }
     })));
 }
@@ -139,12 +134,14 @@ function oyunuBaslat(){
 
 function sahaCiz(){
   const saha = $('#saha');
+  saha.className = 'saha ' + S.ayar.duzen;
+  $('#orta-serit').className = 'orta-serit ' + S.ayar.duzen;
   saha.innerHTML = '';
   [0,1].forEach(i=>{
     const o = S.oyuncular[i];
     const t = o.takim;
     const y = document.createElement('div');
-    y.className = 'yari ' + (i===0 ? 'ust':'alt');
+    y.className = 'yari ' + (i===0 ? 'sol':'sag');
     y.id = 'yari-'+i;
     y.innerHTML = `
       <div class="yari-ust-serit">
@@ -232,8 +229,8 @@ function siraDegis(){
 
 function turBasla(ilk){
   const soran = S.sira, cevaplayan = 1 - S.sira;
-  $('#yari-'+soran).className = 'yari ' + (soran===0?'ust ':'alt ') + 'sirasi';
-  $('#yari-'+cevaplayan).className = 'yari ' + (cevaplayan===0?'ust ':'alt ') + 'cevap-sirasi';
+  $('#yari-'+soran).className = 'yari ' + (soran===0?'sol ':'sag ') + 'sirasi';
+  $('#yari-'+cevaplayan).className = 'yari ' + (cevaplayan===0?'sol ':'sag ') + 'cevap-sirasi';
   $('#rozet-'+soran).textContent = 'SEN SOR';       $('#rozet-'+soran).className = 'durum-rozet sor';
   $('#rozet-'+cevaplayan).textContent = 'SEN CEVAPLA'; $('#rozet-'+cevaplayan).className = 'durum-rozet cevapla';
 

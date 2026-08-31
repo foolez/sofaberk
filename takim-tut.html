@@ -97,12 +97,15 @@ button{font-family:inherit;cursor:pointer;border:none}
 /* ================= OYUN — SPLIT SCREEN ================= */
 #ekran-oyun{overflow:hidden}
 .saha{position:absolute;inset:0;display:flex;flex-direction:column}
+.saha.yatay{flex-direction:row}                 /* telefon yan: sol | sağ */
+.saha.dikey{flex-direction:column}              /* telefon masada: üst / alt */
 .yari{
   position:relative;flex:1 1 50%;min-height:0;display:flex;flex-direction:column;
   padding:12px 12px;gap:8px;transition:background .25s, box-shadow .25s;
   background:var(--panel);border:2px solid transparent;overflow:hidden
 }
-.yari.ust{transform:rotate(180deg)}
+.saha.dikey .yari.sol{transform:rotate(180deg)}  /* karşıdaki düz okusun */
+.saha.yatay .yari{flex:1 1 50%}
 .yari.pasif{background:#0f141c}
 .yari.sirasi{border-color:var(--vurgu);background:#101c17;box-shadow:inset 0 0 60px rgba(56,224,138,.10)}
 .yari.cevap-sirasi{border-color:var(--mavi);background:#0f1722;box-shadow:inset 0 0 60px rgba(74,163,255,.10)}
@@ -156,6 +159,15 @@ button{font-family:inherit;cursor:pointer;border:none}
   position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);height:44px;
   display:flex;align-items:center;justify-content:center;gap:14px;pointer-events:none;z-index:5
 }
+.orta-serit.yatay{
+  top:50%;left:50%;right:auto;transform:translate(-50%,-50%);height:auto;
+  flex-direction:column;gap:8px
+}
+.orta-serit.yatay .orta-bilgi{display:none}   /* dar seam: sayaç yeter, rol rozetleri yarılarda */
+/* yatay düzende telefon dik tutuluyorsa uyar */
+.cevir{display:none;background:#2a1c1c;border:2px solid #4a2a2f;color:#ff9aa4;
+  font-size:12px;font-weight:800;padding:8px 14px;border-radius:999px;text-align:center}
+@media (orientation:portrait){ .orta-serit.yatay .cevir{display:block} }
 .orta-sayac{
   background:#0a0d13;border:2px solid var(--cizgi);color:var(--yazi);font-family:var(--display);font-weight:900;font-size:18px;
   min-width:58px;text-align:center;padding:6px 10px;border-radius:999px;font-variant-numeric:tabular-nums
@@ -179,6 +191,15 @@ button{font-family:inherit;cursor:pointer;border:none}
 .katman .kart .lig{display:none}
 
 @media (min-height:760px){ .kart .arma{width:60px} }
+/* dar/alçak yarılar için sıkıştırma (telefon yan tutulduğunda) */
+@media (max-height:520px){
+  .yari{padding:8px 10px;gap:6px}
+  .kilit .kilit-alt{display:none}
+  .kilit .kilit-ikon{font-size:26px}
+  .kontrol button{padding:11px 4px;font-size:13px}
+  .mesaj{min-height:26px;font-size:11px}
+  .arma-alan{padding-bottom:38px}
+}
 
 </style>
 </head>
@@ -217,10 +238,10 @@ button{font-family:inherit;cursor:pointer;border:none}
     </div>
 
     <div class="alan">
-      <label class="etiket">Takım nasıl belirlensin?</label>
-      <div class="secenekler" id="dagitim-secim">
-        <button class="secenek secili" data-dagitim="rastgele">Rastgele<small>oyun dağıtsın</small></button>
-        <button class="secenek" data-dagitim="secim">Kendim seçeyim<small>gizli seçim</small></button>
+      <label class="etiket">Ekran düzeni</label>
+      <div class="secenekler" id="duzen-secim">
+        <button class="secenek secili" data-duzen="yatay">Yatay<small>yan yana, telefon yan</small></button>
+        <button class="secenek" data-duzen="dikey">Karşılıklı<small>alt alta, üst yarı ters</small></button>
       </div>
     </div>
 
@@ -234,8 +255,9 @@ button{font-family:inherit;cursor:pointer;border:none}
     </div>
 
     <button id="basla" class="buyuk-btn">OYUNU BAŞLAT</button>
-    <p class="ipucu">Telefonu iki oyuncunun arasına yatır. Üst yarı karşındaki için ters çevrilidir.
-      Kendi takımını görmek için <b>“BASILI TUT & GÖR”</b>e bas — rakip senin ekranına bakmasın.</p>
+    <p class="ipucu"><b>Yatay:</b> telefonu yan çevir, yan yana oturun — sol taraf senin, sağ taraf onun.<br>
+      <b>Karşılıklı:</b> telefonu aranıza yatır, üst yarı karşındaki için ters döner.<br>
+      Her ikisinde de kendi takımını görmek için kendi yarındaki armaya <b>basılı tut</b> — parmağını çekince kilitlenir.</p>
   </div>
 </section>
 
@@ -265,9 +287,10 @@ button{font-family:inherit;cursor:pointer;border:none}
 <!-- ============ 4) OYUN (SPLIT SCREEN) ============ -->
 <section id="ekran-oyun" class="ekran">
   <div class="saha" id="saha"></div>
-  <div class="orta-serit">
+  <div class="orta-serit" id="orta-serit">
     <div class="orta-sayac" id="orta-sayac">30</div>
     <div class="orta-bilgi" id="orta-bilgi">Tur 1</div>
+    <div class="cevir">📱 Telefonu yan çevir</div>
   </div>
 </section>
 
@@ -488,7 +511,7 @@ const SORULAR = [
 ];
 
 const S = {
-  ayar: { havuz:'super-lig', sure:30, dagitim:'rastgele', hak:2 },
+  ayar: { havuz:'super-lig', sure:30, duzen:'yatay', hak:2 },
   oyuncular: [],
   havuz: [],
   sira: 0,          // soruyu soran oyuncu
@@ -522,7 +545,7 @@ function kurulumHazirla(){
     hs.appendChild(b);
   });
   grupBagla('#sure-secim','sure','sure', Number);
-  grupBagla('#dagitim-secim','dagitim','dagitim', String);
+  grupBagla('#duzen-secim','duzen','duzen', String);
   grupBagla('#hak-secim','hak','hak', Number);
 }
 function grupBagla(sel, dataAdi, ayarAdi, tip){
@@ -544,15 +567,8 @@ $('#basla').onclick = ()=>{
   }));
   S.tur = 1; S.sira = 0;
 
-  if(S.ayar.dagitim === 'rastgele'){
-    const iki = karistir(S.havuz).slice(0,2);
-    S.oyuncular[0].takim = iki[0];
-    S.oyuncular[1].takim = iki[1];
-    devirGoster(0, 'Takımlar dağıtıldı!', 'Telefonu masaya yatır, ' + S.oyuncular[0].ad + ' ve ' + S.oyuncular[1].ad + ' karşılıklı otursun.', oyunuBaslat);
-  } else {
-    S.secimSirasi = 0;
-    devirGoster(0, 'Telefonu ' + S.oyuncular[0].ad + '’a ver', 'Takımını gizlice seçeceksin. Rakip bakmasın.', secimEkrani);
-  }
+  S.secimSirasi = 0;
+  devirGoster(0, 'Telefon ' + S.oyuncular[0].ad + '’da', 'Takımını gizlice sen seçiyorsun. Rakip bakmasın.', secimEkrani);
 };
 
 /* ================= DEVİR TESLİM ================= */
@@ -585,7 +601,9 @@ function secimListele(q){
         S.secimSirasi = 1;
         devirGoster(1, 'Telefonu ' + S.oyuncular[1].ad + '’a ver', 'Sıra onda — o da takımını gizlice seçecek.', secimEkrani);
       } else {
-        devirGoster(0, 'Hazırsınız!', 'Telefonu ikinizin arasına yatırın. Üst yarı ters çevrilidir.', oyunuBaslat);
+        devirGoster(0, 'Hazırsınız!', S.ayar.duzen === 'yatay'
+          ? 'Telefonu yan çevirin ve yan yana oturun: sol taraf ' + S.oyuncular[0].ad + ', sağ taraf ' + S.oyuncular[1].ad + '.'
+          : 'Telefonu aranıza yatırın. Üst yarı ' + S.oyuncular[0].ad + ' için ters çevrilidir.', oyunuBaslat);
       }
     })));
 }
@@ -607,12 +625,14 @@ function oyunuBaslat(){
 
 function sahaCiz(){
   const saha = $('#saha');
+  saha.className = 'saha ' + S.ayar.duzen;
+  $('#orta-serit').className = 'orta-serit ' + S.ayar.duzen;
   saha.innerHTML = '';
   [0,1].forEach(i=>{
     const o = S.oyuncular[i];
     const t = o.takim;
     const y = document.createElement('div');
-    y.className = 'yari ' + (i===0 ? 'ust':'alt');
+    y.className = 'yari ' + (i===0 ? 'sol':'sag');
     y.id = 'yari-'+i;
     y.innerHTML = `
       <div class="yari-ust-serit">
@@ -700,8 +720,8 @@ function siraDegis(){
 
 function turBasla(ilk){
   const soran = S.sira, cevaplayan = 1 - S.sira;
-  $('#yari-'+soran).className = 'yari ' + (soran===0?'ust ':'alt ') + 'sirasi';
-  $('#yari-'+cevaplayan).className = 'yari ' + (cevaplayan===0?'ust ':'alt ') + 'cevap-sirasi';
+  $('#yari-'+soran).className = 'yari ' + (soran===0?'sol ':'sag ') + 'sirasi';
+  $('#yari-'+cevaplayan).className = 'yari ' + (cevaplayan===0?'sol ':'sag ') + 'cevap-sirasi';
   $('#rozet-'+soran).textContent = 'SEN SOR';       $('#rozet-'+soran).className = 'durum-rozet sor';
   $('#rozet-'+cevaplayan).textContent = 'SEN CEVAPLA'; $('#rozet-'+cevaplayan).className = 'durum-rozet cevapla';
 

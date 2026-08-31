@@ -85,12 +85,15 @@ button{font-family:inherit;cursor:pointer;border:none}
 /* ================= OYUN — SPLIT SCREEN ================= */
 #ekran-oyun{overflow:hidden}
 .saha{position:absolute;inset:0;display:flex;flex-direction:column}
+.saha.yatay{flex-direction:row}                 /* telefon yan: sol | sağ */
+.saha.dikey{flex-direction:column}              /* telefon masada: üst / alt */
 .yari{
   position:relative;flex:1 1 50%;min-height:0;display:flex;flex-direction:column;
   padding:12px 12px;gap:8px;transition:background .25s, box-shadow .25s;
   background:var(--panel);border:2px solid transparent;overflow:hidden
 }
-.yari.ust{transform:rotate(180deg)}
+.saha.dikey .yari.sol{transform:rotate(180deg)}  /* karşıdaki düz okusun */
+.saha.yatay .yari{flex:1 1 50%}
 .yari.pasif{background:#0f141c}
 .yari.sirasi{border-color:var(--vurgu);background:#101c17;box-shadow:inset 0 0 60px rgba(56,224,138,.10)}
 .yari.cevap-sirasi{border-color:var(--mavi);background:#0f1722;box-shadow:inset 0 0 60px rgba(74,163,255,.10)}
@@ -144,6 +147,15 @@ button{font-family:inherit;cursor:pointer;border:none}
   position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);height:44px;
   display:flex;align-items:center;justify-content:center;gap:14px;pointer-events:none;z-index:5
 }
+.orta-serit.yatay{
+  top:50%;left:50%;right:auto;transform:translate(-50%,-50%);height:auto;
+  flex-direction:column;gap:8px
+}
+.orta-serit.yatay .orta-bilgi{display:none}   /* dar seam: sayaç yeter, rol rozetleri yarılarda */
+/* yatay düzende telefon dik tutuluyorsa uyar */
+.cevir{display:none;background:#2a1c1c;border:2px solid #4a2a2f;color:#ff9aa4;
+  font-size:12px;font-weight:800;padding:8px 14px;border-radius:999px;text-align:center}
+@media (orientation:portrait){ .orta-serit.yatay .cevir{display:block} }
 .orta-sayac{
   background:#0a0d13;border:2px solid var(--cizgi);color:var(--yazi);font-family:var(--display);font-weight:900;font-size:18px;
   min-width:58px;text-align:center;padding:6px 10px;border-radius:999px;font-variant-numeric:tabular-nums
@@ -167,3 +179,12 @@ button{font-family:inherit;cursor:pointer;border:none}
 .katman .kart .lig{display:none}
 
 @media (min-height:760px){ .kart .arma{width:60px} }
+/* dar/alçak yarılar için sıkıştırma (telefon yan tutulduğunda) */
+@media (max-height:520px){
+  .yari{padding:8px 10px;gap:6px}
+  .kilit .kilit-alt{display:none}
+  .kilit .kilit-ikon{font-size:26px}
+  .kontrol button{padding:11px 4px;font-size:13px}
+  .mesaj{min-height:26px;font-size:11px}
+  .arma-alan{padding-bottom:38px}
+}

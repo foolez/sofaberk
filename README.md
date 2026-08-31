@@ -9,8 +9,10 @@ Herkes bir takım tutar; sırayla **evet / hayır** sorusu sorup rakibin takım�
 
 ## Nasıl oynanır
 
-1. Telefonu iki oyuncunun **arasına yatır**. Üst yarı karşındaki oyuncu için ters çevrilidir.
-2. Oyun ikinize birer takım dağıtır (ya da "Kendim seçeyim" ile gizlice seçersiniz).
+1. Ekran düzenini seç:
+   - **Yatay (varsayılan):** telefonu yan çevir, yan yana oturun — sol taraf 1. oyuncu, sağ taraf 2. oyuncu.
+   - **Karşılıklı:** telefonu aranıza yatır, üst yarı karşıdaki için 180° ters döner.
+2. Telefon sırayla el değiştirir, **herkes kendi takımını gizlice seçer** (rastgele dağıtım yok).
 3. Kendi takımını görmek için arma alanına **basılı tut** — parmağını çekince tekrar kilitlenir.
    Böylece rakip senin takımını göremez.
 4. Sıra kimdeyse **o sorar** (yeşil çerçeve), diğeri kendi takımına bakıp **EVET / HAYIR**'a basar.
@@ -22,6 +24,7 @@ Herkes bir takım tutar; sırayla **evet / hayır** sorusu sorup rakibin takım�
 
 - **75 takım**: Süper Lig (18), Türkiye klasikleri (13), Avrupa devleri (44)
 - **Havuz seçimi**: Süper Lig / Türkiye (geniş) / Avrupa / Hepsi karışık
+- **Ekran düzeni**: yatay (yan yana) veya karşılıklı (alt alta, ters çevrilmiş)
 - **Tur süresi**: 15 / 30 / 45 saniye veya süresiz
 - **Tahmin hakkı**: 1, 2 veya 3
 - **Eleme tahtası (📋)**: elediğin takımları üstü çizili işaretle
