@@ -278,6 +278,18 @@ img.arma{object-fit:contain}
 .tam-katman{position:fixed;inset:0;z-index:30;background:#0c1016;display:flex;flex-direction:column;padding:12px;gap:10px}
 .tam-katman .izgara{overflow:auto;flex:1 1 auto;align-content:start}
 
+/* lobide oda ayarları */
+.lobi-ayar.kurucu{flex-direction:column;gap:14px;align-items:stretch;text-align:left}
+.lobi-grup{display:flex;flex-direction:column;gap:7px}
+.cipler{display:flex;gap:7px;flex-wrap:wrap}
+.lobi-cip{
+  flex:1 1 auto;min-width:88px;background:var(--panel);border:1.5px solid var(--cizgi);color:var(--yazi);
+  padding:10px 8px;border-radius:12px;font-size:13px;font-weight:800;display:flex;flex-direction:column;gap:2px
+}
+.lobi-cip small{font-weight:600;font-size:10px;color:var(--soluk)}
+.lobi-cip.secili{border-color:var(--vurgu);background:#12251c;color:var(--vurgu)}
+.lobi-cip.secili small{color:#6fdca6}
+
 </style>
 </head>
 <body>
@@ -1402,19 +1414,59 @@ function lobiCiz(d){
       : `<span>Rakip bekleniyor…</span><span class="rol">boş</span>`;
     liste.appendChild(el);
   }
-  const h = HAVUZLAR[d.havuz] || HAVUZLAR['super-lig'];
-  $('#lobi-ayar').innerHTML =
-    `<span>${h.ad} · ${takimlariGetir(d.havuz).length} takım</span>` +
-    `<span>${d.sure ? d.sure + ' sn tur' : 'süresiz'}</span>` +
-    `<span>${d.hakAyar} tahmin hakkı</span>`;
+  lobiAyarCiz(d);
   const bas = $('#lobi-basla');
   const kurucu = d.ben === 0;
   bas.style.display = kurucu ? '' : 'none';
   bas.disabled = d.oyuncular.length < 2;
   bas.textContent = d.oyuncular.length < 2 ? 'RAKİP BEKLENİYOR…' : 'BAŞLAT';
   $('#lobi-ipucu').textContent = kurucu
-    ? 'Kodu rakibine söyle. Ayarlar sende: havuz, süre ve hak ana menüde seçtiğin gibi.'
-    : 'Odaya girdin. Kurucu başlatınca takım seçimine geçeceğiz.';
+    ? 'Kodu rakibine söyle. Havuzu, süreyi ve tahmin hakkını aşağıdan değiştirebilirsin.'
+    : 'Odaya girdin. Kurucu ayarları seçip başlatınca takım seçimine geçeceğiz.';
+}
+
+/* Lobide oda ayarları: havuz, süre, tahmin hakkı — sadece kurucu değiştirir */
+function lobiAyarCiz(d){
+  const kap = $('#lobi-ayar');
+  const h = HAVUZLAR[d.havuz] || HAVUZLAR['super-lig'];
+  if(d.ben !== 0){
+    kap.className = 'lobi-ayar';
+    kap.innerHTML =
+      `<span>${h.ad} · ${takimlariGetir(d.havuz).length} takım</span>` +
+      `<span>${d.sure ? d.sure + ' sn tur' : 'süresiz'}</span>` +
+      `<span>${d.hakAyar} tahmin hakkı</span>`;
+    return;
+  }
+  kap.className = 'lobi-ayar kurucu';
+  const cip = (etkin, etiket, alt) =>
+    `<button class="lobi-cip${etkin ? ' secili' : ''}">${etiket}${alt ? `<small>${alt}</small>` : ''}</button>`;
+
+  kap.innerHTML = `
+    <div class="lobi-grup">
+      <span class="etiket">Takım havuzu</span>
+      <div class="cipler" id="lb-havuz">${Object.entries(HAVUZLAR).map(([k,v]) =>
+        cip(k === d.havuz, v.ad, takimlariGetir(k).length + ' takım')).join('')}</div>
+    </div>
+    <div class="lobi-grup">
+      <span class="etiket">Tur süresi</span>
+      <div class="cipler" id="lb-sure">${[15,30,45,0].map(x =>
+        cip(x === d.sure, x ? x + ' sn' : 'Süresiz')).join('')}</div>
+    </div>
+    <div class="lobi-grup">
+      <span class="etiket">Tahmin hakkı</span>
+      <div class="cipler" id="lb-hak">${[1,2,3].map(x =>
+        cip(x === d.hakAyar, x + ' hak')).join('')}</div>
+    </div>`;
+
+  const yolla = (yeniAyar) => {
+    Object.assign(S.ayar, yeniAyar);          // bir dahaki odaya da taşınsın
+    ayarKaydet();
+    netGonder({ t:'ayar', havuz:S.ayar.havuz, sure:S.ayar.sure, hak:S.ayar.hak });
+  };
+  const anahtarlar = Object.keys(HAVUZLAR);
+  $$('#lb-havuz .lobi-cip').forEach((b,i) => b.onclick = () => yolla({ havuz:anahtarlar[i] }));
+  $$('#lb-sure .lobi-cip').forEach((b,i)  => b.onclick = () => yolla({ sure:[15,30,45,0][i] }));
+  $$('#lb-hak .lobi-cip').forEach((b,i)   => b.onclick = () => yolla({ hak:[1,2,3][i] }));
 }
 
 function netSecimCiz(d){

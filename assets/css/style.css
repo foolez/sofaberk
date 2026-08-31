@@ -265,3 +265,15 @@ img.arma{object-fit:contain}
 /* tam ekran katman (online tahmin / eleme) */
 .tam-katman{position:fixed;inset:0;z-index:30;background:#0c1016;display:flex;flex-direction:column;padding:12px;gap:10px}
 .tam-katman .izgara{overflow:auto;flex:1 1 auto;align-content:start}
+
+/* lobide oda ayarları */
+.lobi-ayar.kurucu{flex-direction:column;gap:14px;align-items:stretch;text-align:left}
+.lobi-grup{display:flex;flex-direction:column;gap:7px}
+.cipler{display:flex;gap:7px;flex-wrap:wrap}
+.lobi-cip{
+  flex:1 1 auto;min-width:88px;background:var(--panel);border:1.5px solid var(--cizgi);color:var(--yazi);
+  padding:10px 8px;border-radius:12px;font-size:13px;font-weight:800;display:flex;flex-direction:column;gap:2px
+}
+.lobi-cip small{font-weight:600;font-size:10px;color:var(--soluk)}
+.lobi-cip.secili{border-color:var(--vurgu);background:#12251c;color:var(--vurgu)}
+.lobi-cip.secili small{color:#6fdca6}
