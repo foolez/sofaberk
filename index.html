@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>TAKIM TUT — Evet / Hayır Takım Bilme Oyunu</title>
+<meta name="description" content="İki kişilik, bölünmüş ekranlı, sıralı ve süreli takım tahmin oyunu. Kendi takımını sen görürsün, rakip göremez.">
+<meta name="theme-color" content="#0a0d13">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+</head>
+<body>
+
+<!-- ============ 1) KURULUM ============ -->
+<section id="ekran-kurulum" class="ekran aktif">
+  <div class="kurulum-kutu">
+    <h1 class="logo-yazi">TAKIM<span>TUT</span></h1>
+    <p class="slogan">Sen takımını tutarsın, o seninkini bilmeye çalışır.<br>Evet / Hayır. Sırayla. Süreli.</p>
+
+    <div class="alan">
+      <label class="etiket">Oyuncular</label>
+      <div class="ikili">
+        <input id="ad1" class="girdi" maxlength="14" placeholder="1. Oyuncu" value="Oyuncu 1">
+        <span class="vs">VS</span>
+        <input id="ad2" class="girdi" maxlength="14" placeholder="2. Oyuncu" value="Oyuncu 2">
+      </div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Takım havuzu</label>
+      <div id="havuz-secim" class="secenekler"></div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Tur süresi</label>
+      <div class="secenekler" id="sure-secim">
+        <button class="secenek" data-sure="15">15 sn<small>hızlı</small></button>
+        <button class="secenek secili" data-sure="30">30 sn<small>normal</small></button>
+        <button class="secenek" data-sure="45">45 sn<small>sakin</small></button>
+        <button class="secenek" data-sure="0">Süresiz<small>rahat</small></button>
+      </div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Takım nasıl belirlensin?</label>
+      <div class="secenekler" id="dagitim-secim">
+        <button class="secenek secili" data-dagitim="rastgele">Rastgele<small>oyun dağıtsın</small></button>
+        <button class="secenek" data-dagitim="secim">Kendim seçeyim<small>gizli seçim</small></button>
+      </div>
+    </div>
+
+    <div class="alan">
+      <label class="etiket">Tahmin hakkı</label>
+      <div class="secenekler" id="hak-secim">
+        <button class="secenek" data-hak="1">1 hak<small>tek şans</small></button>
+        <button class="secenek secili" data-hak="2">2 hak<small>önerilen</small></button>
+        <button class="secenek" data-hak="3">3 hak<small>bol keseden</small></button>
+      </div>
+    </div>
+
+    <button id="basla" class="buyuk-btn">OYUNU BAŞLAT</button>
+    <p class="ipucu">Telefonu iki oyuncunun arasına yatır. Üst yarı karşındaki için ters çevrilidir.
+      Kendi takımını görmek için <b>“BASILI TUT & GÖR”</b>e bas — rakip senin ekranına bakmasın.</p>
+  </div>
+</section>
+
+<!-- ============ 2) GİZLİ SEÇİM ============ -->
+<section id="ekran-secim" class="ekran">
+  <div class="secim-ust">
+    <div>
+      <div class="kucuk-etiket">Sıra sende</div>
+      <h2 id="secim-oyuncu">Oyuncu 1</h2>
+    </div>
+    <div class="uyari-rozet">Rakip bakmasın 👀</div>
+  </div>
+  <input id="secim-ara" class="girdi ara" placeholder="Takım ara…" autocomplete="off">
+  <div id="secim-izgara" class="izgara"></div>
+</section>
+
+<!-- ============ 3) DEVİR TESLİM ============ -->
+<section id="ekran-devir" class="ekran">
+  <div class="devir-kutu">
+    <div class="devir-ikon">🤝</div>
+    <h2 id="devir-baslik">Telefonu 2. Oyuncuya ver</h2>
+    <p id="devir-alt">Sen hazırsın. Şimdi sıra onda.</p>
+    <button id="devir-btn" class="buyuk-btn">HAZIRIM</button>
+  </div>
+</section>
+
+<!-- ============ 4) OYUN (SPLIT SCREEN) ============ -->
+<section id="ekran-oyun" class="ekran">
+  <div class="saha" id="saha"></div>
+  <div class="orta-serit">
+    <div class="orta-sayac" id="orta-sayac">30</div>
+    <div class="orta-bilgi" id="orta-bilgi">Tur 1</div>
+  </div>
+</section>
+
+<!-- ============ 5) BİTİŞ ============ -->
+<section id="ekran-bitis" class="ekran">
+  <div class="bitis-kutu">
+    <div id="bitis-kupa" class="devir-ikon">🏆</div>
+    <h2 id="bitis-baslik">Kazandı!</h2>
+    <p id="bitis-alt"></p>
+    <div class="acilis" id="bitis-acilis"></div>
+    <div class="bitis-btnler">
+      <button id="tekrar" class="buyuk-btn">TEKRAR OYNA</button>
+      <button id="menu" class="ikincil-btn">Ana menü</button>
+    </div>
+  </div>
+</section>
+
+<script src="assets/js/teams.js"></script>
+<script src="assets/js/game.js"></script>
+</body>
+</html>
